@@ -1,1 +1,1 @@
-script: poc/unit_tests/run_tests.sh
+script: poc/unit_tests/run-tests.sh
