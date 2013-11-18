@@ -1,0 +1,371 @@
+namespace js
+{
+	extern public class global
+	{
+	public:
+		static js::Object*ref undefined;        
+		static js::DOMWindow*ref window;	
+	    static js::HTMLDocument*ref document;
+        static js::DOMScreen*ref screen;	
+		static string*ref decodeURI(string*ref uri);
+		static string*ref decodeURIComponent(string*ref uri);
+		static string*ref encodeURI(string*ref uri);
+		static string*ref encodeURIComponent(string*ref uri);
+		static string*ref escape(string*ref str);
+		static bool isFinite(js::Object*ref element);
+		static bool isNan(js::Object*ref element);
+		static Number*ref Number(js::Object*ref obj);
+		static float parseFloat(object*ref arg);
+		static int parseInt(object*ref arg);
+		static int parseInt(js::Object*ref arg, int radix);
+		static string*ref String(js::Object*ref obj);		
+		static string*ref unescape(string*ref str);
+        static js::Array*ref arguments;
+		static js::Object*ref NaN;
+		static void alert(string*ref msg);
+		static js::String*ref @typeof(object*ref obj);
+        
+		extern public class console
+		{
+		public:
+			static void log(object*ref text);
+		}
+
+		static js::Object*ref @this;
+	}
+
+	extern public class DOMWindow inherits js::Object
+	{
+	public:
+		int setInterval(object*ref callback, js::Number*ref interval);
+        void clearInterval(js::Number*ref handler);
+		int setTimeout(object*ref callback, js::Number*ref interval);
+		void clearTimeout(js::Number*ref handler);
+        double innerHeight;
+        double innerWidth;
+        js::Object*ref location;
+        js::DOMFrame*ref frameElement;
+        object*ref property onkeyup
+        {
+            get;
+            set;
+        }
+	}
+
+    extern public class DOMFrame inherits js::Object {
+    public:
+        int height;
+        int width;
+    }
+
+    extern public class DOMScreen inherits js::Object {
+    public:
+        int height;
+        int width;
+        int availWidth;
+        int availHeight;
+    }
+
+     extern public class CSSStyleDeclaration inherits js::Object
+     {
+     public:
+        js::String*ref getPropertyValue(js::String*ref key);
+        js::String*ref fontStyle;
+     }
+
+	extern public class Function inherits js::Object
+	{
+	public:
+		Function(params object*ref[] args);
+		js::Object*ref call(params object*ref[] args);
+		js::Object*ref apply(params object*ref[] args);
+		js::Object*ref bind(params object*ref[] args);
+        
+		// Special function that mimic "()" usage
+		js::Object*ref CALL(params object*ref[] args);
+	}
+
+	extern public class Math
+	{
+	public:		
+		static double random();
+		static double PI;
+		static double RAND_MAX;
+
+		static double sqrt(object*ref arg);
+		static double pow(object*ref arg1, object*ref arg2);
+		static double cos(object*ref arg);
+		static double sin(object*ref arg);
+		static double tan(object*ref arg);
+		static double acos(object*ref arg);
+		static double asin(object*ref arg);
+		static double atan(object*ref arg);
+		static double atan2(object*ref arg1, object*ref arg2);
+		static double abs(object*ref arg);
+		static int abs(int arg);
+		static int ceil(object*ref arg);
+		static int floor(object*ref arg);
+		static int round(object*ref arg);
+		static double log(object*ref arg);
+		static double @exp(object*ref arg);
+		static double min(object*ref arg1, object*ref arg2);
+		static double max(object*ref arg1, object*ref arg2);	
+	}
+
+	extern public class Object
+	{
+	public:
+		Object(params object*ref[] args);
+
+		js::Object*ref indexer(object*ref name)
+		{ 
+			get;
+			set;
+		}
+
+		js::Object*ref constructor;
+		js::Object*ref prototype;
+		js::String*ref toString();
+
+		static js::Array*ref keys(js::Object*ref arg);
+		static js::Function*ref create(js::Object*ref arg);
+
+		static bool operator && (object*ref argLeft, object*ref argRigth);
+		static bool operator || (object*ref argLeft, object*ref argRigth);
+        
+        static int operator explicit(js::Object*ref arg1);
+        static js::Object*ref operator implicit(object*ref arg1);
+	}
+
+	public extern class HTMLElement inherits js::Object
+	{
+	public:
+		js::String*ref innerHTML;
+		js::Function*ref onclick;
+        js::Function*ref onkeydown;
+        js::Function*ref onload;
+        double offsetWidth;
+        double offsetHeight;
+		js::String*ref className;
+
+		js::String*ref getAttribute(js::String*ref key);
+		void setAttribute(js::String*ref key, js::String*ref value);
+        js::CSSStyleDeclaration*ref style;
+        void appendChild(HTMLElement*ref arg1);
+	}
+
+	public extern class HTMLAnchorElement inherits js::HTMLElement
+	{
+	public:
+		js::String*ref href;
+		js::String*ref port;
+		js::String*ref host;
+		js::String*ref search;
+		js::String*ref path;
+	}
+
+	public extern class HTMLDocument inherits js::Object
+	{
+	public:
+		js::HTMLElement*ref documentElement;
+		js::HTMLElement*ref createElement(js::String*ref arg);
+        js::HTMLElement*ref getElementsByName(object*ref arg);
+        js::HTMLElement*ref getElementById(object*ref arg);
+	}
+
+	public extern class HTMLCanvasContext inherits js::Object
+	{
+	public:
+		void moveTo(js::Number*ref x, js::Number*ref y);		
+		void lineTo(js::Number*ref x, js::Number*ref y);
+		void stroke();
+		void fill();
+		void rect(js::Number*ref x, js::Number*ref y, js::Number*ref width, js::Number*ref height);
+		void strokeRect(js::Number*ref x, js::Number*ref y, js::Number*ref width, js::Number*ref height);
+		void fillRect(js::Number*ref x, js::Number*ref y, js::Number*ref width, js::Number*ref height);
+		js::Object*ref strokeStyle;
+		js::Object*ref fillStyle;
+		float lineWidth;
+		void beginPath();
+		void arc(js::Number*ref x, js::Number*ref y, js::Number*ref radius, js::Number*ref startAngle, js::Number*ref endAngle, bool anticlockwise);
+		void translate(js::Number*ref x, js::Number*ref y);
+		void rotate(js::Number*ref degrees);
+		void scale(js::Number*ref xFactor, js::Number*ref yFactor);
+		void save();
+		void restore();
+		void drawImage(js::Object*ref image, double x, double y);
+        void drawImage(js::Object*ref image, double x, double y, double width, double height);
+        void setFillColor(js::String*ref arg1);
+        HTMLCanvasGradient^ createRadialGradient(double arg1, double arg2, double arg3, double arg4, double arg5, double arg6);
+	}
+    public extern class HTMLCanvasGradient inherits js::Object
+    {
+    public:
+        void addColorStop(int stop, object*ref color);
+    }
+	public extern class HTMLCanvas inherits js::HTMLElement
+	{
+	public:
+		HTMLCanvasContext*ref getContext(js::String*ref space);
+        double height;
+        double width;        
+	}
+
+	extern public class String inherits js::Object
+	{
+	public:
+		// Constructors
+		String();
+		String(js::Object*ref arg);
+		String(char* str);
+		static js::String*ref NewWithDataUsingEncoding(js::Array*ref data, int encoding);
+		
+        // conversion operators
+        static js::String*ref operator implicit(string*ref arg1);
+        
+		// properties & methods
+		int length;
+		char charAt(int arg);
+		js::Object*ref charCodeAt(int arg); 
+		js::String*ref concat(params js::String*ref[] args);
+		js::String*ref fromCharCode(Object*ref[] args);
+		int indexOf(js::String*ref searchStr);
+		int indexOf(js::String*ref searchStr, int start);
+		int lastIndexOf(js::String*ref searchStr);
+		int lastIndexOf(js::String*ref searchStr, int start);
+		js::Object*ref[] match(js::Object*ref pattern);
+		js::String*ref replace(js::String*ref substring, js::String*ref newString);
+		js::String*ref replace(js::RegExp*ref substring, js::String*ref newString);
+		int search (js::Object*ref regexp);
+		js::String*ref slice(int start);
+		js::String*ref slice(int start, int end);
+		js::String*ref split();
+		js::String*ref split(char separator);
+		js::String*ref split(char separator, int limit);
+		js::Array*ref split(js::String*ref separator);
+		js::String*ref split(js::String*ref separator, int limit);
+		js::String*ref substr(int startIndex);
+		js::String*ref substr(int startIndex, int length);
+		js::String*ref substring(int from);
+		js::String*ref substring(int from, int to);
+		js::String*ref toLowerCase();
+		js::String*ref toUpperCase();
+        js::String*ref trim();
+		string*ref valueOf();
+		static js::String*ref fromCharCode(char aCharacter);
+
+		// binary operators
+		static js::String*ref operator + (js::String*ref op1, js::String*ref op2);
+		static js::String*ref operator + (js::String*ref op1, string*ref op2);
+		static js::String*ref operator + (string*ref op1, js::String*ref op2);
+
+		static bool operator == (js::String*ref op1, js::String*ref op2);
+		static bool operator != (js::String*ref op1, js::String*ref op2);
+	}
+	
+	extern public class Array inherits js::Object
+	{
+	public:
+		// Constructors
+		Array(params object*ref[] args);
+		// properties & methods
+		int length;
+		js::Array*ref concat(js::Array*ref[] args);
+        js::Array*ref concat(params js::Array*ref args);
+		js::String*ref join(js::Object*ref separator);
+		js::Object*ref pop();
+		int push(js::Object*ref arg1, params object*ref[] args);
+		void reverse();
+		js::Object*ref shift();
+		js::Array*ref slice();
+		js::Array*ref slice(int start);
+		js::Array*ref slice(int start, int end);
+		void sort(js::Object*ref sortfunc); 
+		js::Array*ref splice(int index, int howmany, params object*ref[] args);
+		js::String*ref toString();
+		int unshift(params object*ref[] args);
+		js::Object*ref valueOf();
+		int indexOf(js::Object*ref arg);
+		bool every(js::Function*ref aFunction);
+		bool every(js::Function*ref aFunction, js::Object*ref thisObject);
+		
+	}
+
+	extern public class Boolean inherits js::Object
+	{
+	public:
+		bool valueOf();
+		static bool operator!(js::Boolean*ref arg1);
+	}
+	
+	extern public class Number inherits js::Object
+	{
+	public:
+		// Constructors
+		Number();
+		Number(object*ref arg);		
+		double valueOf();
+		static double POSITIVE_INFINITY;
+		static double NEGATIVE_INFINITY;
+        
+        // conversion operators
+        static js::Number*ref operator implicit(double arg1);
+	}
+
+	extern public class RegExp inherits js::Object
+	{
+	public:
+		RegExp();
+		RegExp(js::String*ref arg);
+		RegExp(js::String*ref arg, js::String*ref flag);
+	}
+	
+	extern public class Date inherits js::Object
+	{
+	public:
+		Date();
+		Date(double miliseconds);
+		Date(js::String*ref dateString);
+		Date(int year, int month, int day, int hour, int minute, int second, int millisecond);
+		Date(int year, int month, int day);
+		static long now();
+
+		int getDate();		
+		int getDay();
+		int getFullYear();
+		int getHours();
+		int getMilliseconds();
+		int getMinutes();
+		int getMonth();
+		int getSeconds();
+		long getTime();
+		int getTimezoneOffset();
+		int getUTCDate();
+		int getUTCDay();
+		int getUTCFullYear();
+		int getUTCHours();
+		int getUTCMilliseconds();
+		int getUTCMinutes();
+		int getUTCMonth();
+		int getUTCSeconds();
+		js::String*ref toString();
+        void setDate(int arg);
+        void setMonth(int arg);
+        void setFullYear(int arg);
+        void setHours(int arg);
+        void setMinutes(int arg);
+		void setSeconds(int arg);
+		
+	}
+
+	extern public class DOMEvent inherits js::Object
+	{
+	public:
+		Event();
+		js::HTMLElement*ref currentTarget;
+        int keyCode;
+        void preventDefault();
+        void stopPropagation();
+	}
+
+}

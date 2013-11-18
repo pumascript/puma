@@ -1,0 +1,10 @@
+namespace puma
+{
+    public class Result
+    {
+    }
+    
+    public class FirstPass
+    {
+    }
+}

@@ -1,0 +1,1 @@
+script: poc/unit_tests/run_tests.sh
