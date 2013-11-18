@@ -1,4 +1,4 @@
 script: 
-cd poc/unit_tests/
-chmod 777 run-tests.sh
-sh run-tests.sh
+- cd poc/unit_tests/
+- chmod 777 run-tests.sh
+- sh run-tests.sh
