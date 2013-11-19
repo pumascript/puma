@@ -1,3 +1,5 @@
 CURDIR=$(pwd)
 
-phantomjs run-qunit.js file:\\\$CURDIR\\test.html 
+echo $CURDIR
+
+phantomjs run-qunit.js file://$CURDIR/test.html
