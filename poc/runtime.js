@@ -11,9 +11,9 @@ Result.prototype.makeValue = function(){
 };
 
 FunctionSymbol = (function(){
-    function FunctionSymbol(params, body)
+    function FunctionSymbol(parameters, body)
     {
-        this.params = params;
+        this.parameters = parameters;
         this.body = body;
     }
     
@@ -41,6 +41,7 @@ Symbol = (function(){
 State = (function(){
     function State()
     {
+        this._stackFrame = [];
         this._symbols = {};
     }
     
@@ -58,6 +59,21 @@ State = (function(){
     State.prototype.getSymbol = function(name){
         if(this._symbols[name] === undefined) return Symbol.Undefined;
         else return this._symbols[name];
+    };
+    
+    State.prototype.pushStackFrame = function(){
+        this._stackFrame[this._stackFrame.length] = this._symbols;
+        this._symbols = {};
+    };
+    
+    State.prototype.popStackFrame = function(){
+        if(this._stackFrame.length === 0)
+        {
+            console.warn("You are trying to pop a stack frame with an empty stack!");
+            return;
+        }
+        this._symbols = this._stackFrame[this._stackFrame.length - 1];
+        delete this._stackFrame[this._stackFrame.length - 1];
     };
     
     return State;
@@ -131,6 +147,9 @@ FirstPass = (function(){
             break;
         case "IfStatement":
             result = this.visitIfStatement(ast, state);
+            break;
+        case "ReturnStatement":
+            result = this.visitReturnStatement(ast, state);
             break;
         }
         return result;
@@ -353,14 +372,61 @@ FirstPass = (function(){
     FirstPass.prototype.visitCallExpression = function(ast, state){
         // TODO implement correctly
         var calleeResult = this.accept(ast.callee, state);
+        var functionSymbol;
+        
         if(calleeResult.success === true)
         {
-            argumentValues = [];
-            argumentValue = this.accept(ast.arguments[0], state).value;
-            argumentValues.push(argumentValue);
-            window[calleeResult.value].apply(window, argumentValues);
+            if(calleeResult.value instanceof Symbol)
+            {
+                functionSymbol = calleeResult.value.value;
+                if(functionSymbol instanceof FunctionSymbol)
+                {
+                    return this.callFunctionSymbol(functionSymbol, ast.arguments, state)
+                }
+            }
+            console.warn("left expression is not a function");
         }
         return defaultResult;
+    };
+    
+    /**
+     * @param {FunctionSymbol} functionSymbol
+     * @param {Array} argumentsAst
+     * @param {State} state
+     */
+    FirstPass.prototype.callFunctionSymbol = function(functionSymbol, argumentsAst, state){
+        var argumentValues = [];
+        var parameter;
+        var n;
+        var result;
+        
+        // eval arguments
+        for(n = 0; n < argumentsAst.length; n++)
+        {
+            // TODO if an argument cannot be evaluated cancel function call
+            argumentValues[n] = this.accept(argumentsAst[n], state);
+        }
+        
+        // push new context into state
+        state.pushStackFrame();
+        
+        // bind arguments values to parameters symbols
+        for(n = 0; n < functionSymbol.parameters.length; n++)
+        {
+            parameter = functionSymbol.parameters[n];
+            state.addSymbol(parameter.name, argumentValues[n].value);
+        }
+        // call function body
+        result = this.accept(functionSymbol.body, state);
+        
+        // pop context from state
+        state.popStackFrame();
+        
+        return result;
+    };
+    
+    FirstPass.prototype.visitReturnStatement = function(ast, state){
+        return this.accept(ast.argument, state);
     };
     
     FirstPass.prototype.visitIdentifier = function(ast, state){
