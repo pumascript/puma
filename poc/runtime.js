@@ -57,8 +57,18 @@ State = (function(){
     };
     
     State.prototype.getSymbol = function(name){
-        if(this._symbols[name] === undefined) return Symbol.Undefined;
+        if(this._symbols[name] === undefined)
+        {
+            return this.findSymbolInStackFrame(name, this._stackFrame.length - 1);
+        }
         else return this._symbols[name];
+    };
+    
+    State.prototype.findSymbolInStackFrame = function(name, stackFrameIndex){
+        if(stackFrameIndex < 0) return Symbol.Undefined;
+        var stackFrame = this._stackFrame[stackFrameIndex];
+        if(stackFrame[name] === undefined) return this.findSymbolInStackFrame(name, stackFrameIndex - 1);
+        return stackFrame[name];
     };
     
     State.prototype.pushStackFrame = function(){
