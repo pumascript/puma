@@ -1,14 +1,24 @@
-function Result(success, value){
-    this.success = success;
-    this.value = value;
-}
-Result.prototype.failed = function(){
-    return this.success !== true;
-};
-Result.prototype.makeValue = function(){
-    if(this.value instanceof Symbol)
-        this.value = this.value.value;
-};
+Result = (function(){
+    function Result(success, value){
+        this.success = success;
+        this.value = value;
+    }
+    Result.prototype.failed = function(){
+        return this.success !== true;
+    };
+    Result.prototype.makeValue = function(){
+        if(this.value instanceof Symbol)
+            this.value = this.value.value;
+    };
+    Result.prototype.isReturnResult = function(){
+        return this._isReturnResult === true;
+    };
+    Result.prototype.setIsReturnResult = function(value){
+        return this._isReturnResult = value;
+    };
+    
+    return Result;
+})();
 
 FunctionSymbol = (function(){
     function FunctionSymbol(parameters, body)
@@ -65,7 +75,7 @@ State = (function(){
     };
     
     State.prototype.findSymbolInStackFrame = function(name, stackFrameIndex){
-        if(stackFrameIndex < 0) return Symbol.Undefined;
+        if(stackFrameIndex < 0 || this._stackFrame.length === 0) return Symbol.Undefined;
         var stackFrame = this._stackFrame[stackFrameIndex];
         if(stackFrame[name] === undefined) return this.findSymbolInStackFrame(name, stackFrameIndex - 1);
         return stackFrame[name];
@@ -83,7 +93,7 @@ State = (function(){
             return;
         }
         this._symbols = this._stackFrame[this._stackFrame.length - 1];
-        delete this._stackFrame[this._stackFrame.length - 1];
+        this._stackFrame.pop();
     };
     
     return State;
@@ -99,7 +109,10 @@ FirstPass = (function(){
     FirstPass.prototype.acceptArray = function(arrayNodes, state){
         var result = defaultResult;
         for(var i = 0; i < arrayNodes.length; i++)
+        {
             result = this.accept(arrayNodes[i], state);
+            if(result.isReturnResult()) break;
+        }
         return result;
     };
     
@@ -192,25 +205,33 @@ FirstPass = (function(){
     };
     
     FirstPass.prototype.addFunctionDeclaration = function(name, params, body, state){
-        return state.addSymbol(name, new FunctionSymbol(params, body));
+        return new Result(true, state.addSymbol(name, new FunctionSymbol(params, body)));
     };
     
     FirstPass.prototype.visitVariableDeclaration = function(ast, state){
         if(ast.kind === "var")
         {
-            this.acceptArray(ast.declarations, state);
+            return this.acceptArray(ast.declarations, state);
+        }
+        else
+        {
+            return defaultResult;
         }
     };
     
     FirstPass.prototype.visitVariableDeclarator = function(ast, state){
         if(ast.id.type === "Identifier")
         {
-            this.addLocalVariableDeclaration(ast.id.name, ast.init, state);
+            return new Result(true, this.addLocalVariableDeclaration(ast.id.name, ast.init, state));
+        }
+        else
+        {
+            return defaultResult;
         }
     };
     
     FirstPass.prototype.addLocalVariableDeclaration = function(name, init, state){
-        state.addSymbol(name);
+        var symbol = state.addSymbol(name);
         if(init !== null)
         {
             var initResult = this.accept(init, state);
@@ -221,6 +242,7 @@ FirstPass = (function(){
                 symbol.value = initResult.value;
             }
         }
+        return symbol;
     };
     
     FirstPass.prototype.visitAssignmentExpression = function(ast, state){
@@ -432,11 +454,13 @@ FirstPass = (function(){
         // pop context from state
         state.popStackFrame();
         
-        return result;
+        return new Result(true, result.value);
     };
     
     FirstPass.prototype.visitReturnStatement = function(ast, state){
-        return this.accept(ast.argument, state);
+        var result = this.accept(ast.argument, state);
+        result.setIsReturnResult(true);
+        return result;
     };
     
     FirstPass.prototype.visitIdentifier = function(ast, state){
