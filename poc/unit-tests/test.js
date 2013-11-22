@@ -17,6 +17,16 @@ test("basic function", function(){
     equal( result.value, 1, "Passed!");
 });
 
+test("basic function arguments", function(){
+    var result = evalPuma("function foo(a, b){ return a + b; } foo(1, 2);");
+    equal( result.value, 3, "Passed!");
+});
+
+test("basic function arguments with same name than local variables", function(){
+    var result = evalPuma("var a = 2; var b = 3; function foo(a, b){ return a + b; } foo(1, 2);");
+    equal( result.value, 3, "Passed!");
+});
+
 test("parent variable hidden by local variable", function(){
     var result = evalPuma("var a = 1; function foo(){ var a = 5; return a; } foo();");
     result.makeValue();
@@ -39,6 +49,16 @@ test("parent variable accessed from local function", function(){
     var result = evalPuma("var a = 1; var b = 1; function foo(){ var a = 2; function foo2(){ a = 5; } foo2(); b = a; return 2; } foo(); b;");
     result.makeValue();
     equal( result.value, 5, "Passed!");
+});
+
+test("recursive function call", function(){
+    var result = evalPuma("function recursive(a){ if(a>5) return a; else return recursive(a+1); } recursive(1);");
+    equal(result.value, 6, "Passed!");
+});
+
+test("function that returns a function", function(){
+    var result = evalPuma("function foo(){ function inner(){ return 2; } return inner; } foo()();");
+    equal(result.value, 2, "Passed!");
 });
 
 test("return statement", function(){

@@ -402,7 +402,6 @@ FirstPass = (function(){
     };
     
     FirstPass.prototype.visitCallExpression = function(ast, state){
-        // TODO implement correctly
         var calleeResult = this.accept(ast.callee, state);
         var functionSymbol;
         
@@ -411,12 +410,20 @@ FirstPass = (function(){
             if(calleeResult.value instanceof Symbol)
             {
                 functionSymbol = calleeResult.value.value;
-                if(functionSymbol instanceof FunctionSymbol)
-                {
-                    return this.callFunctionSymbol(functionSymbol, ast.arguments, state)
-                }
             }
-            console.warn("left expression is not a function");
+            else if(calleeResult.value instanceof FunctionSymbol)
+            {
+                functionSymbol = calleeResult.value;
+            }
+            else
+            {
+                console.warn("left expression is not a function");
+            }
+            
+            if(functionSymbol instanceof FunctionSymbol)
+            {
+                return this.callFunctionSymbol(functionSymbol, ast.arguments, state)
+            }
         }
         return defaultResult;
     };
@@ -443,6 +450,9 @@ FirstPass = (function(){
         state.pushStackFrame();
         
         // bind arguments values to parameters symbols
+        // TODO consider cases where:
+        // - there are less arguments than parameters
+        // - there are more arguments than parameters
         for(n = 0; n < functionSymbol.parameters.length; n++)
         {
             parameter = functionSymbol.parameters[n];
@@ -453,6 +463,8 @@ FirstPass = (function(){
         
         // pop context from state
         state.popStackFrame();
+        
+        result.makeValue();
         
         return new Result(true, result.value);
     };
