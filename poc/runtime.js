@@ -353,6 +353,9 @@ FirstPass = (function(){
         case "*":
             value = leftResult.value * rightResult.value;
             break;
+        case "/":
+            value = leftResult.value / rightResult.value;
+            break;
         case "%":
             value = leftResult.value % rightResult.value;
             break;
@@ -380,6 +383,8 @@ FirstPass = (function(){
         case "||":
             value = leftResult.value || rightResult.value;
             break;
+        default:
+            console.warn("binary operator \"" + operator + "\" not found");
         }
         return new Result(true, value);
     };
@@ -456,6 +461,7 @@ FirstPass = (function(){
         for(n = 0; n < functionSymbol.parameters.length; n++)
         {
             parameter = functionSymbol.parameters[n];
+            argumentValues[n].makeValue();
             state.addSymbol(parameter.name, argumentValues[n].value);
         }
         // call function body

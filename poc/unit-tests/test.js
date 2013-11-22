@@ -12,6 +12,16 @@ test("string constant test", function() {
     ok( result.success && "Hello" === result.value, "Passed!" );
 });
 
+test("test division", function(){
+    var result = evalPuma("2 / 2;");
+    equal( result.value, 1, "Passed!");
+});
+
+test("arithmetic operations", function(){
+    var result = evalPuma("1 + 1 * 2 << 2 >> 2 / 2;");
+    equal( result.value, 1 + 1 * 2 << 2 >> 2 / 2, "Passed!");
+});
+
 test("basic function", function(){
     var result = evalPuma("function foo(){ return 1; } foo();");
     equal( result.value, 1, "Passed!");
