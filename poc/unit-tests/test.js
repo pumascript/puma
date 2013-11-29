@@ -87,3 +87,9 @@ test("for statement 2", function(){
     equal( result.value, 2, "Passed!");
 });
 */
+
+test("meta variables types counting", function(){
+    var meta = evalPuma("var a; a = 1; a = \"hola\"; a = 2;").value.meta;
+    equal( meta["number"], 2, "Passed!");
+    equal( meta["string"], 1, "Passed!");
+});
