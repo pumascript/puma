@@ -75,3 +75,15 @@ test("return statement", function(){
     var result = evalPuma("function foo(){ return 1; return 2; } foo();");
     equal( result.value, 1, "Passed!");
 });
+
+test("for statement 1", function(){
+    var result = evalPuma("for(var i=0;i<2;i=i+1) { j+=1; }");
+    equal( result.value, 2, "Passed!");
+});
+
+/*
+test("for statement 2", function(){
+    var result = evalPuma("var b=true; for(var i=0;b;i=i+1) { if(i>5)b=false; j+=1; }");
+    equal( result.value, 2, "Passed!");
+});
+*/

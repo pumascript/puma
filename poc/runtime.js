@@ -511,9 +511,21 @@ FirstPass = (function(){
     };
 	
 	FirstPass.prototype.visitForStatement = function (ast, state) {
-		initResult = this.accept(ast.init, state);
+		var initResult = this.accept(ast.init, state);		
+		var testResult = this.accept(ast.test, state);
+		testResult.makeValue();
 		
-		testResult = this.accept(ast.test, state);
+		if(initResult.failed() || testResult.failed()) return defaultResult;
+		
+		while(testResult.value) {
+			var updateResult = this.accept(ast.update, state);			
+			var bodyResult = this.accept(ast.body, state);			
+			testResult = this.accept(ast.test, state);
+			testResult.makeValue();			
+		}
+		
+		bodyResult.makeValue();
+		return bodyResult;
 	};
     
     FirstPass.prototype.visit = function(ast, state){
