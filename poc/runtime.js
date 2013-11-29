@@ -30,19 +30,27 @@ FunctionSymbol = (function(){
     return FunctionSymbol;
 })();
 
-Symbol = (function(){
-    var UNDEFINED = "__UNDEFINED__";
-    
+Symbol = (function(){    
     function Symbol(name, value)
     {
-        this.value = value;
+        this._value = value;
+        Object.defineProperty(this, "value", {
+            get : function(){ 
+                return this._value; 
+            },
+            set : function(newValue){ 
+                this.updateMetaData(newValue);
+                this._value = newValue; 
+            }
+        });
         this.name = name;
+        this.initMetaData();
     }
     
-    Symbol.Undefined = new Symbol(UNDEFINED, "undefined");
+    Symbol.UNDEFINED = "__UNDEFINED__";
     
     Symbol.prototype.isUndefined = function(){
-        return this.name === UNDEFINED;
+        return this.name === Symbol.UNDEFINED;
     };
     
     return Symbol;
