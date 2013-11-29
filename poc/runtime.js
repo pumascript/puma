@@ -179,6 +179,9 @@ FirstPass = (function(){
         case "IfStatement":
             result = this.visitIfStatement(ast, state);
             break;
+		case "ForStatement":
+            result = this.visitForStatement(ast, state);
+            break;
         case "ReturnStatement":
             result = this.visitReturnStatement(ast, state);
             break;
@@ -514,6 +517,24 @@ FirstPass = (function(){
             if(ast.alternate !== null) return this.accept(ast.alternate, state);
         }
     };
+	
+	FirstPass.prototype.visitForStatement = function (ast, state) {
+		var initResult = this.accept(ast.init, state);		
+		var testResult = this.accept(ast.test, state);
+		testResult.makeValue();
+		
+		if(initResult.failed() || testResult.failed()) return defaultResult;
+		
+		while(testResult.value) {
+			var updateResult = this.accept(ast.update, state);			
+			var bodyResult = this.accept(ast.body, state);			
+			testResult = this.accept(ast.test, state);
+			testResult.makeValue();			
+		}
+		
+		bodyResult.makeValue();
+		return bodyResult;
+	};
     
     FirstPass.prototype.visit = function(ast, state){
         
