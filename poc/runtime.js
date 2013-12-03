@@ -113,6 +113,7 @@ FirstPass = (function(){
     }
     
     var defaultResult = new Result(false, null);
+	var emptyResult = new Result(true, null);
     
     FirstPass.prototype.acceptArray = function(arrayNodes, state){
         var result = defaultResult;
@@ -515,6 +516,7 @@ FirstPass = (function(){
         else
         {
             if(ast.alternate !== null) return this.accept(ast.alternate, state);
+			else return emptyResult;
         }
     };
 	

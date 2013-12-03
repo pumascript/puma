@@ -81,12 +81,15 @@ test("for statement 1", function(){
     equal( result.value, 2, "Passed!");
 });
 
-/*
 test("for statement 2", function(){
-    var result = evalPuma("var b=true; for(var i=0;b;i=i+1) { if(i>5)b=false; j+=1; }");
-    equal( result.value, 2, "Passed!");
+    var result = evalPuma("var b=true; for(var i=0;b;i=i+1) { if(i>5)b=false;}");
+    equal( result.value, false, "Passed!");
 });
-*/
+
+test("for statement 3", function(){
+    var result = evalPuma("var b=true; for(var i=0;b;i=i+1) { if(i>5)b=false; j+=1;}");
+    equal( result.value, 6, "Passed!");
+});
 
 test("meta variables types counting", function(){
     var meta = evalPuma("var a; a = 1; a = \"hola\"; a = 2;").value.meta;
