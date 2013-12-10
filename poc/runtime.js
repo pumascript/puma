@@ -547,7 +547,7 @@ FirstPass = (function(){
 
 function evalPuma(programStr)
 {
-    var ast = window.esprima.parse(programStr);
+    var ast = window.esprima.parse(programStr, {"comment": true });
     
     var firstPass = new FirstPass();
     return firstPass.accept(ast, new State);

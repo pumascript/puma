@@ -91,6 +91,21 @@ test("for statement 3", function(){
     equal( result.value, 6, "Passed!");
 });
 
+test("Comments testing 1", function(){
+    var result = evalPuma("var b=true; //This is a comment");
+    equal( result.success, true, "Passed!");
+});
+
+test("Comments testing 2", function(){
+    var result = evalPuma("//Comment\n var b=true;");
+    equal( result.success, true, "Passed!");
+});
+
+test("Comments testing 3", function(){
+    var result = evalPuma("/*Comment*/ var b=true;");
+    equal( result.success, true, "Passed!");
+});
+
 test("meta variables types counting", function(){
     var meta = evalPuma("var a; a = 1; a = \"hola\"; a = 2;").value.meta;
     equal( meta["number"], 2, "Passed!");
