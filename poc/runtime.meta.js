@@ -1,4 +1,4 @@
-Symbol.EmitTypeWarnings = true;
+Symbol.EmitTypeWarnings = false;
 
 Symbol.prototype.initMetaData = function(){
     this._meta = {
