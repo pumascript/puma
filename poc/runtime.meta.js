@@ -1,5 +1,10 @@
+Symbol.EmitTypeWarnings = true;
+
 Symbol.prototype.initMetaData = function(){
-    this._meta = {};
+    this._meta = {
+        parameters: [],
+        returns: {}
+    };
     Object.defineProperty(this, "meta", {
         get : function(){ 
             return this._meta;
@@ -9,21 +14,65 @@ Symbol.prototype.initMetaData = function(){
 
 Symbol.Undefined = new Symbol(Symbol.UNDEFINED, "undefined");
 
+/**
+ * Register symbol meta-type information for last assignation operation
+ * @param newValue {object} actual value that will be assigned to the symbol
+ */
 Symbol.prototype.updateMetaData = function(newValue){
+    Symbol._updateMetaData(this.name, this._meta, newValue, "Symbol");
+};
+
+/**
+ * Helper function to register (type,count) pairs in meta-type dictionaries
+ * @param symbolName {string} Name of the symbol that will be used if a warning is emmited
+ * @param dictionary {object<string,number>} An object used as dictionary where the key is the typename and the value is the number of ocurrences.
+ */
+Symbol._updateMetaData = function(symbolName, dictionary, newValue, errorStartString){
     var type = typeof(newValue);
-    if(this._meta[type] === undefined)
+    if(dictionary[type] === undefined)
     {
-        if(Symbol.EmitTypeWarnings && Object.keys(this._meta).length >= 1)
+        if(Symbol.EmitTypeWarnings && Object.keys(dictionary).length >= 1)
         {
-            console.warn("Symbol \"" + this.name + "\" takes more than one type in their lifetime.");
+            console.warn(errorStartString + " \"" + symbolName + "\" takes more than one type in their lifetime.");
         }
-        this._meta[type] = 1;
+        dictionary[type] = 1;
     }
     else
     {
-        this._meta[type]++;
+        dictionary[type]++;
     }
 };
 
-Symbol.EmitTypeWarnings = false;
+FunctionSymbol.prototype.initMetaData = Symbol.prototype.initMetaData;
+
+/**
+ * Register actual arguments type information in Function meta-type information
+ * @param actualArguments {Array<Result>} An array with the results of evaluation of each actual argument
+ * @return {void}
+ */
+FunctionSymbol.prototype.registerCallStart = function(actualArguments){
+    var n;
+    var types;
+    var actualArgumentValue;
     
+    for(n = 0; n < actualArguments.length; n++)
+    {
+        types = this._meta.parameters[n];
+        if(types === undefined)
+        {
+            types = {};
+            this._meta.parameters[n] = types;
+        }
+        actualArgumentValue = actualArguments[n].value;
+        Symbol._updateMetaData(this.name, types, actualArgumentValue, "Parameter " + n + " of function");
+    }
+};
+
+/**
+ * Register return value type information in Function meta-type information
+ * @param returnResult {Result} The Result object that last function call generated
+ * @return {void}
+ */
+FunctionSymbol.prototype.registerCallReturn = function(returnResult){
+    Symbol._updateMetaData(this.name, this._meta.returns, returnResult.value, "Return type");
+};
