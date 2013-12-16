@@ -111,3 +111,18 @@ test("meta variables types counting", function(){
     equal( meta["number"], 2, "Passed!");
     equal( meta["string"], 1, "Passed!");
 });
+
+test("meta parameters and return type counting", function(){
+    var meta = evalPuma("function foo(a, b){ return a + b; } foo(1,2); foo(3,4); foo;").value.value.meta;
+    equal(meta.parameters[0]["number"], 2, "Passed!");
+    equal(meta.parameters[1]["number"], 2, "Passed!");
+    equal(meta.returns["number"], 2, "Passed!");
+});
+
+test("mixed meta parameters and return type counting", function(){
+    var meta = evalPuma("function foo(a, b){ return a + b; } foo(1,\"hola\"); foo(3,4); foo;").value.value.meta;
+    equal(meta.parameters[0]["number"], 2, "Passed!");
+    equal(meta.parameters[1]["number"], 1, "Passed!");
+    equal(meta.returns["number"], 1, "Passed!");
+    equal(meta.returns["string"], 1, "Passed!");
+});

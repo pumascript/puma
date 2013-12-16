@@ -21,10 +21,12 @@ Result = (function(){
 })();
 
 FunctionSymbol = (function(){
-    function FunctionSymbol(parameters, body)
+    function FunctionSymbol(name, parameters, body)
     {
+        this.name = name;
         this.parameters = parameters;
         this.body = body;
+        this.initMetaData();        
     }
     
     return FunctionSymbol;
@@ -217,7 +219,7 @@ FirstPass = (function(){
     };
     
     FirstPass.prototype.addFunctionDeclaration = function(name, params, body, state){
-        return new Result(true, state.addSymbol(name, new FunctionSymbol(params, body)));
+        return new Result(true, state.addSymbol(name, new FunctionSymbol(name, params, body)));
     };
     
     FirstPass.prototype.visitVariableDeclaration = function(ast, state){
@@ -476,6 +478,10 @@ FirstPass = (function(){
             argumentValues[n].makeValue();
             state.addSymbol(parameter.name, argumentValues[n].value);
         }
+        
+        // call meta function data collection
+        functionSymbol.registerCallStart(argumentValues);
+        
         // call function body
         result = this.accept(functionSymbol.body, state);
         
@@ -483,6 +489,8 @@ FirstPass = (function(){
         state.popStackFrame();
         
         result.makeValue();
+        
+        functionSymbol.registerCallReturn(result);
         
         return new Result(true, result.value);
     };
