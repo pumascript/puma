@@ -21,11 +21,12 @@ Result = (function(){
 })();
 
 FunctionSymbol = (function(){
-    function FunctionSymbol(name, parameters, body)
+    function FunctionSymbol(name, parameters, body, isMeta)
     {
         this.name = name;
         this.parameters = parameters;
         this.body = body;
+        this.isMeta = isMeta;
         this.initMetaData();        
     }
     
@@ -112,6 +113,8 @@ State = (function(){
 FirstPass = (function(){
     function FirstPass()
     {
+        this._metaComments = [];
+        this._lastStatementLoc = {"line": 0, "column": 0};
     }
     
     var defaultResult = new Result(false, null);
@@ -188,11 +191,21 @@ FirstPass = (function(){
         case "ReturnStatement":
             result = this.visitReturnStatement(ast, state);
             break;
+        case "Block":
+            result = this.visitComment(ast,state);
+            break;
         }
+        
+        this._lastStatementLoc = ast.loc.end;
         return result;
     };
             
     FirstPass.prototype.visitProgram = function(ast, state){
+        if(ast.comments) {
+            this.acceptArray(ast.comments, state);
+            this._lastStatementLoc.column = 0;
+            this._lastStatementLoc.line = 0;
+        }
         return this.acceptArray(ast.body, state);
     };
     
@@ -209,7 +222,7 @@ FirstPass = (function(){
     FirstPass.prototype.visitFunctionDeclaration = function(ast, state){
         if(ast.id.type === "Identifier")
         {
-            return this.addFunctionDeclaration(ast.id.name, ast.params, ast.body, state);
+            return this.addFunctionDeclaration(ast.id.name, ast.params, ast.body, state, ast.loc.start);
         }
         else
         {
@@ -218,8 +231,32 @@ FirstPass = (function(){
         }
     };
     
-    FirstPass.prototype.addFunctionDeclaration = function(name, params, body, state){
-        return new Result(true, state.addSymbol(name, new FunctionSymbol(name, params, body)));
+    FirstPass.prototype.addFunctionDeclaration = function(name, params, body, state, loc){
+        var commentColumns = this._metaComments[loc.line]; 
+        var commentLine = loc.line;
+        var isMeta = false;
+        
+        if(commentColumns === undefined) { 
+            commentColumns =  this._metaComments[loc.line-1];
+            commentLine = loc.line-1;
+        }
+        
+        if(commentColumns !== undefined){
+            if(commentLine >= this._lastStatementLoc.line) {
+                if(commentLine < loc.line) isMeta = true;
+                else {
+                    for(var i=0; i<commentColumns.length;i++) {
+                        var column = commentColumns[i];
+                        if(column>this._lastStatementLoc.column && column<loc.column) {
+                            isMeta=true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+            
+        return new Result(true, state.addSymbol(name, new FunctionSymbol(name, params, body, isMeta)));
     };
     
     FirstPass.prototype.visitVariableDeclaration = function(ast, state){
@@ -546,6 +583,18 @@ FirstPass = (function(){
 		return bodyResult;
 	};
     
+    FirstPass.prototype.visitComment = function(ast, state) {
+        //TODO Use RegEx
+        if(ast.value.indexOf("@meta") >= 0) {
+            var lineMetaComments = this._metaComments[ast.loc.end.line];
+            if( lineMetaComments === undefined) {
+               lineMetaComments = this._metaComments[ast.loc.end.line] = [];
+            }
+            lineMetaComments.push(ast.loc.end.column);
+        }
+        return defaultResult;
+    }
+    
     FirstPass.prototype.visit = function(ast, state){
         
     };
@@ -555,9 +604,8 @@ FirstPass = (function(){
 
 function evalPuma(programStr)
 {
-    var ast = window.esprima.parse(programStr, {"comment": true });
-    
-    var firstPass = new FirstPass();
+    var ast = window.esprima.parse(programStr, {"comment": true, "loc": true });    
+    var firstPass = new FirstPass();  
     return firstPass.accept(ast, new State);
 }
 

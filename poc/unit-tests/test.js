@@ -126,3 +126,18 @@ test("mixed meta parameters and return type counting", function(){
     equal(meta.returns["number"], 1, "Passed!");
     equal(meta.returns["string"], 1, "Passed!");
 });
+
+
+test("Meta Function testing 1", function(){
+    var result = evalPuma("/*@meta*/ function funcion(){}; function foo() {}; funcion;");
+    equal( result.success, true, "Passed!");
+    equal( result.value._value.isMeta, true, "Passed!");    
+});
+
+test("Meta Function testing 2", function(){
+    var result = evalPuma("/*@meta*/ function funcion(){}; function foo() {}; foo;");
+    equal( result.success, true, "Passed!");
+    equal( result.value._value.isMeta, false, "Passed!");    
+});
+
+
