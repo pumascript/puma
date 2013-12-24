@@ -140,4 +140,7 @@ test("Meta Function testing 2", function(){
     equal( result.value._value.isMeta, false, "Passed!");    
 });
 
-
+test("Unary expressions", function(){
+    var result = evalPuma("var a = '3'; var b = 1; if(!false){~(+a + (-b));}");
+    equal( result.value, -3, "Passed!");
+});
