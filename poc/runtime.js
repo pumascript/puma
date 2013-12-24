@@ -194,6 +194,9 @@ FirstPass = (function(){
         case "Block":
             result = this.visitComment(ast,state);
             break;
+        case "UpdateExpression":
+            result = this.visitUpdateExpression(ast,state);
+            break;
         }
         
         this._lastStatementLoc = ast.loc.end;
@@ -449,10 +452,29 @@ FirstPass = (function(){
         var value;
         switch(ast.operator)
         {
+        case "delete":
+            value = delete argumentResult.value;
+            break;
+        case "void":
+            value = void argumentResult.value;
+            break;
+        case "typeof":
+            value = typeof argumentResult.value;
+            break;
+        case "+":
+            value = +argumentResult.value;
+            break;
+        case "-":
+            value = -argumentResult.value;
+            break;
+        case "~":
+            value = ~argumentResult.value;
+            break;
         case "!":
             value = !argumentResult.value;
             break;
-        // TODO add all operators in ECMA-262 section 11.4 Unary Operators
+        // the "++" and "--" operators are identified as "UpdateExpression" by the parser
+        // instead of "UnaryExpression" so a special handler was added for them
         }
         return new Result(true, value);
     };
@@ -594,6 +616,25 @@ FirstPass = (function(){
         }
         return defaultResult;
     }
+    
+    FirstPass.prototype.visitUpdateExpression = function(ast, state){
+        var argumentResult = this.accept(ast.argument, state);
+        if(argumentResult.failed()) return defaultResult;
+
+        argumentResult.makeValue();
+            
+        var value;
+        switch(ast.operator)
+        {
+        case "++":
+            value = ++argumentResult.value;
+            break;
+        case "--":
+            value = --argumentResult.value;
+            break;
+        }
+        return new Result(true, value);
+    };
     
     FirstPass.prototype.visit = function(ast, state){
         
