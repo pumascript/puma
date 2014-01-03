@@ -141,6 +141,6 @@ test("Meta Function testing 2", function(){
 });
 
 test("Unary expressions", function(){
-    var result = evalPuma("var a = '3'; var b = 1; if(!false){~(+a + (-b));}");
-    equal( result.value, -3, "Passed!");
+    var result = evalPuma("var a = '3'; var b = 1; b++; if(!false){~(+a + (-b));}");
+    equal( result.value, -2, "Passed!");
 });
