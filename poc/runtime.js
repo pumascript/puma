@@ -621,19 +621,17 @@ FirstPass = (function(){
         var argumentResult = this.accept(ast.argument, state);
         if(argumentResult.failed()) return defaultResult;
 
-        argumentResult.makeValue();
-            
-        var value;
+        var symbol = argumentResult.value;
         switch(ast.operator)
         {
         case "++":
-            value = ++argumentResult.value;
+            symbol.value++;
             break;
         case "--":
-            value = --argumentResult.value;
+            symbol.value--;
             break;
         }
-        return new Result(true, value);
+        return new Result(true, symbol);
     };
     
     FirstPass.prototype.visit = function(ast, state){
