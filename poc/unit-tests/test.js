@@ -144,3 +144,13 @@ test("Unary expressions", function(){
     var result = evalPuma("var a = '3'; var b = 1; b++; if(!false){~(+a + (-b));}");
     equal( result.value, -2, "Passed!");
 });
+
+test("While statement 1", function(){
+    var result = evalPuma("var a=0; while(a<10){a++;}");
+    equal( result.value, 10, "Passed!");
+});
+
+test("While statement 2", function(){
+    var result = evalPuma("var a=0; var b=true; while(b){if(a>=9){b=false;} a++;}");
+    equal( result.value, 10, "Passed!");
+});

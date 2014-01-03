@@ -638,26 +638,15 @@ FirstPass = (function(){
     };
     
     FirstPass.prototype.visitWhileStatement = function (ast, state) {
-		// var initResult = this.accept(ast.init, state);
 		var testResult = this.accept(ast.test, state);
 		testResult.makeValue();
 
 		if(testResult.failed()) return defaultResult;
-		
-        var safety = 0;
-        
+
 		while(testResult.value) {
-			// var updateResult = this.accept(ast.update, state);			
 			var bodyResult = this.accept(ast.body, state);			
 			testResult = this.accept(ast.test, state);
 			testResult.makeValue();
-            
-            // development test, should be removed
-            safety++;
-            if (safety > 20) {
-                console.warn("while loop not working");
-                break;
-            }
 		}
 		
 		bodyResult.makeValue();
