@@ -197,6 +197,9 @@ FirstPass = (function(){
         case "UpdateExpression":
             result = this.visitUpdateExpression(ast,state);
             break;
+        case "WhileStatement":
+            result = this.visitWhileStatement(ast,state);
+            break;
         }
         
         this._lastStatementLoc = ast.loc.end;
@@ -636,6 +639,33 @@ FirstPass = (function(){
         return new Result(true, value);
     };
     
+    FirstPass.prototype.visitWhileStatement = function (ast, state) {
+		// var initResult = this.accept(ast.init, state);
+		var testResult = this.accept(ast.test, state);
+		testResult.makeValue();
+
+		if(testResult.failed()) return defaultResult;
+		
+        var safety = 0;
+        
+		while(testResult.value) {
+			// var updateResult = this.accept(ast.update, state);			
+			var bodyResult = this.accept(ast.body, state);			
+			testResult = this.accept(ast.test, state);
+			testResult.makeValue();
+            
+            // development test, should be removed
+            safety++;
+            if (safety > 20) {
+                console.warn("while loop not working");
+                break;
+            }
+		}
+		
+		bodyResult.makeValue();
+		return bodyResult;
+	};
+        
     FirstPass.prototype.visit = function(ast, state){
         
     };
