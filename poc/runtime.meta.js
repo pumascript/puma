@@ -76,3 +76,19 @@ FunctionSymbol.prototype.registerCallStart = function(actualArguments){
 FunctionSymbol.prototype.registerCallReturn = function(returnResult){
     Symbol._updateMetaData(this.name, this._meta.returns, returnResult.value, "Return type");
 };
+
+/**
+ * Merges the result returned by a meta function call with the function call context.
+ * @param {Result} result Result object returned by the meta function call
+ * @param {*} callExpressionAst Original Esprima call expression node.
+ */
+FirstPass.prototype.mergeMetaCallResult = function(result, callExpressionAst){
+    var resultValue = result.value;
+    if(resultValue !== null)
+    {
+        for (var attr in resultValue)
+        {
+            if (resultValue.hasOwnProperty(attr)) callExpressionAst[attr] = resultValue[attr];
+        }
+    }
+};

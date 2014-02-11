@@ -200,10 +200,48 @@ FirstPass = (function(){
         case "WhileStatement":
             result = this.visitWhileStatement(ast,state);
             break;
+        case "ObjectExpression":
+            result = this.visitObjectExpression(ast, state);
+            break;
         }
         
         this._lastStatementLoc = ast.loc.end;
         return result;
+    };
+    
+    FirstPass.prototype.visitObjectExpression = function(ast, state){
+        var propertiesCount = ast.properties.length;
+        var propertiesAst = ast.properties;
+        var resultValue = {};
+        for(var i = 0; i < propertiesCount; i++)
+        {
+            var propertyAst = propertiesAst[i];
+            var propertyName; 
+            if(propertyAst.key.type === "Literal")
+            {
+                propertyName = propertyAst.key.value;
+            }
+            else if(propertyAst.key.type === "Identifier")
+            {
+                propertyName = propertyAst.key.name;
+            }
+            else
+            {
+                console.warn("Error executing object expression. Property name not found!");
+            }
+            
+            var propertyValue = this.accept(propertyAst.value, state);
+            if(propertyValue.success)
+            {
+                propertyValue.makeValue();
+                resultValue[propertyName] = propertyValue.value;
+            }
+            else
+            {
+                resultValue[propertyName] = undefined;
+            }
+        }
+        return new Result(true, resultValue);
     };
             
     FirstPass.prototype.visitProgram = function(ast, state){
@@ -503,7 +541,7 @@ FirstPass = (function(){
             
             if(functionSymbol instanceof FunctionSymbol)
             {
-                return this.callFunctionSymbol(functionSymbol, ast.arguments, state)
+                return this.callFunctionSymbol(functionSymbol, ast, ast.arguments, state)
             }
         }
         return defaultResult;
@@ -514,18 +552,30 @@ FirstPass = (function(){
      * @param {Array} argumentsAst
      * @param {State} state
      */
-    FirstPass.prototype.callFunctionSymbol = function(functionSymbol, argumentsAst, state){
+    FirstPass.prototype.callFunctionSymbol = function(functionSymbol, callExpressionAst, argumentsAst, state){
         var argumentValues = [];
         var parameter;
         var n;
         var result;
+        var argumentValue;
+        var isMetaCall = functionSymbol.isMeta;
+        var isNotMetaCall = !isMetaCall;
         
         // eval arguments
         for(n = 0; n < argumentsAst.length; n++)
         {
-            // TODO if an argument cannot be evaluated cancel function call
-            argumentValues[n] = this.accept(argumentsAst[n], state);
+            if(isNotMetaCall)
+            {
+                // TODO if an argument cannot be evaluated cancel function call
+                argumentValues[n] = this.accept(argumentsAst[n], state);
+            }
+            else
+            {
+                // TODO consider arguments that require value instead of AST
+                argumentValues[n] = argumentsAst[n];
+            }
         }
+        
         
         // push new context into state
         state.pushStackFrame();
@@ -537,8 +587,19 @@ FirstPass = (function(){
         for(n = 0; n < functionSymbol.parameters.length; n++)
         {
             parameter = functionSymbol.parameters[n];
-            argumentValues[n].makeValue();
-            state.addSymbol(parameter.name, argumentValues[n].value);
+            argumentValue = argumentValues[n];
+            if(isNotMetaCall)
+            {
+                argumentValue.makeValue();
+                argumentValue = argumentValue.value;
+            }
+            state.addSymbol(parameter.name, argumentValue);
+        }
+        
+        // bind special meta function implicit arguments
+        if(isMetaCall)
+        {
+            state.addSymbol("context", callExpressionAst);
         }
         
         // call meta function data collection
@@ -550,7 +611,14 @@ FirstPass = (function(){
         // pop context from state
         state.popStackFrame();
         
-        result.makeValue();
+        if(isMetaCall && result.success)
+        {
+            this.mergeMetaCallResult(result, callExpressionAst);
+        }
+        else
+        {
+            result.makeValue();
+        }
         
         functionSymbol.registerCallReturn(result);
         
@@ -662,9 +730,16 @@ FirstPass = (function(){
 
 function evalPuma(programStr)
 {
-    var ast = window.esprima.parse(programStr, {"comment": true, "loc": true });    
+    var ast = window.esprima.parse(programStr, {"comment": true, "loc": true });
+    return evalPumaAst(ast);
+}
+
+function evalPumaAst(programAst)
+{
     var firstPass = new FirstPass();  
-    return firstPass.accept(ast, new State);
+    var result = firstPass.accept(programAst, new State);
+    result.pumaAst = programAst;
+    return result;
 }
 
 window.onload = function(){

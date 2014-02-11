@@ -154,3 +154,38 @@ test("While statement 2", function(){
     var result = evalPuma("var a=0; var b=true; while(b){if(a>=9){b=false;} a++;}");
     equal( result.value, 10, "Passed!");
 });
+
+test("Object expression", function(){
+    var result = evalPuma("var o1 = { a: 1, b: 3 }; o1;");
+    equal( result.value.value.a, 1, "Passed!");
+    equal( result.value.value.b, 3, "Passed!");
+});
+
+test("Object expression 2", function(){
+    var result = evalPuma("var o1 = { 'a': 1, 'b': 3 }; o1;");
+    equal( result.value.value.a, 1, "Passed!");
+    equal( result.value.value.b, 3, "Passed!");
+});
+
+test("Object expression with inner sub objects", function(){
+    var result = evalPuma("var o1 = { a: { c: 1 }, b: { d: 'hola'} }; o1;");
+    equal( result.value.value.a.c, 1, "Passed!");
+    equal( result.value.value.b.d, 'hola', "Passed!");
+});
+
+test("Basic Meta Function that rewrite itself", function(){
+    var result = evalPuma("/*@meta*/ function sumar(a,b){ return "+
+        '{"type":"BinaryExpression","operator":"+","left": a,"right":b };'
+    +" } sumar(5, 6);");
+    result = evalPumaAst(result.pumaAst);
+    equal( result.success, true, "Passed!");
+    equal( result.value, 11, "Passed!");
+});
+
+test("Basic Meta Function that returns null do not rewrite itself", function(){
+    var result = evalPuma("/*@meta*/ function sumar(a,b){ return null; } sumar(5, 6);");
+    equal( result.value, null, "Passed!");
+    result = evalPumaAst(result.pumaAst);
+    equal( result.success, true, "Passed!");
+    equal( result.value, null, "Passed!");
+});
