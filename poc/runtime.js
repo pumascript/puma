@@ -27,7 +27,7 @@ FunctionSymbol = (function(){
         this.parameters = parameters;
         this.body = body;
         this.isMeta = isMeta;
-        this.initMetaData();        
+        this.initMetaData();
     }
     
     return FunctionSymbol;
@@ -64,7 +64,14 @@ State = (function(){
     {
         this._stackFrame = [];
         this._symbols = {};
+        this.initializeDefaultSymbols();
     }
+    
+    State.prototype.initializeDefaultSymbols = function(){
+        var pumaAst = new FunctionSymbol("pumaAst", [], null, true);
+        pumaAst.isAstConstructionFunction = true;
+        this.addSymbol("pumaAst", pumaAst);
+    };
     
     State.prototype.addSymbol = function(name, value){
         if(value === undefined) value = null;
@@ -541,6 +548,7 @@ FirstPass = (function(){
             
             if(functionSymbol instanceof FunctionSymbol)
             {
+                if(functionSymbol.isAstConstructionFunction) return this.callAstConstruction(ast, ast.arguments, state);
                 return this.callFunctionSymbol(functionSymbol, ast, ast.arguments, state)
             }
         }

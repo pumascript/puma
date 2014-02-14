@@ -92,3 +92,16 @@ FirstPass.prototype.mergeMetaCallResult = function(result, callExpressionAst){
         }
     }
 };
+
+FirstPass.prototype.callAstConstruction = function(callExpressionAst, argumentsAst, state){
+    var ast = null;
+    if(argumentsAst.length === 1) 
+    {
+        ast = argumentsAst[0];
+    }
+    else
+    {
+        return defaultResult;
+    }
+    return new Result(true, ast);
+};
