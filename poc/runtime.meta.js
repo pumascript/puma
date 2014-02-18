@@ -101,7 +101,7 @@ FirstPass.prototype.findTemplateIds = function(ast, list, parentAst, propertyNam
     }
     else
     {
-        for( var i in ast)
+        for(var i in ast)
         {
             if(typeof(ast[i]) === "object") this.findTemplateIds(ast[i], list, ast, i);
         }
