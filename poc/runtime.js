@@ -234,7 +234,7 @@ FirstPass = (function(){
             }
             else
             {
-                console.warn("Error executing object expression. Property name not found!");
+                console.warn(PumaScript.Loc(propertyAst) + "Error executing object expression. Property name not found!");
             }
             
             var propertyValue = this.accept(propertyAst.value, state);
@@ -277,7 +277,7 @@ FirstPass = (function(){
         }
         else
         {
-            console.warn("Invalid function declaration.")
+            console.warn(PumaScript.Loc(ast) + "Invalid function declaration.")
             return defaultResult;
         }
     };
@@ -356,13 +356,13 @@ FirstPass = (function(){
 
         if(!(leftResult.value instanceof Symbol))
         {
-            console.warn("ReferenceError: Invalid left-hand side in assignment.");
+            console.warn(PumaScript.Loc(ast.left) + "ReferenceError: Invalid left-hand side in assignment.");
             return defaultResult;
         }
         if(leftResult.value.isUndefined())
         {
             var undefinedName = ast.left.name;
-            console.warn("Implicit definition of property \"" + undefinedName + "\".");
+            console.warn(PumaScript.Loc(ast.left) + "Implicit definition of property \"" + undefinedName + "\".");
             state.addSymbol(undefinedName);
             leftResult = this.accept(ast.left, state);
         }
@@ -486,7 +486,7 @@ FirstPass = (function(){
             value = leftResult.value || rightResult.value;
             break;
         default:
-            console.warn("binary operator \"" + operator + "\" not found");
+            console.warn(PumaScript.Loc(ast) + "binary operator \"" + operator + "\" not found");
         }
         return new Result(true, value);
     };
@@ -543,7 +543,7 @@ FirstPass = (function(){
             }
             else
             {
-                console.warn("left expression is not a function");
+                console.warn(PumaScript.Loc(ast.callee) + "left expression is not a function");
             }
             
             if(functionSymbol instanceof FunctionSymbol)
@@ -748,6 +748,12 @@ function evalPumaAst(programAst)
     var result = firstPass.accept(programAst, new State);
     result.pumaAst = programAst;
     return result;
+}
+
+PumaScript = {};
+
+PumaScript.Loc = function(ast){
+    return "[" + ast.loc.start.line + ", " + ast.loc.start.column + "] ";
 }
 
 window.onload = function(){

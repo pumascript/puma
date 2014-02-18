@@ -93,11 +93,46 @@ FirstPass.prototype.mergeMetaCallResult = function(result, callExpressionAst){
     }
 };
 
+FirstPass.prototype.findTemplateIds = function(ast, list, parentAst, propertyName){
+    if(list === undefined) list = [];
+    if(ast.type === "Identifier" && ast.name.indexOf("$") === 0)
+    {
+        list.push({ id: ast, parent: parentAst, property: propertyName });
+    }
+    else
+    {
+        for( var i in ast)
+        {
+            if(typeof(ast[i]) === "object") this.findTemplateIds(ast[i], list, ast, i);
+        }
+    }
+    return list;
+};
+
 FirstPass.prototype.callAstConstruction = function(callExpressionAst, argumentsAst, state){
     var ast = null;
+    var idsToReplace, i, id, idData, symbol;
     if(argumentsAst.length === 1) 
     {
         ast = argumentsAst[0];
+        
+        // replace $id in template with symbols in context
+        idsToReplace = this.findTemplateIds(ast);
+        for(i in idsToReplace)
+        {
+            idData = idsToReplace[i];
+            id = idData.id.name.substring(1);
+            
+            symbol = state.getSymbol(id);
+            if(symbol.isUndefined())
+            {
+                console.warn(PumaScript.Loc(idData.id) + 'Template parameter not found in scope "$' + id + '".');
+            }
+            else
+            {
+                idData.parent[idData.property] = symbol.value;
+            }
+        }
     }
     else
     {

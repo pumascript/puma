@@ -202,3 +202,10 @@ test("Basic Meta Function that rewrite itself using pumaAst", function(){
     equal( result.success, true, "Passed!");
     equal( result.value, 11, "Passed!");
 });
+
+test("Basic Meta Function that rewrite itself using pumaAst and parameters", function(){
+    var result = evalPuma("/*@meta*/ function sumar(a,b){ return pumaAst( $a +  $b); } sumar(5, 6);");
+    result = evalPumaAst(result.pumaAst);
+    equal( result.success, true, "Passed!");
+    equal( result.value, 11, "Passed!");
+});
