@@ -95,15 +95,19 @@ FirstPass.prototype.mergeMetaCallResult = function(result, callExpressionAst){
 
 FirstPass.prototype.findTemplateIds = function(ast, list, parentAst, propertyName){
     if(list === undefined) list = [];
-    if(ast.type === "Identifier" && ast.name.indexOf("$") === 0)
+    
+    if(ast !== null)
     {
-        list.push({ id: ast, parent: parentAst, property: propertyName });
-    }
-    else
-    {
-        for(var i in ast)
+        if(ast.type === "Identifier" && ast.name.indexOf("$") === 0)
         {
-            if(typeof(ast[i]) === "object") this.findTemplateIds(ast[i], list, ast, i);
+            list.push({ id: ast, parent: parentAst, property: propertyName });
+        }
+        else
+        {
+            for(var i in ast)
+            {
+                if(typeof(ast[i]) === "object") this.findTemplateIds(ast[i], list, ast, i);
+            }
         }
     }
     return list;
@@ -140,3 +144,73 @@ FirstPass.prototype.callAstConstruction = function(callExpressionAst, argumentsA
     }
     return new Result(true, ast);
 };
+
+/**
+ * Find AST nodes by type attribute. Type attribute must use the same names than Esprima parser.
+ * Returns an array with all the nodes. An empty array if none is found.
+ *
+ * @param {Object} ast AST node to search on.
+ * @param {string} typeName The value of "type" property of the nodes to lookup
+ * @retrun {Array} 
+ */
+function pumaFindByType(ast, typeName){
+    function internalPumaFindByType(ast, typeName, list){
+        if(ast !== null)
+        {
+            if(ast.type === typeName)
+            {
+                list.push(ast);
+            }
+            else
+            {
+                for(var i in ast)
+                {
+                    if(typeof(ast[i]) === "object") this.internalPumaFindByType(ast[i], typeName, list);
+                }
+            }
+        }
+        return list;
+    }
+    return internalPumaFindByType(ast, typeName, []);
+}
+
+/**
+ * Find nodes inside an AST node. This method search using a chain of properties passed in "propertyChain" argument. A sample call is pumaFindByProperty("left.id.name", "foo") that will look for nodes with "left" properties which "id.name" sub-property has value "foo".
+ * Returns an Array with all nodes matched with the property expression.
+ *
+ * @param {Object} ast AST node to search on.
+ * @param {string} propertyChain A string with the chain of properties to look for. Link properties with a dot like in "id.name" will look for a property "id" with a sub property "name".
+ * @return {Array}
+ */
+function pumaFindByProperty(ast, propertyChain, value){
+    var propertyChain = propertyChain.split('.');
+    var propertyLength = propertyChain.length;
+    
+    function matchProperty(ast, propertyList, value){
+        for(var i = 0; i < propertyLength; i++)
+        {
+            var innerAst = ast[propertyList];
+            // TODO
+        }
+        return false;
+    }
+    
+    function internalPumaFindByProperty(ast, propertyChain, value){
+        if(ast !== null)
+        {
+            if(matchProperty(ast, propertyList, value))
+            {
+                list.push(ast);
+            }
+            else
+            {
+                for(var i in ast)
+                {
+                    if(typeof(ast[i]) === "object") this.internalPumaFindByType(ast[i], typeName, list);
+                }
+            }
+        }
+        return list;
+    }
+    return internalPumaFindByProperty(ast, propertyChain, value);
+}
