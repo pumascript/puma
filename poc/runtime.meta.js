@@ -154,7 +154,7 @@ FirstPass.prototype.callAstConstruction = function(callExpressionAst, argumentsA
  * @retrun {Array} 
  */
 function pumaFindByType(ast, typeName){
-    function internalPumaFindByType(ast, typeName, list){
+    var internalPumaFindByType = function(ast, typeName, list){
         if(ast !== null)
         {
             if(ast.type === typeName)
@@ -165,12 +165,12 @@ function pumaFindByType(ast, typeName){
             {
                 for(var i in ast)
                 {
-                    if(typeof(ast[i]) === "object") this.internalPumaFindByType(ast[i], typeName, list);
+                    if(typeof(ast[i]) === "object") internalPumaFindByType(ast[i], typeName, list);
                 }
             }
         }
         return list;
-    }
+    };
     return internalPumaFindByType(ast, typeName, []);
 }
 
@@ -180,25 +180,31 @@ function pumaFindByType(ast, typeName){
  *
  * @param {Object} ast AST node to search on.
  * @param {string} propertyChain A string with the chain of properties to look for. Link properties with a dot like in "id.name" will look for a property "id" with a sub property "name".
+ * @param {*} value Value that will be compared with properties' value.
+ * @param {Function=} compareFunction Optional comparison function. It must take two arguments "function(propertyValue, value){}" and return true when values matches. The second argument is the value passed as parameter.
  * @return {Array}
  */
-function pumaFindByProperty(ast, propertyChain, value){
-    var propertyChain = propertyChain.split('.');
-    var propertyLength = propertyChain.length;
+function pumaFindByProperty(ast, propertyChain, value, compareFunction){
+    var propertyList = propertyChain.split('.');
+    var propertyLength = propertyList.length;
+    var matchLength = propertyLength - 1;
     
     function matchProperty(ast, propertyList, value){
+        var innerAst = ast;
         for(var i = 0; i < propertyLength; i++)
         {
-            var innerAst = ast[propertyList];
-            // TODO
+            if(innerAst === null || innerAst === undefined) return false;
+            innerAst = innerAst[propertyList[i]];
+            if(i === matchLength && compareFunction === undefined && innerAst === value) return true;
+            if(i === matchLength && compareFunction !== undefined && compareFunction(innerAst, value)) return true;
         }
         return false;
     }
     
-    function internalPumaFindByProperty(ast, propertyChain, value){
+    function internalPumaFindByProperty(ast, propertyList, value, list, compareFunction){
         if(ast !== null)
         {
-            if(matchProperty(ast, propertyList, value))
+            if(matchProperty(ast, propertyList, value, compareFunction))
             {
                 list.push(ast);
             }
@@ -206,11 +212,11 @@ function pumaFindByProperty(ast, propertyChain, value){
             {
                 for(var i in ast)
                 {
-                    if(typeof(ast[i]) === "object") this.internalPumaFindByType(ast[i], typeName, list);
+                    if(typeof(ast[i]) === "object") internalPumaFindByProperty(ast[i], propertyList, value, list, compareFunction);
                 }
             }
         }
         return list;
     }
-    return internalPumaFindByProperty(ast, propertyChain, value);
+    return internalPumaFindByProperty(ast, propertyList, value, [], compareFunction);
 }

@@ -209,3 +209,24 @@ test("Basic Meta Function that rewrite itself using pumaAst and parameters", fun
     equal( result.success, true, "Passed!");
     equal( result.value, 11, "Passed!");
 });
+
+test("Puma Find by Type", function(){
+    var ast = esprima.parse("1 + 2; 5+4; a = 2;");
+    var result = pumaFindByType(ast, "BinaryExpression");
+    
+    equal( result.length, 2, "Passed!");
+});
+
+test("Puma Find by Properties", function(){
+    var ast = esprima.parse("1 + 2; 5+4; a = 2;");
+    var result = pumaFindByProperty(ast, "expression.left.name", "a");
+    
+    equal( result.length, 1, "Passed!");
+});
+
+test("Puma Find by Properties with custom comparator", function(){
+    var ast = esprima.parse("a = 2; b = 3; cc = 1;")
+    var result = pumaFindByProperty(ast, "left.name", 1, function(value1, value2){ return value1.length === value2; } )
+    
+    equal( result.length, 2, "Passed!");
+});
