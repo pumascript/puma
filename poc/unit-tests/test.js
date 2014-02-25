@@ -230,3 +230,13 @@ test("Puma Find by Properties with custom comparator", function(){
     
     equal( result.length, 2, "Passed!");
 });
+
+test("Member expression", function(){
+    var result = evalPuma("var o1 = { a: 1, b: 3 }; o1.b;");
+    equal( result.value, 3, "Passed!");
+});
+
+test("Member expression with inner sub objects", function(){
+    var result = evalPuma("var o1 = { a: { c: 1 }, b: { d: 'hola'} }; o1.b.d;");
+    equal( result.value, 'hola', "Passed!");
+});

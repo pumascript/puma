@@ -169,7 +169,7 @@ FirstPass = (function(){
             result = this.visitCallExpression(ast, state);
             break;
         case "MemberExpression":
-            result = this.visitMemberExperssion(ast, state);
+            result = this.visitMemberExpression(ast, state);
             break;
         case "FunctionExpression":
             result = this.visitFunctionExpression(ast, state);
@@ -264,7 +264,32 @@ FirstPass = (function(){
         return this.acceptArray(ast.body, state);
     };
     
-    FirstPass.prototype.visitMemberExperssion = function(ast, state){
+    FirstPass.prototype.visitMemberExpression = function(ast, state){
+        var obj = this.accept(ast.object, state).value;
+        var propertyName = ast.property.name;
+        
+        if (obj === Object(obj))
+        {
+            if (obj instanceof Symbol)
+            {
+                obj = obj.value;
+            }
+            
+            if (propertyName in obj)
+            {
+                return new Result(true, obj[propertyName]);
+            }
+            else
+            {
+                console.warn(PumaScript.Loc(ast) + "Property name not found.")
+                return defaultResult;
+            }
+        }
+        else
+        {
+            console.warn(PumaScript.Loc(ast) + "Left hand side must be an object.")
+            return defaultResult;
+        }
     };
     
     FirstPass.prototype.visitFunctionExpression = function(ast, state){
