@@ -240,3 +240,10 @@ test("Member expression with inner sub objects", function(){
     var result = evalPuma("var o1 = { a: { c: 1 }, b: { d: 'hola'} }; o1.b.d;");
     equal( result.value, 'hola', "Passed!");
 });
+
+test("Basic Meta Function that rewrite itself using pumaAst and parameters 2", function(){
+    var result = evalPuma("/*@meta*/ function sumar(a,b){ var ast = pumaAst( $a +  $b); return ast; } sumar(5, 6);");
+    result = evalPumaAst(result.pumaAst);
+    equal( result.success, true, "Passed!");
+    equal( result.value, 11, "Passed!");
+});

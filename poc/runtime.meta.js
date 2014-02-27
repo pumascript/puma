@@ -83,7 +83,10 @@ FunctionSymbol.prototype.registerCallReturn = function(returnResult){
  * @param {*} callExpressionAst Original Esprima call expression node.
  */
 FirstPass.prototype.mergeMetaCallResult = function(result, callExpressionAst){
+    // resolve to value if it's a symbol
+    result.makeValue();
     var resultValue = result.value;
+    
     if(resultValue !== null)
     {
         for (var attr in resultValue)
