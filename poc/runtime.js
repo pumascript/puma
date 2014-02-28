@@ -47,7 +47,9 @@ Symbol = (function(){
             }
         });
         this.name = name;
-        this.initMetaData();
+        
+        if ("initMetaData" in this)
+            this.initMetaData();
     }
     
     Symbol.UNDEFINED = "__UNDEFINED__";
@@ -57,6 +59,27 @@ Symbol = (function(){
     };
     
     return Symbol;
+})();
+
+PropertyWrapper = (function(){
+    PropertyWrapper.prototype = new Symbol();
+    PropertyWrapper.prototype.constructor = PropertyWrapper;
+
+    function PropertyWrapper(obj, propertyName)
+    {
+        this._obj = obj;
+        this._propertyName = propertyName;
+        Object.defineProperty(this, "value", {
+            get : function(){
+                return this._obj[this._propertyName];
+            },
+            set : function(newValue){
+                this._obj[this._propertyName] = newValue;
+            }
+        });
+    }
+    
+    return PropertyWrapper
 })();
 
 State = (function(){
@@ -265,31 +288,18 @@ FirstPass = (function(){
     };
     
     FirstPass.prototype.visitMemberExpression = function(ast, state){
-        var obj = this.accept(ast.object, state).value;
+        var objResult = this.accept(ast.object, state);
+        if (objResult.failed()) return defaultResult;
+        objResult.makeValue();
+        
+        var obj = objResult.value;
         var propertyName = ast.property.name;
         
-        if (obj === Object(obj))
-        {
-            if (obj instanceof Symbol)
-            {
-                obj = obj.value;
-            }
-            
-            if (propertyName in obj)
-            {
-                return new Result(true, obj[propertyName]);
-            }
-            else
-            {
-                console.warn(PumaScript.Loc(ast) + "Property name not found.")
-                return defaultResult;
-            }
-        }
-        else
-        {
-            console.warn(PumaScript.Loc(ast) + "Left hand side must be an object.")
-            return defaultResult;
-        }
+        if (!(propertyName in obj))
+            obj[propertyName] = undefined;
+        
+        var wrapper = new PropertyWrapper(obj, propertyName);
+        return new Result(true, wrapper);
     };
     
     FirstPass.prototype.visitFunctionExpression = function(ast, state){
