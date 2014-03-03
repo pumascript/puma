@@ -234,6 +234,9 @@ FirstPass = (function(){
         case "ObjectExpression":
             result = this.visitObjectExpression(ast, state);
             break;
+        case "ArrayExpression":
+            result = this.visitArrayExpression(ast, state);
+            break;
         }
         
         this._lastStatementLoc = ast.loc.end;
@@ -779,7 +782,26 @@ FirstPass = (function(){
 		bodyResult.makeValue();
 		return bodyResult;
 	};
+
+    FirstPass.prototype.visitArrayExpression = function(ast, state){
+        arrayReturn = [];
         
+        for(index = 0; index < ast.elements.length; index++)
+        {
+            var elementValue = null;
+            if (ast.elements[index] !== null)
+            {
+                var elementResult = this.accept(ast.elements[index], state);
+                if (elementResult.failed()) return defaultResult;
+                elementResult.makeValue();
+                elementValue = elementResult.value;
+            }
+            arrayReturn.push(elementValue);
+        }
+        
+        return new Result(true, arrayReturn);
+    };
+    
     FirstPass.prototype.visit = function(ast, state){
         
     };

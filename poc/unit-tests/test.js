@@ -262,3 +262,10 @@ test("Function expression recursive", function(){
     var result = evalPuma("var a = function fact(number){ if(number > 1) { return number + fact(number - 1); } else { return number; } }; a(3);");
     equal( result.value, 6, "Passed!");
 });
+
+test("Array expression", function(){
+    var result = evalPuma("var a = [1, 2, ]");
+    equal( result.value.value[1], 2, "Passed!");
+    equal( result.value.value[2], null, "Passed!");
+    equal( result.value.value.length, 2, "Passed!");
+});
