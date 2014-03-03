@@ -21,13 +21,14 @@ Result = (function(){
 })();
 
 FunctionSymbol = (function(){
-    function FunctionSymbol(name, parameters, body, isMeta)
+    function FunctionSymbol(name, parameters, body, isMeta, addToFunctionState)
     {
         this.name = name;
         this.parameters = parameters;
         this.body = body;
         this.isMeta = isMeta;
         this.initMetaData();
+        this.addToFunctionState = addToFunctionState;
     }
     
     return FunctionSymbol;
@@ -303,6 +304,17 @@ FirstPass = (function(){
     };
     
     FirstPass.prototype.visitFunctionExpression = function(ast, state){
+        var functionName = undefined;
+        var addToFunctionState = false;
+        
+        if (ast.id !== null)
+        {
+            functionName = ast.id.name;
+            addToFunctionState = true;
+        }
+        
+        var functionSymbol = new FunctionSymbol(functionName, ast.params, ast.body, false, addToFunctionState)
+        return new Result(true, functionSymbol);
     };
     
     FirstPass.prototype.visitFunctionDeclaration = function(ast, state){
@@ -619,9 +631,13 @@ FirstPass = (function(){
             }
         }
         
-        
         // push new context into state
         state.pushStackFrame();
+        
+        // this is required by named FunctionExpressions because they should
+        // exist only inside the scope of the function
+        if(functionSymbol.addToFunctionState)
+            state.addSymbol(functionSymbol.name, functionSymbol);
         
         // bind arguments values to parameters symbols
         // TODO consider cases where:

@@ -247,3 +247,18 @@ test("Basic Meta Function that rewrite itself using pumaAst and parameters 2", f
     equal( result.success, true, "Passed!");
     equal( result.value, 11, "Passed!");
 });
+
+test("Function expression", function(){
+    var result = evalPuma("var a = function() { return 3; }; a();");
+    equal( result.value, 3, "Passed!");
+});
+
+test("Function expression with parameters", function(){
+    var result = evalPuma("var a = function(number) { return number; }; a(4);");
+    equal( result.value, 4, "Passed!");
+});
+
+test("Function expression recursive", function(){
+    var result = evalPuma("var a = function fact(number){ if(number > 1) { return number + fact(number - 1); } else { return number; } }; a(3);");
+    equal( result.value, 6, "Passed!");
+});
