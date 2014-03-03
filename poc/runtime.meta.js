@@ -122,6 +122,8 @@ FirstPass.prototype.callAstConstruction = function(callExpressionAst, argumentsA
     if(argumentsAst.length === 1) 
     {
         ast = argumentsAst[0];
+        // clone the ast
+        ast = jQuery.extend(true, {}, ast);
         
         // replace $id in template with symbols in context
         idsToReplace = this.findTemplateIds(ast);
