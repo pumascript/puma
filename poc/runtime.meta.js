@@ -121,11 +121,7 @@ FirstPass.prototype.callAstConstruction = function(callExpressionAst, argumentsA
     var idsToReplace, i, id, idData, symbol;
     if(argumentsAst.length === 1) 
     {
-        ast = argumentsAst[0];
-        
-        // TODO avoid using external library and implement a native clone method.
-        // clone the ast
-        ast = jQuery.extend(true, {}, ast);
+        ast = pumaCloneAst(argumentsAst[0]);
         
         // replace $id in template with symbols in context
         idsToReplace = this.findTemplateIds(ast);
@@ -150,6 +146,16 @@ FirstPass.prototype.callAstConstruction = function(callExpressionAst, argumentsA
         return defaultResult;
     }
     return new Result(true, ast);
+};
+
+/**
+ * Creates a deep copy of the provided AST object. It must be a Puma AST.
+ * @param {Object} ast Puma AST object that will be copied
+ * @return {Object} Cloned object.
+ */
+function pumaCloneAst(ast){
+    // TODO implement a faster clone function
+    return JSON.parse(JSON.stringify(ast));
 };
 
 /**
