@@ -1,6 +1,0 @@
-import "outputmodules/js_lib/classy.js", "platform=JavaScript", "type=script", "outputsubfolder=lib", "copy=true";
-import "outputmodules/js_lib/zoe.base.js", "platform=JavaScript", "type=script", "outputsubfolder=lib", "copy=true";
-import "../esprima-master/esprima.js", "platform=JavaScript", "type=script", "outputsubfolder=lib", "copy=true";
-import "default.externs.zoe";
-
-import "runtime.zoe";

@@ -122,6 +122,8 @@ FirstPass.prototype.callAstConstruction = function(callExpressionAst, argumentsA
     if(argumentsAst.length === 1) 
     {
         ast = argumentsAst[0];
+        
+        // TODO avoid using external library and implement a native clone method.
         // clone the ast
         ast = jQuery.extend(true, {}, ast);
         
