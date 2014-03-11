@@ -10,8 +10,18 @@
     <script src="../esprima-master/esprima.js" ></script>
     <script src="../poc/runtime.js"></script>
 	  <script src="../poc/runtime.meta.js"></script>
-    <!-- Tests -->
-    <script src="test-selectors.js"></script>
+    <!-- Tests Engine -->
+    <script src="core.js"></script>
+    <script src="main.js"></script>
+    
+    <!-- Test Suites-->
+    <script src="suites/testSelectors_1.js"></script>
+    
+    <script>
+      $(document).ready(function(){
+        runAllEnabledTestSuites();
+      });
+    </script>
   </head>
   <body></body>
 </html>
