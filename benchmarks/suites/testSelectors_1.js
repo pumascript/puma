@@ -1,10 +1,10 @@
 /*
 * Benchmark Number: 1
-* Description : Jquery vs Native Selectors
+* Description : Jquery vs Native Selectors #id
 */
 
 // Benchmark 1 Jquery Selector
-var test1 = new Benchmark("JquerySelector", "Jquery Selector in the same level between 10.000 siblings");
+var test1 = new Benchmark("JquerySelector", "Jquery Selector #ID in the same level between 10.000 siblings");
 test1.prepare = function() {
   for(var i=0; i<10000;i++) {
     $("body").append('<div id="test' + Math.random()*100 + '"></div>');
@@ -27,6 +27,6 @@ test2.test = function() {
 test2.clean = test1.clean;
 
 //Creation of the test suite
-var testSelectors_1 = new Suite("Jquery vs Native Selectors");
+var testSelectors_1 = new Suite("Jquery vs Native Selectors #ID");
 testSelectors_1.addTest(test1);
 testSelectors_1.addTest(test2);
