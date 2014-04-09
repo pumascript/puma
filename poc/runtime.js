@@ -675,7 +675,11 @@ FirstPass = (function(){
         
         if(isMetaCall && result.success)
         {
-            this.mergeMetaCallResult(result, callExpressionAst);
+			var mergeResult = this.mergeMetaCallResult(result, callExpressionAst);
+			if(mergeResult) {
+				result = this.accept(callExpressionAst, state);
+				result.makeValue();
+			}
         }
         else
         {

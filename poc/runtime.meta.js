@@ -81,6 +81,7 @@ FunctionSymbol.prototype.registerCallReturn = function(returnResult){
  * Merges the result returned by a meta function call with the function call context.
  * @param {Result} result Result object returned by the meta function call
  * @param {*} callExpressionAst Original Esprima call expression node.
+ * @return {boolean} return true if callExpressionAst is changed, false otherwise.
  */
 FirstPass.prototype.mergeMetaCallResult = function(result, callExpressionAst){
     // resolve to value if it's a symbol
@@ -93,7 +94,9 @@ FirstPass.prototype.mergeMetaCallResult = function(result, callExpressionAst){
         {
             if (resultValue.hasOwnProperty(attr)) callExpressionAst[attr] = resultValue[attr];
         }
+		return true;
     }
+	return false;
 };
 
 FirstPass.prototype.findTemplateIds = function(ast, list, parentAst, propertyName){
