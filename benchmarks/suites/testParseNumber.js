@@ -1,6 +1,6 @@
 /*
 * Benchmark Number: 2
-* Description : parseInt vs Math.floor
+* Description : parseInt vs Math.floor vs bitwise
 */
 
 
