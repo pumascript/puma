@@ -8,9 +8,10 @@
 
 function runAllEnabledTestSuites(){  
   var suites = [ 
-                {"name" : testSelectors_1}, 
-                {"name" : testSelectors_2},
-                {"name" : testSelectors_3} 
+                //{"name" : testSelectors_1}, 
+                //{"name" : testSelectors_2},
+                //{"name" : testSelectors_3},
+                  {"name" : testChecked} 
                ];
   
   for(var i=0; i<suites.length; i++) {

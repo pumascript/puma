@@ -22,9 +22,16 @@ PumaEditor.prototype.setEditorValue = function(editor, value) {
   return editor.setValue(value);
 };
 
+PumaEditor.prototype.load = function(editor) {
+  this.setEditorValue(this._pumaScriptEditor, localStorage.getItem("puma"));
+};
+
 PumaEditor.prototype.translate = function() {
   var result = {};
   var programStr = this.editorValue(this._pumaScriptEditor);
+  //Save the last execution in local storage
+  localStorage.setItem("puma", programStr);
+  
   if(programStr !== undefined && programStr !== null) {
     result = evalPuma(programStr);
   }
@@ -37,5 +44,9 @@ PumaEditor.prototype.initEvents = function(){
   that = this;
   $("#translatePuma").click(function() {
     that.translate();
+  });
+  
+  $("#loadPuma").click(function() {
+    that.load();
   });
 };
