@@ -269,3 +269,8 @@ test("Array expression", function(){
     equal( result.value.value[2], null, "Passed!");
     equal( result.value.value.length, 2, "Passed!");
 });
+
+test("Meta function merge evaluation", function(){
+    var result = evalPuma("/*@meta*/ function parseInt (valueExp) {var ast = pumaAst($valueExp | 0);return ast;}var n1 = parseInt('97');n1 + 2;");
+    equal( result.value, 99, "Passed!");
+});

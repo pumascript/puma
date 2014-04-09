@@ -7,13 +7,15 @@
 */
 
 function runAllEnabledTestSuites(){  
+
   var suites = [ 
                 //{"name" : testSelectors_1}, 
                 //{"name" : testSelectors_2},
                 //{"name" : testSelectors_3},
-                  {"name" : testChecked} 
+                //{"name" : testChecked},
+                  {"name" : testParseNumber}                
                ];
-  
+
   for(var i=0; i<suites.length; i++) {
     //Run the enabled suites
     suites[i].name.execute();
