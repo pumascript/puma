@@ -274,3 +274,28 @@ test("Meta function merge evaluation", function(){
     var result = evalPuma("/*@meta*/ function parseInt (valueExp) {var ast = pumaAst($valueExp | 0);return ast;}var n1 = parseInt('97');n1 + 2;");
     equal( result.value, 99, "Passed!");
 });
+
+test("test logical operator &&", function(){
+    var result = evalPuma("true && true;");
+    equal( result.value, true, "Passed!");
+});
+
+test("test logical operator ||", function(){
+    var result = evalPuma("false || true;");
+    equal( result.value, true, "Passed!");
+});
+
+test("test call to native functions", function(){
+    var result = evalPuma("var regex = /^([0-9]+)?(\.[0-9]+)?$/; regex.test('1231233')");
+    equal( result.value, true, "Passed!");
+});
+
+test("test call to native functions using objects as arguments", function(){
+    var result = evalPuma("var regex = /^([0-9]+)?(\.[0-9]+)?$/; var a1 = { value: '12.56' }; regex.test(a1.value)");
+    equal( result.value, true, "Passed!");
+});
+
+test("test call to native functions in native objects", function(){
+    var result = evalPuma("Math.round(7.888);");
+    equal( result.value, 8, "Passed!");
+});

@@ -78,6 +78,11 @@ PropertyWrapper = (function(){
                 this._obj[this._propertyName] = newValue;
             }
         });
+        Object.defineProperty(this, "obj", {
+            get : function(){
+                return this._obj;
+            }
+        });
     }
     
     return PropertyWrapper
@@ -117,7 +122,11 @@ State = (function(){
     };
     
     State.prototype.findSymbolInStackFrame = function(name, stackFrameIndex){
-        if(stackFrameIndex < 0 || this._stackFrame.length === 0) return Symbol.Undefined;
+        if(stackFrameIndex < 0 || this._stackFrame.length === 0)
+        {
+            if(window[name] !== undefined) return new Symbol(name, window[name]);
+            return Symbol.Undefined;
+        }
         var stackFrame = this._stackFrame[stackFrameIndex];
         if(stackFrame[name] === undefined) return this.findSymbolInStackFrame(name, stackFrameIndex - 1);
         return stackFrame[name];
@@ -236,6 +245,9 @@ FirstPass = (function(){
             break;
         case "ArrayExpression":
             result = this.visitArrayExpression(ast, state);
+            break;
+        case "LogicalExpression":
+            result = this.visitBinaryExpression(ast, state);
             break;
         }
         
@@ -580,16 +592,22 @@ FirstPass = (function(){
     FirstPass.prototype.visitCallExpression = function(ast, state){
         var calleeResult = this.accept(ast.callee, state);
         var functionSymbol;
+        var targetObject = window;
         
         if(calleeResult.success === true)
         {
-            if(calleeResult.value instanceof Symbol)
+            if(calleeResult.value instanceof PropertyWrapper)
             {
+                targetObject = calleeResult.value.obj;
                 functionSymbol = calleeResult.value.value;
             }
             else if(calleeResult.value instanceof FunctionSymbol)
             {
                 functionSymbol = calleeResult.value;
+            }
+            else if(calleeResult.value instanceof Symbol)
+            {
+                functionSymbol = calleeResult.value.value;
             }
             else
             {
@@ -599,11 +617,31 @@ FirstPass = (function(){
             if(functionSymbol instanceof FunctionSymbol)
             {
                 if(functionSymbol.isAstConstructionFunction) return this.callAstConstruction(ast, ast.arguments, state);
-                return this.callFunctionSymbol(functionSymbol, ast, ast.arguments, state)
+                return this.callFunctionSymbol(functionSymbol, ast, ast.arguments, state);
+            }
+            else if(functionSymbol instanceof Function)
+            {
+                return this.callNativeFunction(targetObject, functionSymbol, ast.arguments, state);
             }
         }
         return defaultResult;
     };
+    
+    FirstPass.prototype.callNativeFunction = function(targetObject, nativeFunction, argumentsAst, state){
+        var argumentValues = [];
+        var result;
+        // eval arguments
+        for(n = 0; n < argumentsAst.length; n++)
+        {
+            // TODO do it right
+            result = this.accept(argumentsAst[n], state);
+            result.makeValue();
+            argumentValues[n] = result.value;
+        }
+        
+        return new Result(true, nativeFunction.apply(targetObject, argumentValues));
+    };
+    
     
     /**
      * @param {FunctionSymbol} functionSymbol
