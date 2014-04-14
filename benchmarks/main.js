@@ -13,7 +13,8 @@ function runAllEnabledTestSuites(){
                 //{"name" : testSelectors_2},
                 //{"name" : testSelectors_3},
                 //{"name" : testChecked},
-                  {"name" : testParseNumber}                
+                //{"name" : testParseNumber},
+                  {"name" : testLoopFor}                  
                ];
 
   for(var i=0; i<suites.length; i++) {
