@@ -12,8 +12,6 @@ Symbol.prototype.initMetaData = function(){
     });    
 };
 
-Symbol.Undefined = new Symbol(Symbol.UNDEFINED, "undefined");
-
 /**
  * Register symbol meta-type information for last assignation operation
  * @param newValue {object} actual value that will be assigned to the symbol

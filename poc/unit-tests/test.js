@@ -76,6 +76,11 @@ test("return statement", function(){
     equal( result.value, 1, "Passed!");
 });
 
+test("for empty", function(){
+    var result = evalPuma("for(;false;) {  }; true;");
+    equal( result.value, true, "Passed!");
+});
+
 test("for statement 1", function(){
     var result = evalPuma("for(var i=0;i<2;i=i+1) { j+=1; }");
     equal( result.value, 2, "Passed!");
@@ -88,7 +93,25 @@ test("for statement 2", function(){
 
 test("for statement 3", function(){
     var result = evalPuma("var b=true; for(var i=0;b;i=i+1) { if(i>5)b=false; j+=1;}");
-    equal( result.value, 6, "Passed!");
+    equal( result.value, 7, "Passed!");
+});
+
+test("for statement update test", function(){
+    var result = evalPuma("var first = true; var firstValue = -1; for(var i=5;i<7;i=i+1) { console.log(i); if(first){ firstValue = i; first = false; }  j+=1; } console.log(firstValue); firstValue;");
+    result.makeValue();
+    equal( result.value, 5, "Passed!");
+});
+
+test("simple array access", function(){
+    var result = evalPuma("var a1 = [1,2,3]; a1[1];")    
+    result.makeValue();
+    equal( result.value, 2, "Passed!");
+});
+
+test("property access using expressions", function(){
+    var result = evalPuma("var a1 = [1,2,3,4]; var index = 2; a1[1+1];")
+    result.makeValue();
+    equal( result.value, 3, "Passed!");
 });
 
 test("Comments testing 1", function(){

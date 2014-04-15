@@ -62,6 +62,8 @@ Symbol = (function(){
     return Symbol;
 })();
 
+Symbol.Undefined = new Symbol(Symbol.UNDEFINED, undefined);
+
 PropertyWrapper = (function(){
     PropertyWrapper.prototype = new Symbol();
     PropertyWrapper.prototype.constructor = PropertyWrapper;
@@ -151,10 +153,11 @@ State = (function(){
 })();
 
 FirstPass = (function(){
-    function FirstPass()
+    function FirstPass(programAst)
     {
         this._metaComments = [];
         this._lastStatementLoc = {"line": 0, "column": 0};
+        this._programAst = programAst;
     }
     
     var defaultResult = new Result(false, null);
@@ -168,6 +171,10 @@ FirstPass = (function(){
             if(result.isReturnResult()) break;
         }
         return result;
+    };
+    
+    FirstPass.prototype.run = function(state){
+        return this.accept(this._programAst, state);
     };
     
     FirstPass.prototype.accept = function(ast, state){
@@ -309,7 +316,28 @@ FirstPass = (function(){
         objResult.makeValue();
         
         var obj = objResult.value;
-        var propertyName = ast.property.name;
+        var propertyName = undefined;
+        var propertyResult = undefined;
+        
+        // TODO check ECMAScript standard for additional cases when evaluating member expression
+        if(ast.property.type === 'Identifier' && ast.property.name in obj)
+        {
+            propertyName = ast.property.name;
+        }
+        else
+        {
+            propertyResult = this.accept(ast.property, state);
+            propertyResult.makeValue();
+            
+            if(propertyResult.value === undefined)
+            {
+                propertyName = ast.property.name;
+            }
+            else
+            {
+                propertyName = propertyResult.value;
+            }
+        }
         
         if (!(propertyName in obj))
             obj[propertyName] = undefined;
@@ -700,6 +728,7 @@ FirstPass = (function(){
         if(isMetaCall)
         {
             state.addSymbol("context", callExpressionAst);
+            state.addSymbol("pumaProgram", this._programAst);
         }
         
         // call meta function data collection
@@ -763,20 +792,27 @@ FirstPass = (function(){
     };
 	
 	FirstPass.prototype.visitForStatement = function (ast, state) {
-		var initResult = this.accept(ast.init, state);		
+        // TODO check all empty cases for subitems
+		var initResult = ast.init !== null ? this.accept(ast.init, state) : null;
 		var testResult = this.accept(ast.test, state);
 		testResult.makeValue();
 		
-		if(initResult.failed() || testResult.failed()) return defaultResult;
+		if(initResult !== null && initResult.failed() || testResult.failed()) return defaultResult;
 		
 		while(testResult.value) {
-			var updateResult = this.accept(ast.update, state);			
-			var bodyResult = this.accept(ast.body, state);			
+			var bodyResult = this.accept(ast.body, state);
+			var updateResult = this.accept(ast.update, state);
 			testResult = this.accept(ast.test, state);
 			testResult.makeValue();			
 		}
-		
-		bodyResult.makeValue();
+		if(bodyResult !== undefined)
+        {
+            bodyResult.makeValue();
+        }
+        else
+        {
+            bodyResult = new Result(true, undefined);
+        }
 		return bodyResult;
 	};
     
@@ -859,8 +895,8 @@ function evalPuma(programStr)
 
 function evalPumaAst(programAst)
 {
-    var firstPass = new FirstPass();  
-    var result = firstPass.accept(programAst, new State);
+    var firstPass = new FirstPass(programAst);  
+    var result = firstPass.run(new State);
     result.pumaAst = programAst;
     return result;
 }
