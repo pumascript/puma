@@ -890,6 +890,7 @@ FirstPass = (function(){
 function evalPuma(programStr)
 {
     var ast = window.esprima.parse(programStr, {"comment": true, "loc": true });
+	addParent(ast);
     return evalPumaAst(ast);
 }
 
@@ -899,6 +900,21 @@ function evalPumaAst(programAst)
     var result = firstPass.run(new State);
     result.pumaAst = programAst;
     return result;
+}
+
+function addParent(ast)
+{
+	if(ast === undefined || ast === null) throw "invalid call to accept with null ast.";
+	
+	for(key in ast)
+	{
+		var node = ast[key];
+		if(node === Object(node))
+		{
+			addParent(node);
+			node["parent"] = ast;
+		}
+	}
 }
 
 PumaScript = {};
