@@ -182,7 +182,13 @@ FirstPass.prototype.mergeNodes = function(idMatchData, astToMerge){
  */
 function pumaCloneAst(ast){
     // TODO implement a faster clone function
-    return JSON.parse(JSON.stringify(ast));
+	
+	// Exclude the parent node so it doesn't create a circular reference
+	replacer = function (key,value)	{
+		if (key === "parent") return undefined;
+		else return value;
+	}
+    return JSON.parse(JSON.stringify(ast, replacer));
 };
 
 /**
