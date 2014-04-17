@@ -138,7 +138,14 @@ FirstPass.prototype.callAstConstruction = function(callExpressionAst, argumentsA
             }
             else
             {
-                idData.parent[idData.property] = symbol.value;
+                if(idData.parent)
+                {
+                    this.mergeNodes(idData, pumaCloneAst(symbol.value));
+                }
+                else
+                {
+                    ast = pumaCloneAst(symbol.value);
+                }
             }
         }
     }
@@ -147,6 +154,25 @@ FirstPass.prototype.callAstConstruction = function(callExpressionAst, argumentsA
         return defaultResult;
     }
     return new Result(true, ast);
+};
+
+FirstPass.prototype.mergeNodes = function(idMatchData, astToMerge){
+    function IsStatement(node)
+    {
+        return astToMerge.type.indexOf('Statement') > -1;
+    }
+    
+    if(IsStatement(astToMerge) && idMatchData.parent.type === "ExpressionStatement")
+    {
+        for(var key in astToMerge)
+        {
+            idMatchData.parent[key] = astToMerge[key];
+        }
+    }
+    else
+    {
+        idMatchData.parent[idMatchData.property] = astToMerge;
+    }
 };
 
 /**

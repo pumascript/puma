@@ -575,8 +575,11 @@ FirstPass = (function(){
         case "||":
             value = leftResult.value || rightResult.value;
             break;
+        case "instanceof":
+            value = leftResult.value instanceof rightResult.value;
+            break;
         default:
-            console.warn(PumaScript.Loc(ast) + "binary operator \"" + operator + "\" not found");
+            console.warn(PumaScript.Loc(ast) + "binary operator \"" + ast.operator + "\" not found");
         }
         return new Result(true, value);
     };
@@ -759,7 +762,11 @@ FirstPass = (function(){
     };
     
     FirstPass.prototype.visitReturnStatement = function(ast, state){
-        var result = this.accept(ast.argument, state);
+        var result = new Result(true, undefined);
+        if(ast.argument)
+        {
+            result = this.accept(ast.argument, state);
+        }
         result.setIsReturnResult(true);
         return result;
     };

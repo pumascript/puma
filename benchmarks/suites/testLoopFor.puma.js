@@ -19,11 +19,43 @@ function rewriteForIn() {
 function rewriteSingleForIn(forInAst){
     var left = forInAst.left;
     var right = forInAst.right;
+    var itemName;
+    var tempId;
+    
+    // detect if it's a case that we can convert
+    if(left.type === 'Identifier')
+    {
+        itemName = left;
+    }
+    else if(left.type === 'VariableDeclaration')
+    {
+        tempId = left.declarations[0].id;
+        itemName = pumaAst( $tempId );
+    }
+    else
+    {
+        return;
+    }
 
-    forInAst.type = 'ForStatement';
-    forInAst.init = left;
-    forInAst.test = pumaAst( $left < $right.length );
-    forInAst.update = pumaAst( $left = $left + 1 );
+    // prepare fallback version
+    var cloneForIn = pumaCloneAst(forInAst);
+    var optimizedFor = pumaCloneAst(forInAst);
+
+    optimizedFor.type = 'ForStatement';
+    optimizedFor.init = left;
+    optimizedFor.test = pumaAst( $itemName < $right.length );
+    optimizedFor.update = pumaAst( $itemName = $itemName + 1 );
+    
+    // create if with test and fallback version
+    var temp = pumaAst(function(){
+        if( $right instanceof Array ) $optimizedFor; else $cloneForIn;
+    });
+    var tempIf = pumaFindByType( temp, 'IfStatement')[0];
+
+    forInAst.type = tempIf.type;
+    forInAst.test = tempIf.test;
+    forInAst.consequent = tempIf.consequent;
+    forInAst.alternate = tempIf.alternate;
 }
 
 rewriteForIn();
@@ -35,8 +67,13 @@ for(i in array){
   array[i] +=1;
 }
 
+for(var j in array){
+  array[j] +=1;
+}
+
 /* rewrite into:
   for(var i=0; i< array.length; i++){
     array[i] +=1;
   }
 */
+
