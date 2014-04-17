@@ -211,7 +211,7 @@ function pumaFindByType(ast, typeName){
             {
                 for(var i in ast)
                 {
-                    if(typeof(ast[i]) === "object") internalPumaFindByType(ast[i], typeName, list);
+                    if(i !== 'parent' && typeof(ast[i]) === 'object') internalPumaFindByType(ast[i], typeName, list);
                 }
             }
         }
