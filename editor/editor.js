@@ -6,8 +6,8 @@ var PumaEditor = function() {
 
 PumaEditor.prototype.instantiateCodeMirrorEditor = function(section) {
     return  CodeMirror(document.getElementById(section), {
-          mode: "text/html",
-          extraKeys: {"Ctrl-J": "autocomplete"},
+          mode: "text/javascript",
+          extraKeys: {"Ctrl-Space": "autocomplete", "Ctrl-J": "autocomplete"},
           value: "",
 		      lineNumbers: true,
           tabSize:2
