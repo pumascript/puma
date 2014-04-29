@@ -3,6 +3,7 @@ var Suite = function Suite(name){
   this._suiteName = name;
   this._tests = [];
   this._titleShown = false;
+  this._result = [];
 }
 
 Suite.prototype.addTest = function(test) {
@@ -22,14 +23,27 @@ Suite.prototype.run = function(test) {
 
 Suite.prototype.prettyResults = function (test, result, operationsSecond) {
   if(this._titleShown === false){
-    console.log('++++++++++ Suite : ' + this._suiteName + '++++++++++');
+    this.print('++++++++++ Suite : ' + this._suiteName + '++++++++++');
     this._titleShown = true;
   }
-  console.log('========== Running Test: ' + test.name + ' ==========');
-  console.log('Description: ' + test.description);
-  console.log('Runs(times): '  + test.runs);
-  console.log('Result(miliseconds): '  + result );
-  console.log('Operations per second: '  + operationsSecond );
+  this.print('========== Running Test: ' + test.name + ' ==========');
+  this.print('Description: ' + test.description);
+  this.print('Runs(times): '  + test.runs);
+  this.print('Result(miliseconds): '  + result );
+  this.print('Operations per second: '  + operationsSecond );
+};
+
+Suite.prototype.print = function (str) {
+  var line = $('<p class="result">'+ str + '</p>');
+  this._result.push(line);
+  console.log(str);
+};
+
+Suite.prototype.printInDOM = function () {
+  var body = $('body');
+  for(var i=0; i<this._result.length; i++) {
+    body.append(this._result[i]);
+  }  
 };
 
 Suite.prototype.execute = function() {
@@ -40,6 +54,7 @@ Suite.prototype.execute = function() {
     this.run(test);
     test.clean();
   }
+  this.printInDOM();
 };
 
 //BenchMark Object
