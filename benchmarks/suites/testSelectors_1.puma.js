@@ -1,42 +1,22 @@
 //Test for JQuery VS Native
-//First Iteration for select by ID
 
 /* @meta */
 function $(valueExp){
-  console.log(valueExp);
-  var regex = /^#/;
-  if(regex.test(valueExp.value)){
-    return pumaAst(JQuery($valueExp));
-  }
-  return null;
-};
-
-// Tests
-$("#puma");
-$(".puma");
-
-$(getElementById('puma'));
-
-//Test for JQuery VS Native
-//Second Iteration for select by ID
-
-/* @meta */
-function $(valueExp){
-  console.log(valueExp);
-  
   //Regular Expression for ID
-  var regex = /(#[a-z]+[_a-z0-9-:\\]*)/ig;
+  var regex = /^#\b[a-zA-Z0-9_]+\b$/;
   
   if(regex.test(valueExp.value)){
-    //valueExp.value = valueExp.value.substring(1);
+    valueExp.value = valueExp.value.substring(1);
     return pumaAst($(document.getElementById($valueExp)));   
   }
   return null;
 };
 
 // Tests
-$("#puma");
-$("#puma .puma");
-$(".puma");
+$("#puma"); //to rewrite
+$("#puma .puma"); //multiple selectors
+$(".puma");//class selector
+$("body"); //tag selector
 
-$(getElementById('puma'));
+//Final result example
+$(document.getElementById('puma'));

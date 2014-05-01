@@ -346,3 +346,16 @@ test("test call to native functions in native objects", function(){
     var result = evalPuma("Math.round(7.888);");
     equal( result.value, 8, "Passed!");
 });
+
+test("test for native string and property acess", function(){
+    var result = evalPuma("'hola'.substr(1) === 'ola'");
+    equal( result.value, true, "Passed!");
+});
+
+/*
+This test is when the support for new expression added
+test("test for native string and property acess against object type", function(){
+    var result = evalPuma("'hola'.substr(1) === new String('ola')");
+    equal( result.value, false, "Passed!");
+});
+*/

@@ -319,6 +319,10 @@ FirstPass = (function(){
         var propertyName = undefined;
         var propertyResult = undefined;
         
+        //Particular cases for native data type
+        if(typeof(obj) === 'string') obj = new String(obj);
+        if(typeof(obj) === 'number') obj = new Number(obj);
+      
         // TODO check ECMAScript standard for additional cases when evaluating member expression
         if(ast.property.type === 'Identifier' && ast.property.name in obj)
         {
