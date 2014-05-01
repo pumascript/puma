@@ -161,7 +161,7 @@ FirstPass = (function(){
     }
     
     var defaultResult = new Result(false, null);
-	var emptyResult = new Result(true, null);
+    var emptyResult = new Result(true, null);
     
     FirstPass.prototype.acceptArray = function(arrayNodes, state){
         var result = defaultResult;
@@ -232,7 +232,7 @@ FirstPass = (function(){
         case "IfStatement":
             result = this.visitIfStatement(ast, state);
             break;
-		case "ForStatement":
+        case "ForStatement":
             result = this.visitForStatement(ast, state);
             break;
         case "ReturnStatement":
@@ -298,6 +298,10 @@ FirstPass = (function(){
     };
             
     FirstPass.prototype.visitProgram = function(ast, state){
+        state.addSymbol("pumaProgram", this._programAst);
+        var that = this;
+        state.addSymbol("evalPumaAst", function(astPortion){ return that.accept(astPortion, state); } );
+        
         if(ast.comments) {
             this.acceptArray(ast.comments, state);
             this._lastStatementLoc.column = 0;
@@ -359,8 +363,8 @@ FirstPass = (function(){
             functionName = ast.id.name;
             addToFunctionState = true;
         }
-        
-        var functionSymbol = new FunctionSymbol(functionName, ast.params, ast.body, false, addToFunctionState)
+        var isMeta = this.isMetaFunction(ast.loc.start);
+        var functionSymbol = new FunctionSymbol(functionName, ast.params, ast.body, isMeta, addToFunctionState)
         return new Result(true, functionSymbol);
     };
     
@@ -371,12 +375,12 @@ FirstPass = (function(){
         }
         else
         {
-            console.warn(PumaScript.Loc(ast) + "Invalid function declaration.")
+            console.warn(PumaScript.Loc(ast) + "Invalid function declaration.");
             return defaultResult;
         }
     };
     
-    FirstPass.prototype.addFunctionDeclaration = function(name, params, body, state, loc){
+    FirstPass.prototype.isMetaFunction = function(loc){
         var commentColumns = this._metaComments[loc.line]; 
         var commentLine = loc.line;
         var isMeta = false;
@@ -392,7 +396,7 @@ FirstPass = (function(){
                 else {
                     for(var i=0; i<commentColumns.length;i++) {
                         var column = commentColumns[i];
-                        if(column>this._lastStatementLoc.column && column<loc.column) {
+                        if(column>this._lastStatementLoc.column && column<=loc.column) {
                             isMeta=true;
                             break;
                         }
@@ -400,7 +404,11 @@ FirstPass = (function(){
                 }
             }
         }
-            
+        return isMeta;
+    };
+    
+    FirstPass.prototype.addFunctionDeclaration = function(name, params, body, state, loc){
+        var isMeta = this.isMetaFunction(loc);
         return new Result(true, state.addSymbol(name, new FunctionSymbol(name, params, body, isMeta)));
     };
     
@@ -666,7 +674,7 @@ FirstPass = (function(){
         var argumentValues = [];
         var result;
         // eval arguments
-        for(n = 0; n < argumentsAst.length; n++)
+        for(var n = 0; n < argumentsAst.length; n++)
         {
             // TODO do it right
             result = this.accept(argumentsAst[n], state);
@@ -676,7 +684,6 @@ FirstPass = (function(){
         
         return new Result(true, nativeFunction.apply(targetObject, argumentValues));
     };
-    
     
     /**
      * @param {FunctionSymbol} functionSymbol
@@ -691,6 +698,7 @@ FirstPass = (function(){
         var argumentValue;
         var isMetaCall = functionSymbol.isMeta;
         var isNotMetaCall = !isMetaCall;
+        var that = this;
         
         // eval arguments
         for(n = 0; n < argumentsAst.length; n++)
@@ -735,7 +743,6 @@ FirstPass = (function(){
         if(isMetaCall)
         {
             state.addSymbol("context", callExpressionAst);
-            state.addSymbol("pumaProgram", this._programAst);
         }
         
         // call meta function data collection
@@ -749,11 +756,11 @@ FirstPass = (function(){
         
         if(isMetaCall && result.success)
         {
-			var mergeResult = this.mergeMetaCallResult(result, callExpressionAst);
-			if(mergeResult) {
-				result = this.accept(callExpressionAst, state);
-				result.makeValue();
-			}
+            var mergeResult = this.mergeMetaCallResult(result, callExpressionAst);
+            if(mergeResult) {
+                result = this.accept(callExpressionAst, state);
+                result.makeValue();
+            }
         }
         else
         {
@@ -798,25 +805,25 @@ FirstPass = (function(){
         else
         {
             if(ast.alternate !== null) return this.accept(ast.alternate, state);
-			else return emptyResult;
+            else return emptyResult;
         }
     };
-	
-	FirstPass.prototype.visitForStatement = function (ast, state) {
+    
+    FirstPass.prototype.visitForStatement = function (ast, state) {
         // TODO check all empty cases for subitems
-		var initResult = ast.init !== null ? this.accept(ast.init, state) : null;
-		var testResult = this.accept(ast.test, state);
-		testResult.makeValue();
-		
-		if(initResult !== null && initResult.failed() || testResult.failed()) return defaultResult;
-		
-		while(testResult.value) {
-			var bodyResult = this.accept(ast.body, state);
-			var updateResult = this.accept(ast.update, state);
-			testResult = this.accept(ast.test, state);
-			testResult.makeValue();			
-		}
-		if(bodyResult !== undefined)
+        var initResult = ast.init !== null ? this.accept(ast.init, state) : null;
+        var testResult = this.accept(ast.test, state);
+        testResult.makeValue();
+        
+        if(initResult !== null && initResult.failed() || testResult.failed()) return defaultResult;
+        
+        while(testResult.value) {
+            var bodyResult = this.accept(ast.body, state);
+            var updateResult = this.accept(ast.update, state);
+            testResult = this.accept(ast.test, state);
+            testResult.makeValue();            
+        }
+        if(bodyResult !== undefined)
         {
             bodyResult.makeValue();
         }
@@ -824,8 +831,8 @@ FirstPass = (function(){
         {
             bodyResult = new Result(true, undefined);
         }
-		return bodyResult;
-	};
+        return bodyResult;
+    };
     
     FirstPass.prototype.visitComment = function(ast, state) {
         //TODO Use RegEx
@@ -857,20 +864,20 @@ FirstPass = (function(){
     };
     
     FirstPass.prototype.visitWhileStatement = function (ast, state) {
-		var testResult = this.accept(ast.test, state);
-		testResult.makeValue();
+        var testResult = this.accept(ast.test, state);
+        testResult.makeValue();
 
-		if(testResult.failed()) return defaultResult;
+        if(testResult.failed()) return defaultResult;
 
-		while(testResult.value) {
-			var bodyResult = this.accept(ast.body, state);			
-			testResult = this.accept(ast.test, state);
-			testResult.makeValue();
-		}
-		
-		bodyResult.makeValue();
-		return bodyResult;
-	};
+        while(testResult.value) {
+            var bodyResult = this.accept(ast.body, state);            
+            testResult = this.accept(ast.test, state);
+            testResult.makeValue();
+        }
+        
+        bodyResult.makeValue();
+        return bodyResult;
+    };
 
     FirstPass.prototype.visitArrayExpression = function(ast, state){
         arrayReturn = [];
@@ -901,7 +908,7 @@ FirstPass = (function(){
 function evalPuma(programStr)
 {
     var ast = window.esprima.parse(programStr, {"comment": true, "loc": true });
-	addParent(ast);
+    addParent(ast);
     return evalPumaAst(ast);
 }
 
@@ -915,17 +922,17 @@ function evalPumaAst(programAst)
 
 function addParent(ast)
 {
-	if(ast === undefined || ast === null) throw "invalid call to accept with null ast.";
-	
-	for(key in ast)
-	{
-		var node = ast[key];
-		if(node === Object(node))
-		{
-			addParent(node);
-			node["parent"] = ast;
-		}
-	}
+    if(ast === undefined || ast === null) throw "invalid call to accept with null ast.";
+    
+    for(key in ast)
+    {
+        var node = ast[key];
+        if(node === Object(node))
+        {
+            addParent(node);
+            node["parent"] = ast;
+        }
+    }
 }
 
 PumaScript = {};
