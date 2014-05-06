@@ -16,6 +16,15 @@ Any JavaScript program is a PumaScript program.
 
 To execute a JavaScript program in PumaScript runtime use the "evalPuma" function.
 
+## PumaScript Editor
+
+As part of the tools there was developed a PumaScript Editor based on CodeMirror project. You can access it at:
+
+```
+    editor/puma-editor.html
+```
+You will see two frames of the same size. The one in  the left allows writing code in PumaScript languaje and the one in the rigth is to see the reults of re-writing after pressing the button "Execute". 
+
 ## PumaScript meta-functions
 
 PumaScript allows the construction of meta-functions. This meta-functions can be used to run introspection into normal runtime scripts or to re-write portions of the program.
@@ -32,9 +41,12 @@ To declare a meta-functions just add a comment with "@meta" keyword before the f
 ```
 
 The sample declares the meta-function "sum" that takes two arguments. These arguments are not values but AST - Abstract Syntax Tree - of the actual arguments.
+
 The return expression use the special function "pumaAst" to build a new AST and replace the identifiers "$a" and "$b" with the AST of the actual arguments. In the sample, "sum" is called with literals "5" and "6". So, the expression "sum(5, 6)" will be re-written as just the addition "5 + 6".
 
-A bit more useful example
+### A more useful example:
+
+This example show how to use PumaScript to re-write JQuery selectors into native Javascript functions:
 
 ```
 /* @meta */
@@ -56,9 +68,9 @@ Into this line:
 jQuery(document.getElementById('#main-panel'));
 ```
 
-A meta-function can avoid re-writing the caller expression by returning null instead of an AST.
+A meta-function can avoid re-writing the caller expression by returning null instead of the AST.
 
-### Intrinsic functions to search in AST
+## Search in AST using Intrinsec Functions
 
 There are two global functions that can be used to search for nodes inside a portion of AST.
 
@@ -86,4 +98,3 @@ result = pumaFindByType(ast, "BinaryExpression");
 result = pumaFindByProperty(ast, "left.name", 1, function(value1, value2){ return value1.length === value2; } );
 ```
 Both functions returns an Array with the results. If the array is empty it means that none was found.
-
