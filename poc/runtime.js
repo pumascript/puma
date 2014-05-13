@@ -254,7 +254,7 @@ FirstPass = (function(){
             result = this.visitArrayExpression(ast, state);
             break;
         case "LogicalExpression":
-            result = this.visitBinaryExpression(ast, state);
+			result = this.visitLogicalExpression(ast, state);
             break;
         }
         
@@ -595,6 +595,46 @@ FirstPass = (function(){
         }
         return new Result(true, value);
     };
+	
+	FirstPass.prototype.visitLogicalExpression = function(ast, state){
+		var leftResult = this.accept(ast.left, state);
+        leftResult.makeValue();
+        
+		var rightResult;
+		
+        var value;
+        switch(ast.operator)
+        {
+        case "||":
+			if(leftResult.value) {
+				value = leftResult.value;
+			}
+			else 
+			{
+				rightResult = this.accept(ast.right, state);
+				rightResult.makeValue();
+				value = rightResult.value;
+			}
+            break;
+			
+        case "&&":
+			if(leftResult.value)
+			{
+				rightResult = this.accept(ast.right, state);
+				rightResult.makeValue();
+				value = rightResult.value;
+			}
+			else
+			{
+				value = leftResult.value;
+			}
+            break;
+			
+        default:
+            console.warn(PumaScript.Loc(ast) + "logical operator \"" + ast.operator + "\" not found");
+        }
+        return new Result(true, value);
+	};
     
     FirstPass.prototype.visitUnaryExpression = function(ast, state){
         var argumentResult = this.accept(ast.argument, state);

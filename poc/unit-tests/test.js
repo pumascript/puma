@@ -339,9 +339,19 @@ test("test logical operator &&", function(){
     equal( result.value, true, "Passed!");
 });
 
+test("test logical operator && does not evaluate second arg", function(){
+    var result = evalPuma("var a1=1;false && a1++;a1;");
+    equal( result.value.value, 1, "Passed!");
+});
+
 test("test logical operator ||", function(){
     var result = evalPuma("false || true;");
     equal( result.value, true, "Passed!");
+});
+
+test("test logical operator || does not evaluate second arg", function(){
+    var result = evalPuma("var a1=1;true || a1++;a1;");
+    equal( result.value.value, 1, "Passed!");
 });
 
 test("test call to native functions", function(){
