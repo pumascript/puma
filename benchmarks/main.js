@@ -6,9 +6,14 @@
 *   3-Include the JavaScript file in the benchmark.html head.
 */
 
+/* CONSTANT TO DEFINE NUMBER OF REPEAT OF SUITE */
+var TIMES_REPEAT_SUITE = 1;
+
+/* FLAG TO ENABLE (true)|DISABLE (false) PRINT AS TABLE */
+var PRINT_TABLE = false;
+
 function runAllEnabledTestSuites(){  
-  
-  // Define the test suites using the names as in the files
+  // Define the test suites using the names as defined in the files
   var suites = [ 
                 {"name" : testSelectors_1, "enabled": true }, 
                 {"name" : testSelectors_2, "enabled": false },
@@ -18,10 +23,14 @@ function runAllEnabledTestSuites(){
                 {"name" : testLoopFor, "enabled": false}                  
                ];
   
-  //Run the enabled suites
-  for(var i=0; i<suites.length; i++) {
-    if(suites[i].enabled === true && suites[i].enabled !== undefined) {     
-      suites[i].name.execute();
+  //Run as many times as defined in the constant
+  while(TIMES_REPEAT_SUITE !== 0) {
+    //Run the enabled suites
+    for(var i=0; i<suites.length; i++) {
+      if(suites[i].enabled === true && suites[i].enabled !== undefined) {     
+        suites[i].name.execute();
+      }
     }
+    TIMES_REPEAT_SUITE--;
   }
 };

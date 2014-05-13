@@ -4,6 +4,8 @@ var Suite = function Suite(name){
   this._tests = [];
   this._titleShown = false;
   this._result = [];
+  this._secuenceNumber = 0;
+  this._partialResult = "";
 }
 
 Suite.prototype.addTest = function(test) {
@@ -18,7 +20,20 @@ Suite.prototype.run = function(test) {
     var end = Date.now(); 
     var result = end - start;
     var ops = Math.round(test.runs / (result/1000));
-    this.prettyResults(test, result, ops);
+    if(PRINT_TABLE) {
+      this.summaryResults(test, result, ops);
+    } else {
+      this.prettyResults(test, result, ops);
+    }
+};
+
+Suite.prototype.summaryResults = function (test, result, operationsSecond) {
+  if(this._titleShown === false){
+    this.printTable('<td>' + result + '</td>');
+    this._titleShown = true;
+  } else {
+    this.printTable('<td>' + result + '</td>');
+  }
 };
 
 Suite.prototype.prettyResults = function (test, result, operationsSecond) {
@@ -39,15 +54,31 @@ Suite.prototype.print = function (str) {
   console.log(str);
 };
 
+Suite.prototype.printTable = function (str) {
+  this._partialResult += str;
+  if(this._titleShown === true){
+    var line = $('<tr>'+ this._partialResult + '</tr>');
+    this._result.push(line);
+    this._partialResult = '';
+  }
+};
+
 Suite.prototype.printInDOM = function () {
-  var body = $('body');
+  var container = $('body');
+  var subcontainer = container;
+  
+  if(PRINT_TABLE) subcontainer = $('<table style="border:1px solid black;"></table>');
+  
   for(var i=0; i<this._result.length; i++) {
-    body.append(this._result[i]);
-  }  
+    subcontainer.append(this._result[i]);
+  }
+  
+  if(PRINT_TABLE) container.append(subcontainer);
 };
 
 Suite.prototype.execute = function() {
   var test = {};
+  this._secuenceNumber +=1;  
   for(var i=0; i<this._tests.length; i++){
     test = this._tests[i];
     test.prepare();
@@ -55,6 +86,7 @@ Suite.prototype.execute = function() {
     test.clean();
   }
   this.printInDOM();
+  this._titleShown = false;
 };
 
 //BenchMark Object
