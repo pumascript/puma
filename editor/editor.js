@@ -1,7 +1,7 @@
 var PumaEditor = function() {
   this._javaScriptEditor = this.instantiateCodeMirrorEditor("javascript");
   this._pumaScriptEditor = this.instantiateCodeMirrorEditor("puma"); 
-  this.initEvents();
+  this.registerEvents();
 };
 
 PumaEditor.prototype.instantiateCodeMirrorEditor = function(section) {
@@ -26,11 +26,19 @@ PumaEditor.prototype.load = function(editor) {
   this.setEditorValue(this._pumaScriptEditor, localStorage.getItem("puma"));
 };
 
+PumaEditor.prototype.loadBackup = function(editor) {
+  this.setEditorValue(this._pumaScriptEditor, localStorage.getItem("puma-backup"));
+};
+
 PumaEditor.prototype.translate = function() {
   var result = {};
   var programStr = this.editorValue(this._pumaScriptEditor);
+  
   //Save the last execution in local storage
-  localStorage.setItem("puma", programStr);
+  if(programStr !== '') {
+    localStorage.setItem("puma-backup", localStorage.getItem("puma"));
+    localStorage.setItem("puma", programStr);    
+  }
   
   if(programStr !== undefined && programStr !== null) {
     result = evalPuma(programStr);
@@ -40,7 +48,7 @@ PumaEditor.prototype.translate = function() {
   console.log(result);
 };
 
-PumaEditor.prototype.initEvents = function(){
+PumaEditor.prototype.registerEvents = function(){
   that = this;
   $("#translatePuma").click(function() {
     that.translate();
@@ -48,5 +56,9 @@ PumaEditor.prototype.initEvents = function(){
   
   $("#loadPuma").click(function() {
     that.load();
+  });
+  
+  $("#loadBackupPuma").click(function() {
+    that.loadBackup();
   });
 };
