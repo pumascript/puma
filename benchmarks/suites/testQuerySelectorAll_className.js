@@ -15,7 +15,6 @@ benchmark_getElementByClassName.prepare = function() {
 };
 benchmark_getElementByClassName.test = function() {
 	var elements = document.getElementsByClassName("class1");
-	elements = document.getElementsByClassName("class2");
 };
 benchmark_getElementByClassName.clean = function() {
 	$("body").children().remove();
@@ -25,7 +24,6 @@ var benchmark_querySelectorAll = new Benchmark("Benchmark 7", "querySelectorAll 
 benchmark_querySelectorAll.prepare = benchmark_getElementByClassName.prepare;
 benchmark_querySelectorAll.test = function() {
 	var elements = document.querySelectorAll(".class1");
-	elements = document.querySelectorAll(".class2");
 };
 benchmark_querySelectorAll.clean = benchmark_getElementByClassName.clean;
 

@@ -15,7 +15,6 @@ benchmark_getElementById.prepare = function() {
 };
 benchmark_getElementById.test = function() {
 	var elements = document.getElementById("image_id");
-	elements = document.getElementById("image_id2");
 };
 benchmark_getElementById.clean = function() {
 	$("body").children().remove();
@@ -24,14 +23,9 @@ benchmark_getElementById.clean = function() {
 var benchmark_querySelectorAll = new Benchmark("Benchmark 7", "querySelectorAll (by id) for 1000 nodes");
 benchmark_querySelectorAll.prepare = benchmark_getElementById.prepare;
 benchmark_querySelectorAll.test = function() {
-	var element = [];
 	var elements = document.querySelectorAll("#image_id");
 	if(elements.length > 0) {
-		element = elements[0];
-	}
-	elements = document.querySelectorAll("#image_id2");
-	if(elements.length > 0) {
-		element = elements[0];
+		var element = elements[0];
 	}
 };
 benchmark_querySelectorAll.clean = benchmark_getElementById.clean;

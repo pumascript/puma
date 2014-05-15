@@ -15,7 +15,6 @@ benchmark_getElementByTagName.prepare = function() {
 };
 benchmark_getElementByTagName.test = function() {
 	var elements = document.getElementsByTagName("input");
-	elements = document.getElementsByTagName("img");
 };
 benchmark_getElementByTagName.clean = function() {
 	$("body").children().remove();
@@ -25,7 +24,6 @@ var benchmark_querySelectorAll = new Benchmark("Benchmark 7", "querySelectorAll 
 benchmark_querySelectorAll.prepare = benchmark_getElementByTagName.prepare;
 benchmark_querySelectorAll.test = function() {
 	var elements = document.querySelectorAll("input");
-	elements = document.querySelectorAll("img");
 };
 benchmark_querySelectorAll.clean = benchmark_getElementByTagName.clean;
 
