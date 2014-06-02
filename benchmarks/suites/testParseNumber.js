@@ -57,5 +57,5 @@ testBitwise.clean = testParseInt.clean;
 //Creation of the test suite
 var testParseNumber = new Suite("parseInt vs Math.floor vs Bitwise");
 testParseNumber.addTest(testParseInt);
-testParseNumber.addTest(testMathFloor);
+//testParseNumber.addTest(testMathFloor);
 testParseNumber.addTest(testBitwise);
