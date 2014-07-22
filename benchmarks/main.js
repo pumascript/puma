@@ -7,30 +7,38 @@
 */
 
 /* CONSTANT TO DEFINE NUMBER OF REPEAT OF SUITE */
-var TIMES_REPEAT_SUITE = 1;
+var TIMES_REPEAT_SUITE = 30;
 
 /* FLAG TO ENABLE (true)|DISABLE (false) PRINT AS TABLE */
-var PRINT_TABLE = false;
-
-function runAllEnabledTestSuites(){  
-  // Define the test suites using the names as defined in the files
-  var suites = [ 
-                {"name" : testSelectors_1, "enabled": true }, 
-                {"name" : testSelectors_2, "enabled": false },
-                {"name" : testSelectors_3, "enabled": false},
-                {"name" : testChecked, "enabled": false},
-                {"name" : testParseNumber, "enabled": false},
-                {"name" : testLoopFor, "enabled": false}                  
-               ];
+var PRINT_TABLE = true;
   
-  //Run as many times as defined in the constant
-  while(TIMES_REPEAT_SUITE !== 0) {
-    //Run the enabled suites
-    for(var i=0; i<suites.length; i++) {
-      if(suites[i].enabled === true && suites[i].enabled !== undefined) {     
-        suites[i].name.execute();
-      }
-    }
-    TIMES_REPEAT_SUITE--;
-  }
+var suites = [];
+function runSuitesMultipleTimes(){  
+	
+	// Define the test suites using the names as defined in the files
+	suites = [ 
+					{"name" : testSelectors_1, "enabled": false }, 
+					{"name" : testSelectors_2, "enabled": false },
+					{"name" : testSelectors_3, "enabled": false},
+					{"name" : testChecked, "enabled": false},
+					{"name" : testParseNumber, "enabled": false},
+					{"name" : testLoopFor, "enabled": false},
+					{"name" : testGetElementsById, "enabled": false},				
+					{"name" : testGetElementsByClassName, "enabled": false},
+					{"name" : testGetElementsByTagName, "enabled": true}
+				   ];
+	interval = setInterval(runEnabledSuites, 1000);
+};
+function runEnabledSuites() {
+	if(TIMES_REPEAT_SUITE !== 0) {
+		TIMES_REPEAT_SUITE--;
+		for(var i=0; i<suites.length; i++) {
+		  if(suites[i].enabled === true && suites[i].enabled !== undefined) {     
+			suites[i].name.execute();
+		  }
+		}
+	}
+	else {
+		clearInterval(interval);
+	}
 };
