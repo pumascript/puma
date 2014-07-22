@@ -10,9 +10,10 @@
     <script src="../esprima-master/esprima.js" ></script>
     <script src="../poc/runtime.js"></script>
 	  <script src="../poc/runtime.meta.js"></script>
+    
     <!-- Tests Engine -->
     <script src="core.js"></script>
-    <script src="main.js"></script>
+    <script src="main.js"></script>  
     
     <!-- Test Suites-->
     <script src="suites/testSelectors_1.js"></script>
@@ -21,10 +22,13 @@
     <script src="suites/testCheckedAttribute.js"></script>
 	  <script src="suites/testParseNumber.js"></script>
     <script src="suites/testLoopFor.js"></script>
+    <script src="suites/testQuerySelector_id.js"></script>
+    <script src="suites/testQuerySelector_tagName.js"></script>
+    <script src="suites/testQuerySelector_className.js"></script>     
     
     <script>
       $(document).ready(function(){
-        runAllEnabledTestSuites();
+        runSuitesMultipleTimes();
       });
     </script>
   </head>

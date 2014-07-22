@@ -8,6 +8,8 @@ var Suite = function Suite(name){
   this._partialResult = "";
 }
 
+var nameShown = false;
+
 Suite.prototype.addTest = function(test) {
   this._tests.push(test);
 };
@@ -21,6 +23,10 @@ Suite.prototype.run = function(test) {
     var result = end - start;
     var ops = Math.round(test.runs / (result/1000));
     if(PRINT_TABLE) {
+      if(!nameShown) {
+			 this.print('========== Running Test: ' + test.name + ' ==========');
+			 nameShown = true;
+		  }
       this.summaryResults(test, result, ops);
     } else {
       this.prettyResults(test, result, ops);
