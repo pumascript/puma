@@ -38,5 +38,5 @@ benchmark_querySelector.clean = benchmark_getElementByTagName.clean;
 
 //Creation of the test suite
 var testGetElementByTagName = new Suite("Get element by tag name suite");
-testGetElementByTagName.addTest(benchmark_getElementByTagName);
 testGetElementByTagName.addTest(benchmark_querySelector);
+testGetElementByTagName.addTest(benchmark_getElementByTagName);

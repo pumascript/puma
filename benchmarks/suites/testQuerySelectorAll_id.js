@@ -32,5 +32,5 @@ benchmark_querySelectorAll.clean = benchmark_getElementById.clean;
 
 //Creation of the test suite
 var testGetElementsById = new Suite("Get elements by id suite");
-testGetElementsById.addTest(benchmark_getElementById);
 testGetElementsById.addTest(benchmark_querySelectorAll);
+testGetElementsById.addTest(benchmark_getElementById);

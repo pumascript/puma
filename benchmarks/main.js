@@ -23,9 +23,9 @@ function runSuitesMultipleTimes(){
 					{"name" : testChecked, "enabled": false},
 					{"name" : testParseNumber, "enabled": false},
 					{"name" : testLoopFor, "enabled": false},
-					{"name" : testGetElementById, "enabled": false},				
-					{"name" : testGetElementByClassName, "enabled": false},
-					{"name" : testGetElementByTagName, "enabled": true}
+					{"name" : testGetElementsById, "enabled": false},				
+					{"name" : testGetElementsByClassName, "enabled": false},
+					{"name" : testGetElementsByTagName, "enabled": true}
 				   ];
 	interval = setInterval(runEnabledSuites, 1000);
 };
