@@ -95,6 +95,7 @@ State = (function(){
     {
         this._stackFrame = [];
         this._symbols = {};
+        this._newFrameThisBinding = undefined;
         this.initializeDefaultSymbols();
     }
     
@@ -102,6 +103,8 @@ State = (function(){
         var pumaAst = new FunctionSymbol("pumaAst", [], null, true);
         pumaAst.isAstConstructionFunction = true;
         this.addSymbol("pumaAst", pumaAst);
+        // TODO: should "this" be set to the global object?
+        this.addSymbol("this", {});
     };
     
     State.prototype.addSymbol = function(name, value){
@@ -137,6 +140,12 @@ State = (function(){
     State.prototype.pushStackFrame = function(){
         this._stackFrame[this._stackFrame.length] = this._symbols;
         this._symbols = {};
+        
+        if (this._newFrameThisBinding !== undefined)
+        {
+            this.addSymbol("this", this._newFrameThisBinding);
+            this._newFrameThisBinding = undefined;
+        }
     };
     
     State.prototype.popStackFrame = function(){
@@ -148,6 +157,10 @@ State = (function(){
         this._symbols = this._stackFrame[this._stackFrame.length - 1];
         this._stackFrame.pop();
     };
+    
+    State.prototype.setNewFrameThisBinding = function(thisBinding){
+        this._newFrameThisBinding = thisBinding;
+    }
     
     return State;
 })();
@@ -256,6 +269,12 @@ FirstPass = (function(){
         case "LogicalExpression":
 			result = this.visitLogicalExpression(ast, state);
             break;
+        case "ThisExpression":
+            result = this.visitThisExpression(ast, state);
+            break;
+        case "NewExpression":
+            result = this.visitNewExpression(ast, state);
+            break;
         }
         
         this._lastStatementLoc = ast.loc.end;
@@ -327,10 +346,15 @@ FirstPass = (function(){
         if(typeof(obj) === 'string') obj = new String(obj);
         if(typeof(obj) === 'number') obj = new Number(obj);
       
-        // TODO check ECMAScript standard for additional cases when evaluating member expression
-        if(ast.property.type === 'Identifier' && ast.property.name in obj)
+        // if the property name is "prototype" then rename it to avoid conflicts
+        var astPropertyName = ast.property.name;
+        if (astPropertyName === "prototype")
+            astPropertyName = "prototypeProperty";
+
+        // TODO check ECMAScript standard for additional cases when evaluating member expression        
+        if(ast.property.type === 'Identifier')
         {
-            propertyName = ast.property.name;
+            propertyName = astPropertyName;
         }
         else
         {
@@ -339,7 +363,7 @@ FirstPass = (function(){
             
             if(propertyResult.value === undefined)
             {
-                propertyName = ast.property.name;
+                propertyName = astPropertyName;
             }
             else
             {
@@ -409,7 +433,9 @@ FirstPass = (function(){
     
     FirstPass.prototype.addFunctionDeclaration = function(name, params, body, state, loc){
         var isMeta = this.isMetaFunction(loc);
-        return new Result(true, state.addSymbol(name, new FunctionSymbol(name, params, body, isMeta)));
+        var functionSymbol = new FunctionSymbol(name, params, body, isMeta);
+        functionSymbol.prototypeProperty = {};
+        return new Result(true, state.addSymbol(name, functionSymbol));
     };
     
     FirstPass.prototype.visitVariableDeclaration = function(ast, state){
@@ -936,6 +962,28 @@ FirstPass = (function(){
         }
         
         return new Result(true, arrayReturn);
+    };
+
+    FirstPass.prototype.visitThisExpression = function(ast, state){
+        return new Result(true, state.getSymbol("this"));
+    };
+    
+    FirstPass.prototype.visitNewExpression = function(ast, state){
+        var calleeResult = this.accept(ast.callee, state);
+        // the result can fail when processing a system type
+        // since the identifier is not in the symbol table
+        if (calleeResult.failed()) return defaultResult;
+        calleeResult.makeValue();
+        var typeValue = calleeResult.value;
+        
+        // create a new object from the prototype
+        var newObject = Object.create(typeValue.prototypeProperty);
+        // set "this" to the new object
+        state.setNewFrameThisBinding(newObject);
+        // call the constructor
+        this.callFunctionSymbol(typeValue, undefined, ast.arguments, state);
+
+        return new Result(true, newObject);
     };
     
     FirstPass.prototype.visit = function(ast, state){

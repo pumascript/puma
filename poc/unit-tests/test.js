@@ -369,10 +369,26 @@ test("test call to native functions in native objects", function(){
     equal( result.value, 8, "Passed!");
 });
 
-test("test for native string and property acess", function(){
+test("test for native string and property access", function(){
     var result = evalPuma("'hola'.substr(1) === 'ola'");
     equal( result.value, true, "Passed!");
 });
+
+test("New Expression: simple object", function(){
+    var result = evalPuma("function A(){ this.a = 10; } var o = new A(); o.a;");
+    equal( result.value.value, 10, "Passed!");
+});
+
+test("New Expression: constructor with parameters", function(){
+    var result = evalPuma("function A(a){ this.a = a; } var o = new A(5); o.a;");
+    equal( result.value.value, 5, "Passed!");
+});
+
+test("New Expression: object with an extended prototype", function(){
+    var result = evalPuma("function A(){ this.a = 1; } A.prototype.b = 2; var o = new A(); o.b;");
+    equal( result.value.value, 2, "Passed!");
+});
+
 
 /*
 This test is when the support for new expression added
