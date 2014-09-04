@@ -18,12 +18,16 @@ To execute a JavaScript program in PumaScript runtime use the "evalPuma" functio
 
 ## PumaScript Editor
 
-As part of the tools there was developed a PumaScript Editor based on CodeMirror project. You can access it at:
+A simple PumaScript editor is available here:
 
 ```
     editor/puma-editor.html
 ```
-You will see two frames of the same size. The one in  the left allows writing code in PumaScript languaje and the one in the rigth is to see the reults of re-writing after pressing the button "Execute". 
+The editor shows two frames side by side. The one in  the left allows writing code in PumaScript language and the one in the right is used to see the results of re-writing after pressing the button "Execute". 
+
+Note that you can use any text editor to write PumaScript code. Then, use the "evalPuma" function run your code by using JavaScript.
+
+We are working in a node.js module in order to use PumaScript integrated in your development cycle in a similar way to code minifiers or static analysis tools like JSHint.
 
 ## PumaScript meta-functions
 
@@ -46,7 +50,7 @@ The return expression use the special function "pumaAst" to build a new AST and 
 
 ### A more useful example:
 
-This example show how to use PumaScript to re-write JQuery selectors into native Javascript functions:
+This example show how to use PumaScript to re-write JQuery selectors into native JavaScript functions:
 
 ```
 /* @meta */
@@ -70,7 +74,7 @@ jQuery(document.getElementById('#main-panel'));
 
 A meta-function can avoid re-writing the caller expression by returning null instead of the AST.
 
-## Search in AST using Intrinsec Functions
+## Search in AST using Intrinsic Functions
 
 There are two global functions that can be used to search for nodes inside a portion of AST.
 
