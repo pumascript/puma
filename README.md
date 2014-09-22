@@ -102,3 +102,13 @@ result = pumaFindByType(ast, "BinaryExpression");
 result = pumaFindByProperty(ast, "left.name", 1, function(value1, value2){ return value1.length === value2; } );
 ```
 Both functions returns an Array with the results. If the array is empty it means that none was found.
+
+## Team Puma
+Alexis Ferreyra
+Emanuel Ravera
+Julieta Alvarez
+Mariano Appendino
+
+## Security track
+Marcelo Gonzalez
+Martin Molina
