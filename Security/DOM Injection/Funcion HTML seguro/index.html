@@ -1,0 +1,37 @@
+<html>
+    <Head>
+        <title>HTML seguro</title>
+        <link rel="StyleSheet" href="estilo.css" type="text/css">
+		<script type="text/javascript" src="archivoJavaScript.js"></script>
+    </Head>
+    <body>
+        <div id="contenedor">
+            <div id="cabecera" class="cajaDiv">
+                <h1>Funcion que crea HTML seguro de un string</h1>
+                <h2>Se debe evitar el uso de innerHtml</h2>
+            </div>
+            <div id="contenido1" class="cajaDiv">
+                <div class="DivOculto">
+                <label for="stringHtml">Ingrese codigo HTML que sera insertado en el div de abajo</label>
+                </div>
+                <br/>
+                <div>
+                <input type="text" id="stringHtml" class="cajaDeTexto"/>
+                </div>
+                <br/>
+                <input type="button" id="usarInner" class="botonMediano" value="Usar innerHtml" 
+                       onclick="probar()">
+				</input>
+                <input type="button" id="usarDom" class="botonMediano" value="Usar el DOM" 
+                       onclick="probarConDom()">
+				</input>
+            </div>
+            <div id="divVacio" class="cajaDiv">
+                
+            </div>
+            <div id="pie" class="cajaDiv">
+                <h2>byChelo</h2>
+            </div>
+        </div>
+    </body>
+</html>
