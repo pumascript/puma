@@ -397,3 +397,15 @@ test("test for native string and property acess against object type", function()
     equal( result.value, false, "Passed!");
 });
 */
+
+test("array property access using reference expression", function(){
+    var result = evalPuma("var a1 = [1,2,3,4]; var index = 1; a1[index];")
+    result.makeValue();
+    equal( result.value, 2, "Passed!");
+});
+
+test("object property access using member access and computed expression", function(){
+    var result = evalPuma("var a1 = { uno: 1, dos: 2 }; a1['uno'] + a1.dos + a1['un' + 'o'];")
+    result.makeValue();
+    equal( result.value, 4, "Passed!");
+});

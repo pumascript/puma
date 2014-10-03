@@ -352,7 +352,7 @@ FirstPass = (function(){
             astPropertyName = "prototypeProperty";
 
         // TODO check ECMAScript standard for additional cases when evaluating member expression        
-        if(ast.property.type === 'Identifier')
+        if(ast.property.type === 'Identifier' && ast.computed == false)
         {
             propertyName = astPropertyName;
         }
