@@ -242,18 +242,11 @@ test("Call AST Construction Function - trivial id replace", function(){
     equal( result.value.id, 'bla', "Passed!");
 });
 
-/**
-This found another possible bug that requires investigation:
-
-"tempIf.test" seems to be resolving "test" as global object first (i.e. the QUnit test function) instead of looking for test property of the object first.
-
-test("Call AST Construction Function - Statement merge with ExpressionStatement", function(){
-var result = evalPuma(
-"/- @meta -/ function rewriteForIn(){var forIns=pumaFindByType(pumaProgram,'ForInStatement');console.log('For In statements found: '+forIns.length);for(var index=0;index<forIns.length;index++)rewriteSingleForIn(forIns[index]);return null} function rewriteSingleForIn(forInAst){var left=forInAst.left;var right=forInAst.right;var itemName;var tempId;if(left.type==='Identifier')itemName=left;else if(left.type==='VariableDeclaration'){tempId=left.declarations[0].id;itemName=pumaAst($tempId)}else return;var cloneForIn=pumaCloneAst(forInAst);var optimizedFor=pumaCloneAst(forInAst);optimizedFor.type='ForStatement';optimizedFor.init=left;optimizedFor.test=pumaAst($itemName<$right.length);optimizedFor.update=pumaAst($itemName=$itemName+1);var temp= pumaAst(function(){if($right instanceof Array)$optimizedFor;else $cloneForIn});var tempIf=pumaFindByType(temp,'IfStatement')[0];forInAst.type=tempIf.type;forInAst.test=tempIf.test;forInAst.consequent=tempIf.consequent;forInAst.alternate=tempIf.alternate}rewriteForIn();var array=[7,2,3,7];var i=0;for(i in array)array[i]+=1;for(var j in array)array[j]+=1;"
-);
+test("rewrite forIn meta function test", function(){
+    var result = evalPuma("/* @meta */ function rewriteForIn(){var forIns=pumaFindByType(pumaProgram,'ForInStatement');console.log('For In statements found: '+forIns.length);for(var index=0;index<forIns.length;index++)rewriteSingleForIn(forIns[index]);return null} function rewriteSingleForIn(forInAst){var left=forInAst.left;var right=forInAst.right;var itemName;var tempId;if(left.type==='Identifier')itemName=left;else if(left.type==='VariableDeclaration'){tempId=left.declarations[0].id;itemName=pumaAst($tempId)}else return;var cloneForIn=pumaCloneAst(forInAst);var optimizedFor=pumaCloneAst(forInAst);optimizedFor.type='ForStatement';optimizedFor.init=left;optimizedFor.test=pumaAst($itemName<$right.length);optimizedFor.update=pumaAst($itemName=$itemName+1);var temp= pumaAst(function(){if($right instanceof Array)$optimizedFor;else $cloneForIn});var tempIf=pumaFindByType(temp,'IfStatement')[0];forInAst.type=tempIf.type;forInAst.test=tempIf.test;forInAst.consequent=tempIf.consequent;forInAst.alternate=tempIf.alternate}rewriteForIn();var array=[7,2,3,7];var i=0;for(i in array)array[i]+=1;for(var j in array)array[j]+=1;"
+    );
     equal( result.success, true, "Passed!");
 });
-*/
 
 test("Basic Meta Function that rewrite itself using pumaAst", function(){
     var result = evalPuma("/*@meta*/ function sumar(a,b){ return pumaAst(6 + 5); } sumar(5, 6);");
