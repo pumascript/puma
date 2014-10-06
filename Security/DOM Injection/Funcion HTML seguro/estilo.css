@@ -30,7 +30,7 @@ h1, h2 {
 	background: linear-gradient(#FF8000, orange);
 }
 
-#tablaPrincipal {
+.tabla {
     width:100%; /* Usa todo el elemento contenedor para poner los datos*/
 	text-align:center;
 	table-layout: fixed; /* columnas de ancho fijo*/
@@ -51,4 +51,27 @@ h1, h2 {
 }
 .botonMediano:hover {
 	background: linear-gradient(#FF8000, orange);
+}
+
+.areaDeTexto {
+    resize: none;
+    width: 200px;
+	height: 30px;
+	border-radius: 20px;
+	padding-left: 5px;
+	padding-right:5px;
+	text-align:center;
+	background: linear-gradient(#FF8000, orange);
+}
+
+#centrado {
+    text-align: center;
+}
+
+#BLTagAtributos1 {
+    width: 100px;
+}
+
+#BLTagAtributos2 {
+    width: 150;
 }
