@@ -1,0 +1,77 @@
+body {
+    width:960px; /* para controlar el tamaño total de la pagina*/
+	margin: 0 auto; /* para que se centre en el navegador y no se tire a la izquierda*/
+	font-family:verdana;
+    background-image: url(imagenes/fondo.jpg);
+}
+#contenedor {
+    padding: 5px;
+}
+.cajaDiv {
+    border-style:solid;
+	border-width:2px;
+	border-radius: 20px;  /* efecto bordes redondeados*/
+	background: linear-gradient(#FF8000, orange); /* efecto colores en gradiente*/
+	padding:10px;
+	margin-top: 20px;
+	box-shadow: 30px 10px 20px #aaa; /* efecto sombra*/
+}
+h1, h2 {
+    text-align: center;
+}
+
+.cajaDeTexto {
+    width: 500px;
+	height: 30px;
+	border-radius: 20px;
+	padding-left: 5px;
+	padding-right:5px;
+	text-align:center;
+	background: linear-gradient(#FF8000, orange);
+}
+
+.tabla {
+    width:100%; /* Usa todo el elemento contenedor para poner los datos*/
+	text-align:center;
+	table-layout: fixed; /* columnas de ancho fijo*/
+}
+
+#contenido1 {
+    text-align: center;
+}
+
+.botonMediano {
+    width: 200px;
+	cursor:hand;
+	height: 30px;
+	font-style:blique;
+	font-size:18px;
+	border-radius: 30px;  /* efecto bordes redondeados*/
+	background: linear-gradient(orange, #FF8000); /* efecto colores en gradiente*/
+}
+.botonMediano:hover {
+	background: linear-gradient(#FF8000, orange);
+}
+
+.areaDeTexto {
+    resize: none;
+    width: 200px;
+	height: 30px;
+	border-radius: 20px;
+	padding-left: 5px;
+	padding-right:5px;
+	text-align:center;
+	background: linear-gradient(#FF8000, orange);
+}
+
+#centrado {
+    text-align: center;
+}
+
+#BLTagAtributos1 {
+    width: 100px;
+}
+
+#BLTagAtributos2 {
+    width: 150;
+}
