@@ -402,3 +402,9 @@ test("object property access using member access and computed expression", funct
     result.makeValue();
     equal( result.value, 4, "Passed!");
 });
+
+test("'check that pumaFindByProperty ends", function(){
+    var result = evalPuma("/* @meta */ function findInnerHTML(){ var final = pumaFindByProperty(pumaFindByType(pumaProgram, 'AssignmentExpression'), 'left.property.name', 'innerHTML'); final[0].right.name = 'pepe'; return null;} function test1(){ divVacio.innerHTML = textoHtml;} findInnerHTML(); true;")
+    result.makeValue();
+    equal( result.value, true, "Passed!");
+});
