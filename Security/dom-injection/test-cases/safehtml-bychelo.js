@@ -149,14 +149,12 @@ function crearHijos(padre, htmlUsuario, blackList) {
     }
 }
 
-function htmlSeguro(objeto, textoHtml) {
+function safeHtml(objeto, textoHtml) {
 	//Primero debo vaciar lo que tiene el elemento (ya que innerHtml es lo que hace al principio)
-	//con lo cual debo recrearlo con todos los atributos que poseía
-	var objetoNuevo = document.createElement(objeto.tagName);
-	for (var f=0; f < objeto.attributes.length; f++){
-		objetoNuevo.setAttribute(objeto.attributes[f].name, objeto.attributes[f].value);
+	//borrar los hijos de objeto
+	while (objeto.firstChild) {
+		objeto.removeChild(objeto.firstChild);
 	}
-    objeto.parentNode.replaceChild(objetoNuevo, objeto);
     var parser = new DOMParser();
     var textoParseado = parser.parseFromString(textoHtml,'text/html');
     //Ahora me posiciono en el nodo body (por debajo del él estan todos los nodos creados por el usuario
@@ -167,6 +165,6 @@ function htmlSeguro(objeto, textoHtml) {
 	var BLTagAtributos = [];
     var blackList = crearBlackList(BLTags, BLAtributos, BLTagAtributos);
     //Voy a recorrer los nodos con la función recursiva crearHijos
-    crearHijos(objetoNuevo, htmlUsuario, blackList);
-	return objetoNuevo;
+    crearHijos(objeto, htmlUsuario, blackList);
+	return objeto;
     }

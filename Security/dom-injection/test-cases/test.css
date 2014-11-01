@@ -1,8 +1,8 @@
-body {
+﻿body {
     width:960px; /* para controlar el tamaño total de la pagina*/
 	margin: 0 auto; /* para que se centre en el navegador y no se tire a la izquierda*/
 	font-family:verdana;
-    background-image: url(imagenes/fondo.jpg);
+    background-image: url(imagenes/gray.jpg);
 }
 #contenedor {
     padding: 5px;
