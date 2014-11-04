@@ -258,7 +258,7 @@ function pumaFindByProperty(ast, propertyChain, value, compareFunction){
             {
                 for(var i in ast)
                 {
-                    if(typeof(ast[i]) === "object") internalPumaFindByProperty(ast[i], propertyList, value, list, compareFunction);
+                    if(i !== 'parent' && typeof(ast[i]) === "object") internalPumaFindByProperty(ast[i], propertyList, value, list, compareFunction);
                 }
             }
         }

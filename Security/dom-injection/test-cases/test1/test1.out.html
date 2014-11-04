@@ -1,14 +1,14 @@
 <html>
     <Head>
-        <title>HTML seguro</title>
-        <link rel="StyleSheet" href="estilo.css" type="text/css">
-		<script type="text/javascript" src="archivoJavaScript.js"></script>
+        <title>Test 1 OUT</title>
+        <link rel="StyleSheet" href="../test.css" type="text/css">
+		<script type="text/javascript" src="../safehtml-bychelo.js"></script>
+		<script type="text/javascript" src="test1.out.js"></script>
     </Head>
     <body>
         <div id="contenedor">
             <div id="cabecera" class="cajaDiv">
-                <h1>Funcion que crea HTML seguro de un string</h1>
-                <h2>Se debe evitar el uso de innerHtml</h2>
+                <h1>Test 1 OUT</h1>
             </div>
             <div id="contenido1" class="cajaDiv">
                 <div class="DivOculto">
@@ -19,11 +19,8 @@
                 <input type="text" id="stringHtml" class="cajaDeTexto"/>
                 </div>
                 <br/>
-                <input type="button" id="usarInner" class="botonMediano" value="Usar innerHtml" 
-                       onclick="probar()">
-				</input>
-                <input type="button" id="usarDom" class="botonMediano" value="Usar el DOM" 
-                       onclick="probarConDom()">
+                <input type="button" id="usarInner" class="botonMediano" value="Agregar" 
+                       onclick="agregar()">
 				</input>
             </div>
             <div id="divVacio" class="cajaDiv">
