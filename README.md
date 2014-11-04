@@ -31,7 +31,7 @@ We are working in a node.js module in order to use PumaScript integrated in your
 
 ## PumaScript meta-functions
 
-PumaScript allows the construction of meta-functions. This meta-functions can be used to run introspection into normal runtime scripts or to re-write portions of the program.
+PumaScript allows the construction of meta-functions. These meta-functions can be used to run introspection into normal runtime scripts or to re-write portions of the program.
 
 To declare a meta-functions just add a comment with "@meta" keyword before the function declaration.
 
@@ -78,10 +78,10 @@ A meta-function can avoid re-writing the caller expression by returning null ins
 
 There are two global functions that can be used to search for nodes inside a portion of AST.
 
-* Find by node type: `pumaFindByType`
-* Find by property names and values: `pumaFindByProperty`
+* Search by node type: `pumaFindByType`
+* Search by property names and values: `pumaFindByProperty`
 
-Use this functions are used to find specific sub-nodes in a portion of AST. For example:
+These functions are used to find specific sub-nodes in a portion of AST. For example:
 
 ```
 var ast = pumaAst(function(){
@@ -103,12 +103,12 @@ result = pumaFindByProperty(ast, "left.name", 1, function(value1, value2){ retur
 ```
 Both functions returns an Array with the results. If the array is empty it means that none was found.
 
-## Team Puma
-Alexis Ferreyra
-Emanuel Ravera
-Julieta Alvarez
-Mariano Appendino
+## The Puma Team
+* Alexis Ferreyra
+* Emanuel Ravera
+* Julieta Alvarez
+* Mariano Appendino
 
 ## Security track
-Marcelo Gonzalez
-Martin Molina
+* Marcelo Gonzalez
+* Martin Molina
