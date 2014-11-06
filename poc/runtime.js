@@ -392,10 +392,13 @@ FirstPass = (function(){
         return new Result(true, functionSymbol);
     };
     
-    FirstPass.prototype.visitFunctionDeclaration = function(ast, state){
+   FirstPass.prototype.visitFunctionDeclaration = function(ast, state){
         if(ast.id.type === "Identifier")
-        {
-            return this.addFunctionDeclaration(ast.id.name, ast.params, ast.body, state, ast.loc.start);
+        {            
+            var isMeta = this.isMetaFunction(ast.loc.start);
+            ast.isMeta = isMeta;
+            
+            return this.addFunctionDeclaration(ast.id.name, ast.params, ast.body, state, isMeta);
         }
         else
         {
@@ -431,12 +434,10 @@ FirstPass = (function(){
         return isMeta;
     };
     
-    FirstPass.prototype.addFunctionDeclaration = function(name, params, body, state, loc){
-        var isMeta = this.isMetaFunction(loc);
-        var functionSymbol = new FunctionSymbol(name, params, body, isMeta);
-        functionSymbol.prototypeProperty = {};
-        return new Result(true, state.addSymbol(name, functionSymbol));
+    FirstPass.prototype.addFunctionDeclaration = function(name, params, body, state, isMeta){    
+        return new Result(true, state.addSymbol(name, new FunctionSymbol(name, params, body, isMeta)));
     };
+    
     
     FirstPass.prototype.visitVariableDeclaration = function(ast, state){
         if(ast.kind === "var")
