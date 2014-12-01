@@ -408,3 +408,14 @@ test("'check that pumaFindByProperty ends", function(){
     result.makeValue();
     equal( result.value, true, "Passed!");
 });
+
+test("test prune phase",function(){
+    var result = evalPuma("/*@meta*/ function parseInt (valueExp) {var ast = pumaAst($valueExp | 0);return ast;}var n1 = parseInt('97');n1 + 2;")   
+    var metaNodeCount = 0;
+    for (var i = 0; i < result.pumaAst.body.length; i++) {
+        if(result.pumaAst.body[i].isMeta){
+            metaNodeCount++;
+        }
+    };
+    equal(metaNodeCount,0,"Passed!");
+});
