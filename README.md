@@ -103,12 +103,13 @@ result = pumaFindByProperty(ast, "left.name", 1, function(value1, value2){ retur
 ```
 Both functions returns an Array with the results. If the array is empty it means that none was found.
 
-## The Puma Team
+## The PumaScript Team
 * Alexis Ferreyra
 * Emanuel Ravera
 * Julieta Alvarez
-* Mariano Appendino
+* Ricardo Medel
 
 ## Security track
 * Marcelo Gonzalez
 * Martin Molina
+
