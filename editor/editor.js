@@ -43,8 +43,7 @@ PumaEditor.prototype.translate = function() {
   if(programStr !== undefined && programStr !== null) {
     result = evalPuma(programStr);
   }
-  var jsresult = window.escodegen.generate(result.pumaAst);
-  this.setEditorValue(this._javaScriptEditor, jsresult);
+  this.setEditorValue(this._javaScriptEditor, result.output);
   console.log(result);
 };
 
