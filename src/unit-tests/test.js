@@ -224,10 +224,9 @@ test("Basic Meta Function that rewrite itself", function(){
 
 test("Basic Meta Function that returns null do not rewrite itself", function(){
     var result = evalPuma("/*@meta*/ function sumar(a,b){ return null; } sumar(5, 6);");
-    equal( result.value, null, "Passed!");
-    result = evalPumaAst(result.pumaAst);
     equal( result.success, true, "Passed!");
     equal( result.value, null, "Passed!");
+    equal( result.pumaAst.body[0].expression.callee.name, 'sumar', "Passed!");
 });
 
 test("Call AST Construction Function", function(){
