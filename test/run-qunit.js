@@ -11,7 +11,7 @@
  * @param timeOutMillis the max amount of time to wait. If not specified, 3 sec is used.
  */
 function waitFor(testFx, onReady, timeOutMillis) {
-    var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 30001, //< Default Max Timout is 3s
+    var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3001, //< Default Max Timout is 3s
         start = new Date().getTime(),
         condition = false,
         interval = setInterval(function() {
@@ -21,31 +21,31 @@ function waitFor(testFx, onReady, timeOutMillis) {
             } else {
                 if(!condition) {
                     // If condition still not fulfilled (timeout but condition is 'false')
-                    console.log("Timeout");
+                    console.log("'waitFor()' timeout");
                     phantom.exit(1);
                 } else {
                     // Condition fulfilled (timeout and/or condition is 'true')
-                    console.log("TESTS Finished in " + (new Date().getTime() - start) + "ms.");
+                    console.log("'waitFor()' finished in " + (new Date().getTime() - start) + "ms.");
                     typeof(onReady) === "string" ? eval(onReady) : onReady(); //< Do what it's supposed to do once the condition is fulfilled
                     clearInterval(interval); //< Stop this interval
                 }
             }
         }, 100); //< repeat check every 250ms
 };
- 
- 
+
+
 if (phantom.args.length === 0 || phantom.args.length > 2) {
     console.log('Usage: run-qunit.js URL');
     phantom.exit(1);
 }
- 
-var page = require('webpage').create();
- 
+
+var page = new WebPage();
+
 // Route "console.log()" calls from within the Page context to the main Phantom context (i.e. current "this")
 page.onConsoleMessage = function(msg) {
     console.log(msg);
 };
- 
+
 page.open(phantom.args[0], function(status){
     if (status !== "success") {
         console.log("Unable to access network");
@@ -61,6 +61,17 @@ page.open(phantom.args[0], function(status){
             });
         }, function(){
             var failedNum = page.evaluate(function(){
+
+                var tests = document.getElementById("qunit-tests").childNodes;
+                console.log("\nTest name (failed, passed, total)\n");
+                for(var i in tests){
+                    var text = tests[i].innerText;
+                    if(text !== undefined){
+                        if(/Rerun$/.test(text)) text = text.substring(0, text.length - 5);
+                        console.log(text + "\n");
+                    }
+                }
+
                 var el = document.getElementById('qunit-testresult');
                 console.log(el.innerText);
                 try {

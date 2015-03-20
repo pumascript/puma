@@ -1261,10 +1261,10 @@ define(['../libs/escodegen/escodegen.browser.js', '../libs/esprima/esprima.js'],
     }
 
      return {
-         evalPuma: evalPuma.bind(this),
-         evalPumaAst: evalPumaAst.bind(this),
-         pumaCloneAst: pumaCloneAst.bind(this),
-         pumaFindByProperty: pumaFindByProperty.bind(this),
-         pumaFindByType: pumaFindByType.bind(this)
+         evalPuma: evalPuma,
+         evalPumaAst: evalPumaAst,
+         pumaCloneAst: pumaCloneAst,
+         pumaFindByProperty: pumaFindByProperty,
+         pumaFindByType: pumaFindByType
     };
 });
