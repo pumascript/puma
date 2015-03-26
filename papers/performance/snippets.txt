@@ -1,0 +1,59 @@
+\begin{figure*}
+\begin{lstlisting}
+
+/** @meta */ 
+function firstLetter(valueExp){
+    var ast = null;
+    if(valueExp.type === 'Literal'){
+        ast = valueExp;
+        ast.value = ast.value.substring(0, 1);
+    }
+    return ast;
+}
+
+// this call will be rewritten to 'H';
+firstLetter('Hello World'); 
+
+// this call will not be rewritten 
+// because the argument expression is not a literal
+firstLetter('Hello ' + 'World'); 
+
+\end{lstlisting}
+\caption{Foundational framework of the snork mechanism.}
+\end{figure*}
+
+
+\begin{figure*}
+\begin{center}
+	\includegraphics[width=1\textwidth]{test1}
+\end{center}
+\caption{Foundational framework of the snork mechanism.}
+\label{fig:1}
+\end{figure*}
+
+
+\begin{lstlisting}
+// invocation with literal
+var myElement = $('#Element_Id_1');
+\end{lstlisting}
+
+In this case, it is always safe to rewrite the invocation and the execution of the meta-function of Figure 6 will follow the 'then' branch of the if-else statement of line 6.
+
+On the other hand, when the actual argument to the meta-function is not a simple literal, the meta-function can use the intrinsic function "evalPumaAst" to evaluate any portion of AST in the current execution context. 
+
+The meta-function of Figure 6 uses a flag variable 'OPTIMISTIC_REWRITE' to enable optimistic rewriting when it can check that at least one execution of the caller expression matches the selector by Id form. The following invocation may not be safe to rewrite if the variable 'element_id' is an argument into a function, but by using the 'evalPumaAst' intrinsic function in line 11, the meta-function is able of detect that the call is safe to rewrite into a more efficient API call.
+
+\begin{lstlisting}
+// invocation with non-trivial expression
+var element_id = "5";
+var myOtherElement = $('#Element_Id_' + element_id);
+\end{lstlisting}
+
+Finally, there are cases where the selector do not match a simple selector by Id. 
+
+\begin{lstlisting}
+// invocation that do not match a selector by Id
+var myOtherClassElements = $('.Class_Id_' + element_id);
+\end{lstlisting}
+
+The meta-function is capable of identifying this case easily, because no matter what value the variable 'element_id' takes, it will not form a valid selector by Id.

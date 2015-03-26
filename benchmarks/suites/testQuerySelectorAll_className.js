@@ -15,6 +15,11 @@ benchmark_getElementByClassName.prepare = function() {
 };
 benchmark_getElementByClassName.test = function() {
 	var elements = document.getElementsByClassName("class1");
+    var frag = document.createDocumentFragment();
+    var length = elements.length;
+    for(var i; i < length; i++)
+        frag.appendChild(elements[i]);
+    return frag.childNodes;
 };
 benchmark_getElementByClassName.clean = function() {
 	$("body").children().remove();

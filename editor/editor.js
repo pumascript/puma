@@ -6,12 +6,15 @@ var PumaEditor = function() {
 
 PumaEditor.prototype.instantiateCodeMirrorEditor = function(section) {
     return  CodeMirror(document.getElementById(section), {
-          mode: "text/javascript",
-          extraKeys: {"Ctrl-Space": "autocomplete", "Ctrl-J": "autocomplete"},
-          value: "",
-		      lineNumbers: true,
-          tabSize:2
-        }); 
+      mode: "text/javascript",
+      extraKeys: {"Ctrl-Space": "autocomplete", "Ctrl-J": "autocomplete"},
+      value: "",
+      lineNumbers: true,
+      height: 'auto',
+      tabSize:2,
+      foldGutter: true,
+      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+    }); 
 };
 
 PumaEditor.prototype.editorValue = function(editor) {
