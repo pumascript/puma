@@ -2,6 +2,8 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
+var Global = window || global;
+
 define(['../libs/escodegen/escodegen.browser.js', '../libs/esprima/esprima.js'], function(escodegen, esprima) {
 
     Result = (function () {
@@ -129,7 +131,7 @@ define(['../libs/escodegen/escodegen.browser.js', '../libs/esprima/esprima.js'],
 
         State.prototype.findSymbolInStackFrame = function (name, stackFrameIndex) {
             if (stackFrameIndex < 0 || this._stackFrame.length === 0) {
-                if (window[name] !== undefined) return new Symbol(name, window[name]);
+                if (Global[name] !== undefined) return new Symbol(name, Global[name]);
                 return Symbol.Undefined;
             }
             var stackFrame = this._stackFrame[stackFrameIndex];
@@ -345,22 +347,20 @@ define(['../libs/escodegen/escodegen.browser.js', '../libs/esprima/esprima.js'],
             // TODO check ECMAScript standard for additional cases when evaluating member expression
             if (ast.property.type === 'Identifier' && ast.computed == false) {
                 propertyName = astPropertyName;
-            }
-            else {
+            } else {
                 propertyResult = this.accept(ast.property, state);
                 propertyResult.makeValue();
 
                 if (propertyResult.value === undefined) {
                     propertyName = astPropertyName;
-                }
-                else {
+                } else {
                     propertyName = propertyResult.value;
                 }
             }
-            if(obj === undefined)console.log(ast);
-            if (!(propertyName in obj))
-                obj[propertyName] = undefined;
 
+            if (!(propertyName in obj)) {
+                obj[propertyName] = undefined;
+            }
             var wrapper = new PropertyWrapper(obj, propertyName);
             return new Result(true, wrapper);
         };
@@ -673,7 +673,7 @@ define(['../libs/escodegen/escodegen.browser.js', '../libs/esprima/esprima.js'],
         FirstPass.prototype.visitCallExpression = function (ast, state) {
             var calleeResult = this.accept(ast.callee, state);
             var functionSymbol;
-            var targetObject = window;
+            var targetObject = Global;
 
             if (calleeResult.success === true) {
                 if (calleeResult.value instanceof PropertyWrapper) {
@@ -1185,7 +1185,7 @@ define(['../libs/escodegen/escodegen.browser.js', '../libs/esprima/esprima.js'],
         // TODO implement a faster clone function
 
         // Exclude the parent node so it doesn't create a circular reference
-        replacer = function (key, value) {
+        var replacer = function (key, value) {
             if (key === "parent") return undefined;
             else return value;
         }
