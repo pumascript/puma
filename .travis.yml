@@ -1,4 +1,4 @@
 script: 
-- chmod 777 ./src/unit-tests/run-tests.sh
-- cd ./src/unit-tests/
+- chmod 777 ./test/run-tests.sh
+- cd ./test/
 - sh run-tests.sh

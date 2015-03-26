@@ -44,10 +44,13 @@ PumaEditor.prototype.translate = function() {
   }
   
   if(programStr !== undefined && programStr !== null) {
-    result = evalPuma(programStr);
+      var that = this;
+      require(['pumascript'], function(puma){
+          result = puma.evalPuma(programStr);
+          that.setEditorValue(that._javaScriptEditor, result.output);
+          console.log(result);
+      });
   }
-  this.setEditorValue(this._javaScriptEditor, result.output);
-  console.log(result);
 };
 
 PumaEditor.prototype.registerEvents = function(){
