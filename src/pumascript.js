@@ -4,7 +4,7 @@ if (typeof define !== 'function') {
 
 var Global = window || global;
 
-define(['../libs/escodegen/escodegen.browser.js', '../libs/esprima/esprima.js'], function(escodegen, esprima) {
+define(['../src/libs/escodegen/escodegen.browser.js', '../src/libs/esprima/esprima.js'], function(escodegen, esprima) {
 
     Result = (function () {
         function Result(success, value) {

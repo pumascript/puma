@@ -4,7 +4,7 @@
  *  must be added the require('pumascript') call.
  */
 
-require(['pumascript', '../libs/esprima/esprima.js'], function(puma, esprima) {
+require(['pumascript', '../src/libs/esprima/esprima.js'], function(puma, esprima) {
 
     test( "hello test", function() {
         ok( 1 == "1", "Passed!" );
