@@ -1,5 +1,10 @@
 # PumaScript
 
+![alt text][travis]
+[travis]: https://travis-ci.org/emravera/puma.svg?branch=master "Current CI status on Master"
+
+## Intro
+
 PumaScript is a research programming language based on JavaScript.
 It has exactly the same syntax and semantic than JavaScript plus meta-programming capabilities and re-writing features.
 
@@ -16,6 +21,23 @@ Any JavaScript program is a PumaScript program.
 
 To execute a JavaScript program in PumaScript runtime use the "evalPuma" function.
 
+## Use PumaScript with require
+
+PumaScript was developed as a AMD module so it can be used with any JS module loader. In order to use in your project copy the src folder to your project.
+
+To include the functionality using requireJS into your code add the following:
+
+```
+<script data-main="/src/pumascript.js" src="/src/libs/requirejs/require.js"></script>
+```
+
+Now you can use it inside your code in this way:
+
+```
+    var puma = require('pumascript')
+    puma.evalPuma(<The program string here>)
+```
+
 ## PumaScript Editor
 
 A simple PumaScript editor is available here:
@@ -23,7 +45,7 @@ A simple PumaScript editor is available here:
 ```
     editor/puma-editor.html
 ```
-The editor shows two frames side by side. The one in  the left allows writing code in PumaScript language and the one in the right is used to see the results of re-writing after pressing the button "Execute". 
+The editor shows two frames side by side. The one in the left allows writing code in PumaScript language and the one in the right is used to see the results of re-writing after pressing the button "Execute".
 
 Note that you can use any text editor to write PumaScript code. Then, use the "evalPuma" function run your code by using JavaScript.
 
@@ -106,6 +128,7 @@ Both functions returns an Array with the results. If the array is empty it means
 ## The PumaScript Team
 * Alexis Ferreyra
 * Emanuel Ravera
+* Nestor Navarro
 * Julieta Alvarez
 * Ricardo Medel
 
@@ -113,3 +136,8 @@ Both functions returns an Array with the results. If the array is empty it means
 * Marcelo Gonzalez
 * Martin Molina
 
+## Universidad Tecnologica Nacional - Facultad Regional Cordoba - Argentina
+Project is executed in Software Research Lab (LIS).
+
+![alt text][utn]
+[utn]: http://upload.wikimedia.org/wikipedia/commons/thumb/6/67/UTN_logo.jpg/200px-UTN_logo.jpg "UTN logo"
