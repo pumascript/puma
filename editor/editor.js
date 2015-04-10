@@ -2,8 +2,9 @@
 
 require.config({
     paths: {
-        jquery: 'libs/jquery/jquery-1.9.1.min',
-        bootstrap: 'libs/bootstrap/js/bootstrap',
+        jquery: 'bower_components/jquery/jquery.min',
+        bootstrap: 'bower_components/bootstrap/dist/js/bootstrap',
+        cm: 'bower_components/codemirror/',
         pumascript: '../src/pumascript'
     },
     shim: {
@@ -16,9 +17,21 @@ require.config({
 
 require([
     'jquery',
+    'cm/lib/codemirror',
     'pumascript',
-    'bootstrap'
-], function ($, puma) {
+    'bootstrap',
+    'cm/addon/hint/show-hint',
+    'cm/addon/hint/xml-hint',
+    'cm/addon/hint/html-hint',
+    'cm/addon/hint/javascript-hint',
+    'cm/addon/fold/foldcode',
+    'cm/addon/fold/foldgutter',
+    'cm/addon/fold/brace-fold',
+    'cm/mode/xml/xml',
+    'cm/mode/javascript/javascript',
+    'cm/mode/css/css',
+    'cm/mode/htmlmixed/htmlmixed'
+], function ($, CodeMirror, puma) {
 
     function PumaEditor() {
         this._javaScriptEditor = this.instantiateCodeMirrorEditor("javascript");
