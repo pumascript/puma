@@ -1,75 +1,159 @@
+/*global define, module, require, global, console */
+
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
 var Global = window || global;
 
-define(['../src/libs/escodegen/escodegen.browser.js', '../src/libs/esprima/esprima.js'], function(escodegen, esprima) {
+define([
+    '../src/libs/escodegen/escodegen.browser.js',
+    '../src/libs/esprima/esprima.js',
+    'exports'
+], function (escodegen, esprima, exports) {
 
-    Result = (function () {
-        function Result(success, value) {
-            this.success = success;
-            this.value = value;
-        }
+    /**
+     * @constructor
+     */
+    function Result(success, value) {
+        this.success = success;
+        this.value = value;
+    }
 
-        Result.prototype.failed = function () {
-            return this.success !== true;
-        };
-        Result.prototype.makeValue = function () {
-            if (this.value instanceof Symbol)
-                this.value = this.value.value;
-        };
-        Result.prototype.isReturnResult = function () {
-            return this._isReturnResult === true;
-        };
-        Result.prototype.setIsReturnResult = function (value) {
-            return this._isReturnResult = value;
-        };
+    Result.prototype.failed = function () {
+        return this.success !== true;
+    };
 
-        return Result;
-    })();
+    Result.prototype.makeValue = function () {
+        if (this.value instanceof Symbol)
+            this.value = this.value.value;
+    };
 
-    FunctionSymbol = (function () {
-        function FunctionSymbol(name, parameters, body, isMeta, addToFunctionState) {
-            this.name = name;
-            this.parameters = parameters;
-            this.body = body;
-            this.isMeta = isMeta;
+    Result.prototype.isReturnResult = function () {
+        return this._isReturnResult === true;
+    };
+
+    Result.prototype.setIsReturnResult = function (value) {
+        return this._isReturnResult = value;
+    };
+
+
+
+
+    /**
+     * @constructor
+     */
+    function Symbol(name, value) {
+        this._value = value;
+        this.name = name;
+
+        Object.defineProperty(this, "value", {
+            get: function () {
+                return this._value;
+            },
+            set: function (newValue) {
+                this.updateMetaData(newValue);
+                this._value = newValue;
+            }
+        });
+
+        if ("initMetaData" in this)
             this.initMetaData();
-            this.addToFunctionState = addToFunctionState;
-        }
+    }
 
-        return FunctionSymbol;
-    })();
-
-    Symbol = (function () {
-        function Symbol(name, value) {
-            this._value = value;
-            Object.defineProperty(this, "value", {
-                get: function () {
-                    return this._value;
-                },
-                set: function (newValue) {
-                    this.updateMetaData(newValue);
-                    this._value = newValue;
-                }
-            });
-            this.name = name;
-
-            if ("initMetaData" in this)
-                this.initMetaData();
-        }
-
-        Symbol.UNDEFINED = "__UNDEFINED__";
-
-        Symbol.prototype.isUndefined = function () {
-            return this.name === Symbol.UNDEFINED;
-        };
-
-        return Symbol;
-    })();
+    Symbol.UNDEFINED = "__UNDEFINED__";
 
     Symbol.Undefined = new Symbol(Symbol.UNDEFINED, undefined);
+
+    Symbol.EmitTypeWarnings = false;
+
+    Symbol.prototype.isUndefined = function () {
+        return this.name === Symbol.UNDEFINED;
+    };
+
+    Symbol.prototype.initMetaData = function () {
+        this._meta = {
+            parameters: [],
+            returns: {}
+        };
+
+        Object.defineProperty(this, "meta", {
+            get: function () {
+                return this._meta;
+            }
+        });
+    };
+
+    /**
+     * Register symbol meta-type information for last assignation operation
+     * @param newValue {object} actual value that will be assigned to the symbol
+     */
+    Symbol.prototype.updateMetaData = function (newValue) {
+        Symbol._updateMetaData(this.name, this._meta, newValue, "Symbol");
+    };
+
+    /**
+     * Helper function to register (type,count) pairs in meta-type dictionaries
+     * @param symbolName {string} Name of the symbol that will be used if a warning is emmited
+     * @param dictionary {object<string,number>} An object used as dictionary where the key is the typename and the value is the number of ocurrences.
+     */
+    Symbol._updateMetaData = function (symbolName, dictionary, newValue, errorStartString) {
+        var type = typeof(newValue);
+        if (dictionary[type] === undefined) {
+            if (Symbol.EmitTypeWarnings && Object.keys(dictionary).length >= 1) {
+                console.warn(errorStartString + " \"" + symbolName + "\" takes more than one type in their lifetime.");
+            }
+            dictionary[type] = 1;
+        }
+        else {
+            dictionary[type]++;
+        }
+    };
+
+
+    /**
+     * @constructor
+     */
+    function FunctionSymbol(name, parameters, body, isMeta, addToFunctionState) {
+        this.name = name;
+        this.parameters = parameters;
+        this.body = body;
+        this.isMeta = isMeta;
+        this.initMetaData();
+        this.addToFunctionState = addToFunctionState;
+    }
+
+    FunctionSymbol.prototype.initMetaData = Symbol.prototype.initMetaData;
+
+    /**
+     * Register actual arguments type information in Function meta-type information
+     * @param actualArguments {Array<Result>} An array with the results of evaluation of each actual argument
+     * @return {void}
+     */
+    FunctionSymbol.prototype.registerCallStart = function (actualArguments) {
+        var n;
+        var types;
+        var actualArgumentValue;
+
+        for (n = 0; n < actualArguments.length; n++) {
+            types = this._meta.parameters[n];
+            if (types === undefined) {
+                types = {};
+                this._meta.parameters[n] = types;
+            }
+            actualArgumentValue = actualArguments[n].value;
+            Symbol._updateMetaData(this.name, types, actualArgumentValue, "Parameter " + n + " of function");
+        }
+    };
+
+    /**
+     * Register return value type information in Function meta-type information
+     * @param returnResult {Result} The Result object that last function call generated
+     * @return {void}
+     */
+    FunctionSymbol.prototype.registerCallReturn = function (returnResult) {
+        Symbol._updateMetaData(this.name, this._meta.returns, returnResult.value, "Return type");
+    };
 
     PropertyWrapper = (function () {
         PropertyWrapper.prototype = new Symbol();
@@ -96,74 +180,74 @@ define(['../src/libs/escodegen/escodegen.browser.js', '../src/libs/esprima/espri
         return PropertyWrapper
     })();
 
-    State = (function () {
-        function State() {
-            this._stackFrame = [];
-            this._symbols = {};
+
+    /**
+     * @constructor
+     */
+    function State() {
+        this._stackFrame = [];
+        this._symbols = {};
+        this._newFrameThisBinding = undefined;
+        this.initializeDefaultSymbols();
+    }
+
+    State.prototype.initializeDefaultSymbols = function () {
+        var pumaAst = new FunctionSymbol("pumaAst", [], null, true);
+        pumaAst.isAstConstructionFunction = true;
+        this.addSymbol("pumaAst", pumaAst);
+        // TODO: should "this" be set to the global object?
+        this.addSymbol("this", {});
+    };
+
+    State.prototype.addSymbol = function (name, value) {
+        if (value === undefined) value = null;
+        var symbol = new Symbol(name, value);
+        if (this._symbols[name] !== undefined) {
+            console.warn("Duplicated symbol name \"" + name + "\" in current scope. Old symbol was discarded.");
+        }
+        this._symbols[name] = symbol;
+        return symbol;
+    };
+
+    State.prototype.getSymbol = function (name) {
+        if (this._symbols[name] === undefined) {
+            return this.findSymbolInStackFrame(name, this._stackFrame.length - 1);
+        }
+        else return this._symbols[name];
+    };
+
+    State.prototype.findSymbolInStackFrame = function (name, stackFrameIndex) {
+        if (stackFrameIndex < 0 || this._stackFrame.length === 0) {
+            if (Global[name] !== undefined) return new Symbol(name, Global[name]);
+            return Symbol.Undefined;
+        }
+        var stackFrame = this._stackFrame[stackFrameIndex];
+        if (stackFrame[name] === undefined) return this.findSymbolInStackFrame(name, stackFrameIndex - 1);
+        return stackFrame[name];
+    };
+
+    State.prototype.pushStackFrame = function () {
+        this._stackFrame[this._stackFrame.length] = this._symbols;
+        this._symbols = {};
+
+        if (this._newFrameThisBinding !== undefined) {
+            this.addSymbol("this", this._newFrameThisBinding);
             this._newFrameThisBinding = undefined;
-            this.initializeDefaultSymbols();
         }
+    };
 
-        State.prototype.initializeDefaultSymbols = function () {
-            var pumaAst = new FunctionSymbol("pumaAst", [], null, true);
-            pumaAst.isAstConstructionFunction = true;
-            this.addSymbol("pumaAst", pumaAst);
-            // TODO: should "this" be set to the global object?
-            this.addSymbol("this", {});
-        };
-
-        State.prototype.addSymbol = function (name, value) {
-            if (value === undefined) value = null;
-            var symbol = new Symbol(name, value);
-            if (this._symbols[name] !== undefined) {
-                console.warn("Duplicated symbol name \"" + name + "\" in current scope. Old symbol was discarded.");
-            }
-            this._symbols[name] = symbol;
-            return symbol;
-        };
-
-        State.prototype.getSymbol = function (name) {
-            if (this._symbols[name] === undefined) {
-                return this.findSymbolInStackFrame(name, this._stackFrame.length - 1);
-            }
-            else return this._symbols[name];
-        };
-
-        State.prototype.findSymbolInStackFrame = function (name, stackFrameIndex) {
-            if (stackFrameIndex < 0 || this._stackFrame.length === 0) {
-                if (Global[name] !== undefined) return new Symbol(name, Global[name]);
-                return Symbol.Undefined;
-            }
-            var stackFrame = this._stackFrame[stackFrameIndex];
-            if (stackFrame[name] === undefined) return this.findSymbolInStackFrame(name, stackFrameIndex - 1);
-            return stackFrame[name];
-        };
-
-        State.prototype.pushStackFrame = function () {
-            this._stackFrame[this._stackFrame.length] = this._symbols;
-            this._symbols = {};
-
-            if (this._newFrameThisBinding !== undefined) {
-                this.addSymbol("this", this._newFrameThisBinding);
-                this._newFrameThisBinding = undefined;
-            }
-        };
-
-        State.prototype.popStackFrame = function () {
-            if (this._stackFrame.length === 0) {
-                console.warn("You are trying to pop a stack frame with an empty stack!");
-                return;
-            }
-            this._symbols = this._stackFrame[this._stackFrame.length - 1];
-            this._stackFrame.pop();
-        };
-
-        State.prototype.setNewFrameThisBinding = function (thisBinding) {
-            this._newFrameThisBinding = thisBinding;
+    State.prototype.popStackFrame = function () {
+        if (this._stackFrame.length === 0) {
+            console.warn("You are trying to pop a stack frame with an empty stack!");
+            return;
         }
+        this._symbols = this._stackFrame[this._stackFrame.length - 1];
+        this._stackFrame.pop();
+    };
 
-        return State;
-    })();
+    State.prototype.setNewFrameThisBinding = function (thisBinding) {
+        this._newFrameThisBinding = thisBinding;
+    };
 
     FirstPass = (function () {
         function FirstPass(programAst) {
@@ -374,7 +458,7 @@ define(['../src/libs/escodegen/escodegen.browser.js', '../src/libs/esprima/espri
                 addToFunctionState = true;
             }
             var isMeta = this.isMetaFunction(ast.loc.start);
-            var functionSymbol = new FunctionSymbol(functionName, ast.params, ast.body, isMeta, addToFunctionState)
+            var functionSymbol = new FunctionSymbol(functionName, ast.params, ast.body, isMeta, addToFunctionState);
             return new Result(true, functionSymbol);
         };
 
@@ -448,7 +532,7 @@ define(['../src/libs/escodegen/escodegen.browser.js', '../src/libs/esprima/espri
             if (init !== null) {
                 var initResult = this.accept(init, state);
                 if (initResult.success) {
-                    var symbol = state.getSymbol(name);
+                    symbol = state.getSymbol(name);
                     initResult.makeValue();
                     symbol.value = initResult.value;
                 }
@@ -861,7 +945,7 @@ define(['../src/libs/escodegen/escodegen.browser.js', '../src/libs/esprima/espri
                 lineMetaComments.push(ast.loc.end.column);
             }
             return defaultResult;
-        }
+        };
 
         FirstPass.prototype.visitUpdateExpression = function (ast, state) {
             var argumentResult = this.accept(ast.argument, state);
@@ -941,67 +1025,45 @@ define(['../src/libs/escodegen/escodegen.browser.js', '../src/libs/esprima/espri
         return FirstPass;
     })();
 
-    PrunePass = (function () {
 
-        function PrunePass(programAst) {
-            this._programAst = programAst;
-            this._pruneBody = [];
-        };
+    /**
+     * @constructor
+     */
+    function PrunePass(programAst) {
+        this._programAst = programAst;
+        this._pruneBody = [];
+    };
 
-        PrunePass.prototype.start = function () {
-            if (this._programAst === null) throw "null ast";
-            var tree = this._programAst.body;
-            var prunedAst = this.walk(tree);
-            return prunedAst;
-        };
+    PrunePass.prototype.start = function () {
+        if (this._programAst === null) throw "null ast";
+        var tree = this._programAst.body;
+        var prunedAst = this.walk(tree);
+        return prunedAst;
+    };
 
-        PrunePass.prototype.walk = function (tree) {
-            for (var i = 0; i < tree.length; i++) {
-                if (tree[i].isMeta === false || tree[i].isMeta === undefined) {
-                    this._pruneBody.push(tree[i]);
-                }
+    PrunePass.prototype.walk = function (tree) {
+        for (var i = 0; i < tree.length; i++) {
+            if (tree[i].isMeta === false || tree[i].isMeta === undefined) {
+                this._pruneBody.push(tree[i]);
             }
-            ;
-            this._programAst.body = this._pruneBody;
-            return this._programAst;
         };
 
-        return PrunePass;
-    })();
+        this._programAst.body = this._pruneBody;
 
-    CodeGenerator = (function () {
+        return this._programAst;
+    };
 
-        function CodeGenerator(programAstPruned) {
-            this.programAstPruned = programAstPruned;
-        };
 
-        CodeGenerator.prototype.generateCode = function () {
-            return window.escodegen.generate(this.programAstPruned) || escodegen.generate(this.programAstPruned);
-        };
+    /**
+     * @constructor
+     */
+    function CodeGenerator(programAstPruned) {
+        this.programAstPruned = programAstPruned;
+    };
 
-        return CodeGenerator;
-    })();
-
-    function evalPuma(programStr) {
-        var ast = esprima.parse(programStr, {"comment": true, "loc": true});
-        addParent(ast);
-        return evalPumaAst(ast);
-    }
-
-    function evalPumaAst(programAst) {
-        var firstPass = new FirstPass(programAst);
-        var result = firstPass.run(new State);
-
-        var prune = new PrunePass(programAst);
-        var programAstPruned = prune.start();
-
-        var generator = new CodeGenerator(programAstPruned);
-        var programStr = generator.generateCode();
-
-        result.pumaAst = programAstPruned;
-        result.output = programStr;
-        return result;
-    }
+    CodeGenerator.prototype.generateCode = function () {
+        return window.escodegen.generate(this.programAstPruned) || escodegen.generate(this.programAstPruned);
+    };
 
     function addParent(ast) {
         if (ast === undefined || ast === null) throw "invalid call to accept with null ast.";
@@ -1014,84 +1076,6 @@ define(['../src/libs/escodegen/escodegen.browser.js', '../src/libs/esprima/espri
             }
         }
     }
-
-    PumaScript = {};
-
-    PumaScript.Loc = function (ast) {
-        return "[" + ast.loc.start.line + ", " + ast.loc.start.column + "] ";
-    }
-
-    Symbol.EmitTypeWarnings = false;
-
-    Symbol.prototype.initMetaData = function () {
-        this._meta = {
-            parameters: [],
-            returns: {}
-        };
-        Object.defineProperty(this, "meta", {
-            get: function () {
-                return this._meta;
-            },
-        });
-    };
-
-    /**
-     * Register symbol meta-type information for last assignation operation
-     * @param newValue {object} actual value that will be assigned to the symbol
-     */
-    Symbol.prototype.updateMetaData = function (newValue) {
-        Symbol._updateMetaData(this.name, this._meta, newValue, "Symbol");
-    };
-
-    /**
-     * Helper function to register (type,count) pairs in meta-type dictionaries
-     * @param symbolName {string} Name of the symbol that will be used if a warning is emmited
-     * @param dictionary {object<string,number>} An object used as dictionary where the key is the typename and the value is the number of ocurrences.
-     */
-    Symbol._updateMetaData = function (symbolName, dictionary, newValue, errorStartString) {
-        var type = typeof(newValue);
-        if (dictionary[type] === undefined) {
-            if (Symbol.EmitTypeWarnings && Object.keys(dictionary).length >= 1) {
-                console.warn(errorStartString + " \"" + symbolName + "\" takes more than one type in their lifetime.");
-            }
-            dictionary[type] = 1;
-        }
-        else {
-            dictionary[type]++;
-        }
-    };
-
-    FunctionSymbol.prototype.initMetaData = Symbol.prototype.initMetaData;
-
-    /**
-     * Register actual arguments type information in Function meta-type information
-     * @param actualArguments {Array<Result>} An array with the results of evaluation of each actual argument
-     * @return {void}
-     */
-    FunctionSymbol.prototype.registerCallStart = function (actualArguments) {
-        var n;
-        var types;
-        var actualArgumentValue;
-
-        for (n = 0; n < actualArguments.length; n++) {
-            types = this._meta.parameters[n];
-            if (types === undefined) {
-                types = {};
-                this._meta.parameters[n] = types;
-            }
-            actualArgumentValue = actualArguments[n].value;
-            Symbol._updateMetaData(this.name, types, actualArgumentValue, "Parameter " + n + " of function");
-        }
-    };
-
-    /**
-     * Register return value type information in Function meta-type information
-     * @param returnResult {Result} The Result object that last function call generated
-     * @return {void}
-     */
-    FunctionSymbol.prototype.registerCallReturn = function (returnResult) {
-        Symbol._updateMetaData(this.name, this._meta.returns, returnResult.value, "Return type");
-    };
 
     /**
      * Merges the result returned by a meta function call with the function call context.
@@ -1175,6 +1159,35 @@ define(['../src/libs/escodegen/escodegen.browser.js', '../src/libs/esprima/espri
             idMatchData.parent[idMatchData.property] = astToMerge;
         }
     };
+
+    var PumaScript = {};
+
+    PumaScript.Loc = function (ast) {
+        return "[" + ast.loc.start.line + ", " + ast.loc.start.column + "] ";
+    }
+
+    function evalPuma(programStr) {
+        var ast = esprima.parse(programStr, {"comment": true, "loc": true});
+        addParent(ast);
+        return evalPumaAst(ast);
+    }
+
+    function evalPumaAst(programAst) {
+        var firstPass = new FirstPass(programAst);
+        var result = firstPass.run(new State);
+
+        var prune = new PrunePass(programAst);
+        var programAstPruned = prune.start();
+
+        var generator = new CodeGenerator(programAstPruned);
+        var programStr = generator.generateCode();
+
+        result.pumaAst = programAstPruned;
+        result.output = programStr;
+
+        return result;
+    }
+
 
     /**
      * Creates a deep copy of the provided AST object. It must be a Puma AST.
@@ -1260,11 +1273,9 @@ define(['../src/libs/escodegen/escodegen.browser.js', '../src/libs/esprima/espri
         return internalPumaFindByProperty(ast, propertyList, value, [], compareFunction);
     }
 
-     return {
-         evalPuma: evalPuma,
-         evalPumaAst: evalPumaAst,
-         pumaCloneAst: pumaCloneAst,
-         pumaFindByProperty: pumaFindByProperty,
-         pumaFindByType: pumaFindByType
-    };
+    exports.evalPuma = evalPuma;
+    exports.evalPumaAst = evalPumaAst;
+    exports.pumaCloneAst = pumaCloneAst;
+    exports.pumaFindByProperty = pumaFindByProperty;
+    exports.pumaFindByType = pumaFindByType;
 });
