@@ -1,10 +1,25 @@
+/*
+    PumaScript main source code
+ */
+
+// Global settings
+var Global = {};
+var escodegenLib = '';
+var browser = false;
+
 if (typeof define !== 'function') {
+    //Node.js Runtime
     var define = require('amdefine')(module);
+    Global = global;
+    escodegenLib = '../node_modules/escodegen/escodegen.js';
+} else {
+    // Browser support
+    Global = window;
+    escodegenLib = '../src/libs/escodegen/escodegen.browser.js';
+    browser = true;
 }
 
-var Global = window || global;
-
-define(['../src/libs/escodegen/escodegen.browser.js', '../src/libs/esprima/esprima.js'], function(escodegen, esprima) {
+define([ escodegenLib , '../src/libs/esprima/esprima.js'], function(escodegen, esprima) {
 
     Result = (function () {
         function Result(success, value) {
@@ -976,7 +991,11 @@ define(['../src/libs/escodegen/escodegen.browser.js', '../src/libs/esprima/espri
         };
 
         CodeGenerator.prototype.generateCode = function () {
-            return window.escodegen.generate(this.programAstPruned) || escodegen.generate(this.programAstPruned);
+            if(browser){
+                return Global.escodegen.generate(this.programAstPruned)
+            } else{
+                return escodegen.generate(this.programAstPruned);
+            }
         };
 
         return CodeGenerator;

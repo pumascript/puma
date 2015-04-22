@@ -1,10 +1,3 @@
-/*
- * puma-script
- *
- * Copyright (c) 2014 UTN-LIS
- * Licensed under the MIT license.
- */
-
 'use strict';
 
 module.exports = function (grunt) {
@@ -30,12 +23,12 @@ module.exports = function (grunt) {
     },
 
     // Configuration to be run (and then tested).
-    puma_script_grunt: {
+    puma: {
       default_options: {
         options: {
         },
         files: {
-          'tmp/result.js': ['test/fixtures/puma.js']
+          'test/grunt-test/tmp/result.js': ['test/grunt-test/puma-test.js']
         }
       }      
     },
@@ -44,7 +37,6 @@ module.exports = function (grunt) {
     nodeunit: {
       tests: ['test/*_test.js']
     }
-
   });
 
   // Actually load this plugin's task(s).
@@ -52,10 +44,11 @@ module.exports = function (grunt) {
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'puma_script_grunt', 'nodeunit']);
+  grunt.registerTask('test', ['clean', 'puma', 'nodeunit']);
 
-  grunt.registerTask('puma', ['clean', 'puma_script_grunt']);
-  
+  grunt.registerTask('pumascript', ['puma', 'exec:npm']);
+
+
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);
 
