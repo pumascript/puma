@@ -1,0 +1,16 @@
+{
+    "name": "pumascript-editor",
+    "main": "editor.js",
+    "version": "0.0.1",
+    "homepage": "https://github.com/emravera/puma",
+    "dependencies": {
+        "jquery": "~1.9.1",
+        "codemirror": "~5.1.0",
+        "bootstrap": "~3.1.1"
+    },
+    "private": true,
+    "ignore": [
+    "**/.*",
+    "bower_components"
+  ]
+}
