@@ -10,7 +10,7 @@ It has exactly the same syntax and semantic than JavaScript plus meta-programmin
 
 A number of PumaScript features are based on LayerD project. Which is a meta-programming framework for statically typed languages.
 
-## Simple PumaScript 
+## Simple PumaScript
 
 Any JavaScript program is a PumaScript program.
 
@@ -47,6 +47,12 @@ A simple PumaScript editor is available here:
 ```
 The editor shows two frames side by side. The one in the left allows writing code in PumaScript language and the one in the right is used to see the results of re-writing after pressing the button "Execute".
 
+To setup the editor, you need to have bower installed on your local system, and then in the editor folder run:
+
+```
+    bower install
+```
+
 Note that you can use any text editor to write PumaScript code. Then, use the "evalPuma" function run your code by using JavaScript.
 
 We are working in a node.js module in order to use PumaScript integrated in your development cycle in a similar way to code minifiers or static analysis tools like JSHint.
@@ -58,7 +64,7 @@ PumaScript allows the construction of meta-functions. These meta-functions can b
 To declare a meta-functions just add a comment with "@meta" keyword before the function declaration.
 
 ```
-    /** @meta */ 
+    /** @meta */
     function sum(a, b)
     {
         return pumaAst( $a +  $b);
@@ -131,6 +137,7 @@ Both functions returns an Array with the results. If the array is empty it means
 * Nestor Navarro
 * Julieta Alvarez
 * Ricardo Medel
+* Albertina Durante
 
 ## Security track
 * Marcelo Gonzalez

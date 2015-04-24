@@ -1,16 +1,32 @@
 /*global define, module, require, global, console */
+/*
+    PumaScript main source code
+ */
+
+// Global settings
+var Global = {};
+var escodegenLib = '';
+var browser = false;
 
 if (typeof define !== 'function') {
+    //Node.js Runtime
     var define = require('amdefine')(module);
+    Global = global;
+    escodegenLib = '../node_modules/escodegen/escodegen.js';
+} else {
+    // Browser support
+    Global = window;
+    escodegenLib = '../src/libs/escodegen/escodegen.browser.js';
+    browser = true;
 }
 
-var Global = window || global;
-
 define([
-    '../src/libs/escodegen/escodegen.browser.js',
+    escodegenLib,
     '../src/libs/esprima/esprima.js',
     'exports'
 ], function (escodegen, esprima, exports) {
+
+    'use strict';
 
     /**
      * @constructor
@@ -34,11 +50,8 @@ define([
     };
 
     Result.prototype.setIsReturnResult = function (value) {
-        return this._isReturnResult = value;
+        this._isReturnResult = value;
     };
-
-
-
 
     /**
      * @constructor
@@ -155,31 +168,29 @@ define([
         Symbol._updateMetaData(this.name, this._meta.returns, returnResult.value, "Return type");
     };
 
-    PropertyWrapper = (function () {
-        PropertyWrapper.prototype = new Symbol();
-        PropertyWrapper.prototype.constructor = PropertyWrapper;
+    /**
+     * @constructor
+     */
+    function PropertyWrapper(obj, propertyName) {
+        this._obj = obj;
+        this._propertyName = propertyName;
+        Object.defineProperty(this, "value", {
+            get: function () {
+                return this._obj[this._propertyName];
+            },
+            set: function (newValue) {
+                this._obj[this._propertyName] = newValue;
+            }
+        });
+        Object.defineProperty(this, "obj", {
+            get: function () {
+                return this._obj;
+            }
+        });
+    }
 
-        function PropertyWrapper(obj, propertyName) {
-            this._obj = obj;
-            this._propertyName = propertyName;
-            Object.defineProperty(this, "value", {
-                get: function () {
-                    return this._obj[this._propertyName];
-                },
-                set: function (newValue) {
-                    this._obj[this._propertyName] = newValue;
-                }
-            });
-            Object.defineProperty(this, "obj", {
-                get: function () {
-                    return this._obj;
-                }
-            });
-        }
-
-        return PropertyWrapper
-    })();
-
+    PropertyWrapper.prototype = new Symbol();
+    PropertyWrapper.prototype.constructor = PropertyWrapper;
 
     /**
      * @constructor
@@ -249,7 +260,7 @@ define([
         this._newFrameThisBinding = thisBinding;
     };
 
-    FirstPass = (function () {
+    var FirstPass = (function () {
         function FirstPass(programAst) {
             this._metaComments = [];
             this._lastStatementLoc = {"line": 0, "column": 0};
@@ -980,7 +991,8 @@ define([
         };
 
         FirstPass.prototype.visitArrayExpression = function (ast, state) {
-            arrayReturn = [];
+            var arrayReturn = [],
+                index = 0;
 
             for (index = 0; index < ast.elements.length; index++) {
                 var elementValue = null;
@@ -1032,7 +1044,7 @@ define([
     function PrunePass(programAst) {
         this._programAst = programAst;
         this._pruneBody = [];
-    };
+    }
 
     PrunePass.prototype.start = function () {
         if (this._programAst === null) throw "null ast";
@@ -1046,26 +1058,31 @@ define([
             if (tree[i].isMeta === false || tree[i].isMeta === undefined) {
                 this._pruneBody.push(tree[i]);
             }
-        };
+        }
 
         this._programAst.body = this._pruneBody;
 
         return this._programAst;
     };
 
-
     /**
      * @constructor
      */
     function CodeGenerator(programAstPruned) {
         this.programAstPruned = programAstPruned;
-    };
+    }
 
     CodeGenerator.prototype.generateCode = function () {
-        return window.escodegen.generate(this.programAstPruned) || escodegen.generate(this.programAstPruned);
+        if(browser){
+            return Global.escodegen.generate(this.programAstPruned);
+        } else{
+            return escodegen.generate(this.programAstPruned);
+        }
     };
 
     function addParent(ast) {
+        var key;
+
         if (ast === undefined || ast === null) throw "invalid call to accept with null ast.";
 
         for (key in ast) {
@@ -1164,7 +1181,7 @@ define([
 
     PumaScript.Loc = function (ast) {
         return "[" + ast.loc.start.line + ", " + ast.loc.start.column + "] ";
-    }
+    };
 
     function evalPuma(programStr) {
         var ast = esprima.parse(programStr, {"comment": true, "loc": true});
@@ -1174,7 +1191,7 @@ define([
 
     function evalPumaAst(programAst) {
         var firstPass = new FirstPass(programAst);
-        var result = firstPass.run(new State);
+        var result = firstPass.run(new State());
 
         var prune = new PrunePass(programAst);
         var programAstPruned = prune.start();
@@ -1201,7 +1218,8 @@ define([
         var replacer = function (key, value) {
             if (key === "parent") return undefined;
             else return value;
-        }
+        };
+
         return JSON.parse(JSON.stringify(ast, replacer));
     };
 
