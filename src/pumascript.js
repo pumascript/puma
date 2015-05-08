@@ -2,39 +2,20 @@
 /*
     PumaScript main source code
  */
-
-// Global settings
-var Global = {};
-var escodegenLib = '';
-var browser = false;
-
-if (typeof define !== 'function') {
-    //Node.js Runtime
-    var define = require('amdefine')(module);
-    Global = global;
-    escodegenLib = '../node_modules/escodegen/escodegen.js';
-} else {
-    // Browser support
-    Global = window;
-    escodegenLib = '../src/libs/escodegen/escodegen.browser.js';
-    browser = true;
-}
-
 define([
-    escodegenLib,
-    '../src/libs/esprima/esprima.js',
-    './state',
-    './symbols',
-    './prune-pass'
-], function (escodegen, esprima, State, symbols, PrunePass) {
+    'escodegen',
+    'esprima',
+    '../src/global',
+    '../src/state',
+    '../src/symbols/symbol',
+    '../src/symbols/function-symbol',
+    '../src/symbols/property-wrapper',
+    '../src/prune-pass'
+], function (escodegen, esprima, Global, State, Symbol, FunctionSymbol, PropertyWrapper, PrunePass) {
 
     'use strict';
 
-    var Symbol = symbols.Symbol,
-        FunctionSymbol = symbols.FunctionSymbol,
-        PropertyWrapper = symbols.PropertyWrapper;
-
-      /**
+    /**
      * @constructor
      */
     function Result(success, value) {
@@ -912,7 +893,7 @@ define([
     }
 
     CodeGenerator.prototype.generateCode = function () {
-        if(browser){
+        if (escodegen !== undefined) { // browser === true
             return Global.escodegen.generate(this.programAstPruned);
         } else{
             return escodegen.generate(this.programAstPruned);

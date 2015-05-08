@@ -1,12 +1,9 @@
 /*global define, module, require, global, console */
 define([
-    './symbols'
-], function (symbols) {
-
-    'use strict';
-
-    var Symbol = symbols.Symbol,
-        FunctionSymbol = symbols.FunctionSymbol;
+    '../src/global',
+    '../src/symbols/symbol',
+    '../src/symbols/function-symbol'
+], function (Global, Symbol, FunctionSymbol) {
 
     /**
      * @constructor
@@ -77,5 +74,5 @@ define([
         this._newFrameThisBinding = thisBinding;
     };
 
-    return State;
+    return State; /* exclude-build */
 });

@@ -10,7 +10,7 @@ module.exports = function (grunt) {
 
     grunt.registerMultiTask('puma', 'Meta-programming features for Javascript', function () {
 
-        var puma = require('../src/pumascript.js');
+        var puma = require('../dist/pumascript.js');
 
         // Iterate over all specified files in gruntfile.
         this.files.forEach(function (file) {

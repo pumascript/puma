@@ -2,8 +2,6 @@
 
 define([], function () {
 
-    'use strict';
-
     /**
      * @constructor
      */
@@ -31,5 +29,5 @@ define([], function () {
         return this._programAst;
     };
 
-    return PrunePass;
+    return PrunePass; /* exclude-build */
 });
