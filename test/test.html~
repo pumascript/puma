@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>PumaScript Test Suite</title>
   <link rel="stylesheet" href="qunit/qunit.css">
-  <script data-main="../src/pumascript.js" src="../thirdparty/requirejs/require.js"></script>
+  <script data-main="../dist/pumascript.js" src="../thirdparty/requirejs/require.js"></script>
 </head>
 
 <body>

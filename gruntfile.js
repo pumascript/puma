@@ -1,55 +1,95 @@
-'use strict';
-
 module.exports = function (grunt) {
-  require('load-grunt-tasks')(grunt);
 
-  // Project configuration.
-  grunt.initConfig({
-    jshint: {
-      all: [
-        'gruntfile.js',
-        'tasks/*.js',
-        '<%= nodeunit.tests %>'
-      ],
-      options: {
-        jshintrc: '.jshintrc',
-        reporter: require('jshint-stylish')
-      }
-    },
+    'use strict';
 
-    // Before generating any new files, remove any previously-created files.
-    clean: {
-      tests: ['tmp']
-    },
+    var regex = {
+        DEFINE_START: /define\([^{]*?{/,
+        DEFINE_END: /\}\);[^}\w]*$/,
+        EXCLUSIONS: /[^\n]*\/\*\s*exclude-build\s*\*\/[^\n]*/,
+        EMPTY_DEFINITION: /define\(\[[^\]]+\]\)[\W\n]+$/
+    };
 
-    // Configuration to be run (and then tested).
-    puma: {
-      default_options: {
-        options: {
+    require('load-grunt-tasks')(grunt);
+
+    // Project configuration.
+    grunt.initConfig({
+        buildName: 'pumascript',
+        outputDir: 'dist',
+        output: '<%= outputDir %>/<%= buildName %>',
+
+        jshint: {
+            all: [
+                'gruntfile.js',
+                'tasks/*.js',
+                '<%= nodeunit.tests %>'
+            ],
+            options: {
+                jshintrc: '.jshintrc',
+                reporter: require('jshint-stylish')
+            }
         },
-        files: {
-          'test/grunt-test/tmp/result.js': ['test/grunt-test/puma-test.js']
+
+        clean: {
+            tests: ['tmp']
+        },
+
+        // Configuration to be run (and then tested).
+        puma: {
+            default_options: {
+                options: {},
+                files: {
+                    'test/grunt-test/tmp/result.js': ['test/grunt-test/puma-test.js']
+                }
+            }
+        },
+
+        // Unit tests.
+        nodeunit: {
+            tests: ['test/*_test.js']
+        },
+
+        // build pumascript
+        requirejs: {
+            compile: {
+                options: {
+                    baseUrl: 'src',
+                    mainConfigFile: 'build/config.js',
+                    out: '<%= output %>.js',
+                    name: '<%= buildName %>',
+                    optimize: 'none',
+                    skipSemiColonInsertion: true,
+                    paths: {
+                        escodegen: 'empty:',
+                        esprima: 'empty:'
+                    },
+                    wrap: {
+                        startFile: 'build/start.js',
+                        endFile: 'build/end.js'
+                    },
+                    onBuildWrite: function (name, path, contents) {
+                        // remove define wrappers and closure ends,
+                        // lines to exclude: /* exclude-build */
+                        contents = contents
+                            .replace(regex.DEFINE_START, '')
+                            .replace(regex.DEFINE_END, '')
+                            .replace(regex.EXCLUSIONS, '')
+                            .replace(regex.EMPTY_DEFINITION, '');
+
+                        return contents;
+                    }
+                }
+            }
         }
-      }      
-    },
+    });
 
-    // Unit tests.
-    nodeunit: {
-      tests: ['test/*_test.js']
-    }
-  });
+    // Actually load this plugin's task(s).
+    grunt.loadTasks('tasks');
 
-  // Actually load this plugin's task(s).
-  grunt.loadTasks('tasks');
+    // Whenever the "test" task is run, first clean the "tmp" dir, then run this
+    // plugin's task(s), then test the result.
+    grunt.registerTask('test', ['clean', 'puma', 'nodeunit']);
 
-  // Whenever the "test" task is run, first clean the "tmp" dir, then run this
-  // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'puma', 'nodeunit']);
+    grunt.registerTask('pumascript', ['puma', 'exec:npm']);
 
-  grunt.registerTask('pumascript', ['puma', 'exec:npm']);
-
-
-  // By default, lint and run all tests.
-  grunt.registerTask('default', ['jshint', 'test']);
-
+    grunt.registerTask('default', ['jshint', 'test']);
 };
