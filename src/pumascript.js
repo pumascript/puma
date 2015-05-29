@@ -9,8 +9,8 @@ require.config({
     }
 });
 
-/*
-    PumaScript development wrapper
+/**
+ * PumaScript development wrapper
  */
 define('pumascript', ['../src/runtime'], function (PumaScript) {
 
