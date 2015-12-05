@@ -1,0 +1,13 @@
+{
+    "indent": 4,
+    "undef": true,
+    "unused": true,
+    "globalstrict": false,
+    "-W053": true,
+    "globals": {
+        "module": false,
+        "define": false,
+        "require": false,
+        "window": false
+    }
+}

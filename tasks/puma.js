@@ -1,12 +1,13 @@
+/*global console */
+
 /*
  * pumascript-grunt
  *
  * Copyright (c) 2015 UTN-LIS
  */
 
-'use strict';
-
 module.exports = function (grunt) {
+    'use strict';
 
     grunt.registerMultiTask('puma', 'Meta-programming features for Javascript', function () {
 

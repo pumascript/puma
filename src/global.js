@@ -1,6 +1,6 @@
-/*global define, module, require, global, console */
-define([], function (Symbol, FunctionSymbol) {
+/*global define, global */
 
+define([], function () {
     var Global = {};
 
     if (typeof window === 'object') {
