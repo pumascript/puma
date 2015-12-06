@@ -88,9 +88,9 @@ module.exports = function (grunt) {
 
     // Whenever the "test" task is run, first clean the "tmp" dir, then run this
     // plugin's task(s), then test the result.
-    grunt.registerTask('test', ['clean', 'puma', 'qunit']);
+    grunt.registerTask('test', ['clean', 'requirejs', 'puma', 'qunit']);
 
-    grunt.registerTask('travis', ['jshint', 'qunit']);
+    grunt.registerTask('travis', ['jshint', 'test']);
 
     grunt.registerTask('default', ['test']);
 };
