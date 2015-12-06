@@ -5,6 +5,9 @@ node_js:
   - 4.0
   - 5.0
 sudo: false
+os:
+  - linux
+  - osx
 install:
 - npm install -g grunt-cli
 - npm install
