@@ -1,3 +1,5 @@
+/*global require, test, ok, equal */
+
 /*
  *                  PUMASCRIPT MAIN TEST SUITE
  *  Check if the test include calls to PumaScript built-in function it
@@ -116,13 +118,13 @@ require(['pumascript', '../thirdparty/esprima/esprima.js'], function(puma, espri
     });
 
     test("simple array access", function(){
-        var result = puma.evalPuma("var a1 = [1,2,3]; a1[1];")
+        var result = puma.evalPuma("var a1 = [1,2,3]; a1[1];");
         result.makeValue();
         equal( result.value, 2, "Passed!");
     });
 
     test("property access using expressions", function(){
-        var result = puma.evalPuma("var a1 = [1,2,3,4]; var index = 2; a1[1+1];")
+        var result = puma.evalPuma("var a1 = [1,2,3,4]; var index = 2; a1[1+1];");
         result.makeValue();
         equal( result.value, 3, "Passed!");
     });
@@ -144,23 +146,23 @@ require(['pumascript', '../thirdparty/esprima/esprima.js'], function(puma, espri
 
     test("meta variables types counting", function(){
         var meta = puma.evalPuma("var a; a = 1; a = \"hola\"; a = 2;").value.meta;
-        equal( meta["number"], 2, "Passed!");
-        equal( meta["string"], 1, "Passed!");
+        equal( meta.number, 2, "Passed!");
+        equal( meta.string, 1, "Passed!");
     });
 
     test("meta parameters and return type counting", function(){
         var meta = puma.evalPuma("function foo(a, b){ return a + b; } foo(1,2); foo(3,4); foo;").value.value.meta;
-        equal(meta.parameters[0]["number"], 2, "Passed!");
-        equal(meta.parameters[1]["number"], 2, "Passed!");
-        equal(meta.returns["number"], 2, "Passed!");
+        equal(meta.parameters[0].number, 2, "Passed!");
+        equal(meta.parameters[1].number, 2, "Passed!");
+        equal(meta.returns.number, 2, "Passed!");
     });
 
     test("mixed meta parameters and return type counting", function(){
         var meta = puma.evalPuma("function foo(a, b){ return a + b; } foo(1,\"hola\"); foo(3,4); foo;").value.value.meta;
-        equal(meta.parameters[0]["number"], 2, "Passed!");
-        equal(meta.parameters[1]["number"], 1, "Passed!");
-        equal(meta.returns["number"], 1, "Passed!");
-        equal(meta.returns["string"], 1, "Passed!");
+        equal(meta.parameters[0].number, 2, "Passed!");
+        equal(meta.parameters[1].number, 1, "Passed!");
+        equal(meta.returns.number, 1, "Passed!");
+        equal(meta.returns.string, 1, "Passed!");
     });
 
 
@@ -223,8 +225,8 @@ require(['pumascript', '../thirdparty/esprima/esprima.js'], function(puma, espri
 
     test("Basic Meta Function that rewrite itself", function(){
         var result = puma.evalPuma("/*@meta*/ function sumar(a,b){ return "+
-        '{"type":"BinaryExpression","operator":"+","left": a,"right":b };'
-        +" } sumar(5, 6);");
+        '{"type":"BinaryExpression","operator":"+","left": a,"right":b };' +
+                                   " } sumar(5, 6);");
         result = puma.evalPumaAst(result.pumaAst);
         equal( result.success, true, "Passed!");
         equal( result.value, 11, "Passed!");
@@ -284,8 +286,10 @@ require(['pumascript', '../thirdparty/esprima/esprima.js'], function(puma, espri
     });
 
     test("Puma Find by Properties with custom comparator", function(){
-        var ast = esprima.parse("a = 2; b = 3; cc = 1;")
-        var result = puma.pumaFindByProperty(ast, "left.name", 1, function(value1, value2){ return value1.length === value2; } )
+        var ast = esprima.parse("a = 2; b = 3; cc = 1;");
+        var result = puma.pumaFindByProperty(ast, "left.name", 1, function (value1, value2) { 
+            return value1.length === value2; 
+        });
 
         equal( result.length, 2, "Passed!");
     });
@@ -399,31 +403,31 @@ require(['pumascript', '../thirdparty/esprima/esprima.js'], function(puma, espri
      */
 
     test("array property access using reference expression", function(){
-        var result = puma.evalPuma("var a1 = [1,2,3,4]; var index = 1; a1[index];")
+        var result = puma.evalPuma("var a1 = [1,2,3,4]; var index = 1; a1[index];");
         result.makeValue();
         equal( result.value, 2, "Passed!");
     });
 
     test("object property access using member access and computed expression", function(){
-        var result = puma.evalPuma("var a1 = { uno: 1, dos: 2 }; a1['uno'] + a1.dos + a1['un' + 'o'];")
+        var result = puma.evalPuma("var a1 = { uno: 1, dos: 2 }; a1['uno'] + a1.dos + a1['un' + 'o'];");
         result.makeValue();
         equal( result.value, 4, "Passed!");
     });
 
     test("'check that pumaFindByProperty ends", function(){
-        var result = puma.evalPuma("var puma = require('pumascript'); /* @meta */ function findInnerHTML(){ var final = puma.pumaFindByProperty(puma.pumaFindByType(pumaProgram, 'AssignmentExpression'), 'left.property.name', 'innerHTML'); final[0].right.name = 'pepe'; return null;} function test1(){ divVacio.innerHTML = textoHtml;} findInnerHTML(); true;")
+        var result = puma.evalPuma("var puma = require('pumascript'); /* @meta */ function findInnerHTML(){ var final = puma.pumaFindByProperty(puma.pumaFindByType(pumaProgram, 'AssignmentExpression'), 'left.property.name', 'innerHTML'); final[0].right.name = 'pepe'; return null;} function test1(){ divVacio.innerHTML = textoHtml;} findInnerHTML(); true;");
         result.makeValue();
         equal( result.value, true, "Passed!");
     });
 
     test("test prune phase",function(){
-        var result = puma.evalPuma("/*@meta*/ function parseInt (valueExp) {var ast = pumaAst($valueExp | 0);return ast;}var n1 = parseInt('97');n1 + 2;")
+        var result = puma.evalPuma("/*@meta*/ function parseInt (valueExp) {var ast = pumaAst($valueExp | 0);return ast;}var n1 = parseInt('97');n1 + 2;");
         var metaNodeCount = 0;
         for (var i = 0; i < result.pumaAst.body.length; i++) {
             if(result.pumaAst.body[i].isMeta){
                 metaNodeCount++;
             }
-        };
+        }
         equal(metaNodeCount,0,"Passed!");
     });
 });
