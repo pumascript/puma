@@ -16,14 +16,13 @@ module.exports = function (grunt) {
         buildName: 'pumascript',
         outputDir: 'dist',
         output: '<%= outputDir %>/<%= buildName %>',
-        tests: 'test/test.js',
 
         jshint: {
             all: [
                 'gruntfile.js',
                 'src/**/*.js',
                 'tasks/*.js',
-                '<%= tests %>',
+                'test/*.js',
                 '!src/libs/**/*.js'
             ],
             options: {
@@ -36,6 +35,10 @@ module.exports = function (grunt) {
             tests: ['tmp']
         },
 
+        qunit: {
+            all: ['test/**/*.html']
+        },
+
         // Configuration to be run (and then tested).
         puma: {
             default_options: {
@@ -44,11 +47,6 @@ module.exports = function (grunt) {
                     'test/grunt-test/tmp/result.js': ['test/grunt-test/puma-test.js']
                 }
             }
-        },
-
-        // Unit tests.
-        nodeunit: {
-            tests: ['<%= tests %>']
         },
 
         // build pumascript
@@ -90,9 +88,9 @@ module.exports = function (grunt) {
 
     // Whenever the "test" task is run, first clean the "tmp" dir, then run this
     // plugin's task(s), then test the result.
-    grunt.registerTask('test', ['clean', 'puma', 'nodeunit']);
+    grunt.registerTask('test', ['clean', 'puma', 'qunit']);
 
-    grunt.registerTask('pumascript', ['puma', 'exec:npm']);
+    grunt.registerTask('travis', ['jshint', 'qunit']);
 
-    grunt.registerTask('default', ['jshint', 'test']);
+    grunt.registerTask('default', ['test']);
 };

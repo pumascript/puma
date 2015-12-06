@@ -1,4 +1,4 @@
-/*global require, test, ok, equal */
+/*global define, test, ok, equal */
 
 /*
  *                  PUMASCRIPT MAIN TEST SUITE
@@ -6,11 +6,7 @@
  *  must be added the require('pumascript') call.
  */
 
-require(['pumascript', '../thirdparty/esprima/esprima.js'], function(puma, esprima) {
-
-    test( "hello test", function() {
-        ok( 1 == "1", "Passed!" );
-    });
+define(['pumascript', 'esprima'], function(puma, esprima) {
 
     test("number constant test", function() {
         var result = puma.evalPuma("1");
