@@ -6,6 +6,7 @@ node_js:
   - 5.0
 sudo: false
 install:
+- npm install -g grunt-cli
 - npm install
 script:
 - grunt jshint
