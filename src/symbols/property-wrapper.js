@@ -1,4 +1,5 @@
-/*global define, module, require, global, console */
+/*global define */
+
 define([
     './symbol'
 ], function (Symbol) {
@@ -9,7 +10,8 @@ define([
     function PropertyWrapper(obj, propertyName) {
         this._obj = obj;
         this._propertyName = propertyName;
-        Object.defineProperty(this, "value", {
+        
+        Object.defineProperty(this, 'value', {
             get: function () {
                 return this._obj[this._propertyName];
             },
@@ -17,7 +19,8 @@ define([
                 this._obj[this._propertyName] = newValue;
             }
         });
-        Object.defineProperty(this, "obj", {
+
+        Object.defineProperty(this, 'obj', {
             get: function () {
                 return this._obj;
             }
@@ -27,5 +30,5 @@ define([
     PropertyWrapper.prototype = new Symbol();
     PropertyWrapper.prototype.constructor = PropertyWrapper;
 
-    return PropertyWrapper /* exclude-build */
+    return PropertyWrapper; /* exclude-build */
 });

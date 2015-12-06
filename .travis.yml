@@ -1,4 +1,21 @@
-script: 
+language: node_js
+node_js:
+  - 0.10
+  - 0.12
+  - 4.0
+  - 5.0
+
+sudo: false
+
+os:
+  - linux
+
+install:
+- npm install -g grunt-cli
+- npm install
+
+script:
+- grunt jshint
 - chmod 777 ./test/run-tests.sh
 - cd ./test/
 - sh run-tests.sh

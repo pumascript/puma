@@ -1,4 +1,4 @@
-/*global define, module, require, global, console */
+/*global define, console */
 /*
     PumaScript main source code
  */
@@ -28,8 +28,9 @@ define([
     };
 
     Result.prototype.makeValue = function () {
-        if (this.value instanceof Symbol)
+        if (this.value instanceof Symbol) {
             this.value = this.value.value;
+        }
     };
 
     Result.prototype.isReturnResult = function () {
@@ -73,7 +74,6 @@ define([
         if (ast === undefined || ast === null) throw "invalid call to accept with null ast.";
 
         var nodeType = ast.type;
-        var nodes;
         var result = defaultResult;
 
         // TODO order alphabetically
@@ -209,9 +209,9 @@ define([
         if (objResult.failed()) return defaultResult;
         objResult.makeValue();
 
-        var obj = objResult.value;
-        var propertyName = undefined;
-        var propertyResult = undefined;
+        var obj = objResult.value,
+            propertyName,
+            propertyResult;
 
         //Particular cases for native data type
         if (typeof (obj) === 'string') obj = new String(obj);
@@ -223,7 +223,7 @@ define([
             astPropertyName = "prototypeProperty";
 
         // TODO check ECMAScript standard for additional cases when evaluating member expression
-        if (ast.property.type === 'Identifier' && ast.computed == false) {
+        if (ast.property.type === 'Identifier' && ast.computed === false) {
             propertyName = astPropertyName;
         } else {
             propertyResult = this.accept(ast.property, state);
@@ -243,9 +243,9 @@ define([
         return new Result(true, wrapper);
     };
 
-    FirstPass.prototype.visitFunctionExpression = function (ast, state) {
-        var functionName = undefined;
-        var addToFunctionState = false;
+    FirstPass.prototype.visitFunctionExpression = function (ast) {
+        var addToFunctionState = false,
+            functionName;
 
         if (ast.id !== null) {
             functionName = ast.id.name;
@@ -596,7 +596,6 @@ define([
         var argumentValue;
         var isMetaCall = functionSymbol.isMeta;
         var isNotMetaCall = !isMetaCall;
-        var that = this;
 
         // eval arguments
         for (n = 0; n < argumentsAst.length; n++) {
@@ -674,7 +673,7 @@ define([
         return new Result(true, state.getSymbol(identifier));
     };
 
-    FirstPass.prototype.visitLiteral = function (ast, state) {
+    FirstPass.prototype.visitLiteral = function (ast) {
         return new Result(true, ast.value);
     };
 
@@ -697,13 +696,15 @@ define([
         // TODO check all empty cases for subitems
         var initResult = ast.init !== null ? this.accept(ast.init, state) : null;
         var testResult = this.accept(ast.test, state);
+        var bodyResult;
+        
         testResult.makeValue();
 
         if (initResult !== null && initResult.failed() || testResult.failed()) return defaultResult;
 
         while (testResult.value) {
-            var bodyResult = this.accept(ast.body, state);
-            var updateResult = this.accept(ast.update, state);
+            bodyResult = this.accept(ast.body, state);
+            this.accept(ast.update, state);
             testResult = this.accept(ast.test, state);
             testResult.makeValue();
         }
@@ -715,7 +716,7 @@ define([
         return bodyResult;
     };
 
-    FirstPass.prototype.visitComment = function (ast, state) {
+    FirstPass.prototype.visitComment = function (ast) {
         //TODO Use RegEx
         if (ast.value.indexOf("@meta") >= 0) {
             var lineMetaComments = this._metaComments[ast.loc.end.line];
@@ -744,13 +745,15 @@ define([
     };
 
     FirstPass.prototype.visitWhileStatement = function (ast, state) {
-        var testResult = this.accept(ast.test, state);
+        var testResult = this.accept(ast.test, state),
+            bodyResult;
+        
         testResult.makeValue();
 
         if (testResult.failed()) return defaultResult;
 
         while (testResult.value) {
-            var bodyResult = this.accept(ast.body, state);
+            bodyResult = this.accept(ast.body, state);
             testResult = this.accept(ast.test, state);
             testResult.makeValue();
         }
@@ -799,7 +802,7 @@ define([
         return new Result(true, newObject);
     };
 
-    FirstPass.prototype.visit = function (ast, state) {
+    FirstPass.prototype.visit = function () { // ast, state
 
     };
 
@@ -872,11 +875,9 @@ define([
     };
 
     FirstPass.prototype.mergeNodes = function (idMatchData, astToMerge) {
-        function IsStatement(node) {
-            return astToMerge.type.indexOf('Statement') > -1;
-        }
+        var isStatement = (astToMerge.type.indexOf('Statement') > -1);
 
-        if (IsStatement(astToMerge) && idMatchData.parent.type === "ExpressionStatement") {
+        if (isStatement && idMatchData.parent.type === "ExpressionStatement") {
             for (var key in astToMerge) {
                 idMatchData.parent[key] = astToMerge[key];
             }
@@ -909,7 +910,7 @@ define([
             var node = ast[key];
             if (node === Object(node)) {
                 addParent(node);
-                node["parent"] = ast;
+                node.parent = ast;
             }
         }
     }
@@ -957,7 +958,7 @@ define([
         };
 
         return JSON.parse(JSON.stringify(ast, replacer));
-    };
+    }
 
     /**
      * Find AST nodes by type attribute. Type attribute must use the same names than Esprima parser.
@@ -1017,7 +1018,9 @@ define([
                 }
                 else {
                     for (var i in ast) {
-                        if (i !== 'parent' && typeof(ast[i]) === "object") internalPumaFindByProperty(ast[i], propertyList, value, list, compareFunction);
+                        if (i !== 'parent' && typeof(ast[i]) === "object") {
+                            internalPumaFindByProperty(ast[i], propertyList, value, list, compareFunction);
+                        }
                     }
                 }
             }

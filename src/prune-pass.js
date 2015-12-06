@@ -1,4 +1,4 @@
-/*global define, module, require, global, console */
+/*global define */
 
 define([], function () {
 

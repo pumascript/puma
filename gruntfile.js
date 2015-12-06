@@ -16,12 +16,15 @@ module.exports = function (grunt) {
         buildName: 'pumascript',
         outputDir: 'dist',
         output: '<%= outputDir %>/<%= buildName %>',
+        tests: 'test/test.js',
 
         jshint: {
             all: [
                 'gruntfile.js',
+                'src/**/*.js',
                 'tasks/*.js',
-                '<%= nodeunit.tests %>'
+                '<%= tests %>',
+                '!src/libs/**/*.js'
             ],
             options: {
                 jshintrc: '.jshintrc',
@@ -45,7 +48,7 @@ module.exports = function (grunt) {
 
         // Unit tests.
         nodeunit: {
-            tests: ['test/*_test.js']
+            tests: ['<%= tests %>']
         },
 
         // build pumascript

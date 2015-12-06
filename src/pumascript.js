@@ -1,6 +1,4 @@
-/*global define, module, require, global, console */
-
-'use strict';
+/*global define, require */
 
 require.config({
     paths: {
@@ -14,5 +12,7 @@ require.config({
  */
 define('pumascript', ['../src/runtime'], function (PumaScript) {
 
+    'use strict';
+    
     return PumaScript;
 });
