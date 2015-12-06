@@ -1,4 +1,10 @@
+language: node_js
+node_js:
+  - 0.10
+  - 0.12
+sudo: false
 script: 
+- grunt jshint
 - chmod 777 ./test/run-tests.sh
 - cd ./test/
 - sh run-tests.sh
