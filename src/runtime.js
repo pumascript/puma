@@ -894,11 +894,12 @@ define([
     }
 
     CodeGenerator.prototype.generateCode = function () {
-        if (escodegen !== undefined) { // browser === true
+        if (Global.escodegen) { // browser === true
             return Global.escodegen.generate(this.programAstPruned);
         } else{
             return escodegen.generate(this.programAstPruned);
         }
+        return escodegen.generate(this.programAstPruned);
     };
 
     function addParent(ast) {
