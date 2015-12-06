@@ -16,7 +16,7 @@ module.exports = function (grunt) {
         buildName: 'pumascript',
         outputDir: 'dist',
         output: '<%= outputDir %>/<%= buildName %>',
-        tests: 'test/*_test.js',
+        tests: 'test/test.js',
 
         jshint: {
             all: [
