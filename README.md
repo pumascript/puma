@@ -138,13 +138,14 @@ Both functions returns an Array with the results. If the array is empty it means
 * Julieta Alvarez
 * Ricardo Medel
 * Albertina Durante
+* Diego Campos
 
 ## Security track
 * Marcelo Gonzalez
 * Martin Molina
 
 ## Universidad Tecnologica Nacional - Facultad Regional Cordoba - Argentina
-Project is executed in Software Research Lab (LIS).
+The PumaScript project is being developed at the Department of Information Systems Engineering of the UTN-FRC.
 
 ![alt text][utn]
 [utn]: http://upload.wikimedia.org/wikipedia/commons/thumb/6/67/UTN_logo.jpg/200px-UTN_logo.jpg "UTN logo"
