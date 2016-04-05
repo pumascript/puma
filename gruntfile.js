@@ -94,12 +94,13 @@ module.exports = function (grunt) {
 
     grunt.registerTask('travis', ['jshint', 'test']);
 
-    grunt.registerTask('init','Prepare a fresh install to start working with Puma',function(){
+    grunt.registerTask('init','Prepare to start working with Puma',function(){
         var exec = require('child_process').exec;
         var done = this.async();
         exec('bower install', {cwd: './editor'}, function(err, stdout, stderr) {
             console.log(stdout);
             done();
+            grunt.task.run('test');
         })
     });
     
