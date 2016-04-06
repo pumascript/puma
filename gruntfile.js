@@ -30,7 +30,6 @@ module.exports = function (grunt) {
                 reporter: require('jshint-stylish')
             }
         },
-
         clean: {
             tests: ['tmp']
         },
@@ -38,7 +37,6 @@ module.exports = function (grunt) {
         qunit: {
             all: ['test/**/*.html']
         },
-
         // Configuration to be run (and then tested).
         puma: {
             default_options: {
@@ -92,5 +90,19 @@ module.exports = function (grunt) {
 
     grunt.registerTask('travis', ['jshint', 'test']);
 
-    grunt.registerTask('default', ['test']);
+    grunt.registerTask('init','Prepare to start working with Puma',function(){
+        var exec = require('child_process').exec;
+        var done = this.async();
+        
+        exec('bower install', {cwd: './editor'}, function(err, stdout, stderr){
+            grunt.log.ok(stdout);
+            if(err !== null){
+                grunt.log.errorlns('error: ',stderr);
+            }             
+            done();
+        });
+        grunt.task.run('test');
+    });
+    
+    grunt.registerTask('default', ['init']);    
 };
