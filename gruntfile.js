@@ -30,7 +30,6 @@ module.exports = function (grunt) {
                 reporter: require('jshint-stylish')
             }
         },
-
         clean: {
             tests: ['tmp']
         },
@@ -95,13 +94,15 @@ module.exports = function (grunt) {
         var exec = require('child_process').exec;
         var done = this.async();
         
-        exec('bower install', {cwd: './editor'}, function(err, stdout, stderr) {
-            console.log(stdout);
-            if(err !== null) throw 'error: '+ stderr;        
+        exec('bower install', {cwd: './editor'}, function(err, stdout, stderr){
+            grunt.log.ok(stdout);
+            if(err !== null){
+                grunt.log.errorlns('error: ',stderr);
+            }             
             done();
-        })
+        });
         grunt.task.run('test');
     });
     
-    grunt.registerTask('default', ['test']);    
+    grunt.registerTask('default', ['init']);    
 };
