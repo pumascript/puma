@@ -1,5 +1,3 @@
-/*global console */
-
 /*
  * pumascript-grunt
  *
