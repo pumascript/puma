@@ -3,6 +3,25 @@
 [![Build Status](https://travis-ci.org/emravera/puma.svg?branch=master)](https://travis-ci.org/emravera/puma)
 [![Join the chat at https://gitter.im/emravera/puma](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/emravera/puma?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+## Development Environment
+1) Fork a Repo 
+```
+https://github.com/emravera/puma.git
+```
+
+2) Clone Repo from our Fork 
+```
+git clone https://github.com/[USER]/puma.git
+```
+
+3) Run
+```
+npm install
+bower install
+grunt init
+```
+The PumaSript Editor will open.
+
 ## Intro
 
 PumaScript is a research programming language based on JavaScript.
