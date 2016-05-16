@@ -39,10 +39,28 @@ var var1 = 'a\u200Db ';
 
 ok
 
+~~~
+var var1 = 'a\uFEFFb ';
+~~~
+
+ok
+
 7.2 White Space
 ---
 
-ECMA dice que debería soportar todos los caracteres de espacio de UNICODE 3.0
+~~~
+var var1    =   "a  b"  ;
+//todos los espacios son TAB
+~~~
+
+ok
+
+~~~
+var var1 = "a b" ;
+//todos los espacios son espacios normales. <SP>
+~~~
+
+ok
 
 ~~~
 var var1="a \u0009 b ";
@@ -64,14 +82,6 @@ ok
 var var1="a\u00A0b ";
 //Result:
 var var1 = 'a\xA0b ';
-~~~
-
-ok
-
-~~~
-var var1 = 'a\uFEFFb ';
-//Result:
-var var1 = 'a\uFEFFb ';
 ~~~
 
 ok
@@ -187,3 +197,269 @@ var var1= "a\u3000b";
 ~~~
 
 ok
+
+7.3 Line Terminators
+---
+
+7.4 Comments
+---
+
+~~~
+// comentario
+var a=1;
+~~~
+
+ok
+
+~~~
+/*
+comentario
+*/
+var a=1;
+~~~
+
+ok
+
+~~~
+/*
+/*
+comentario
+*/
+*/
+var a=1;
+~~~
+
+ok
+
+7.5 Tokens
+---
+
+no hay nada que testear en esta seccion
+
+7.6 Identifier Names and Identifiers
+---
+
+~~~
+var $a$b$ = 1;
+~~~
+
+ok
+
+~~~
+var _a_b_ = 1;
+~~~
+
+ok
+
+7.6.1 Reserved Words
+---
+
+~~~
+var break= 1;
+~~~
+
+ok
+
+~~~
+var do= 1;
+~~~
+
+ok
+
+~~~
+var instanceof= 1;
+~~~
+
+ok
+
+~~~
+var typeof= 1;
+~~~
+
+ok
+
+~~~
+var case= 1;
+~~~
+
+ok
+
+~~~
+var else= 1;
+~~~
+
+ok
+
+~~~
+var new= 1;
+~~~
+
+ok
+
+~~~
+var var= 1;
+~~~
+
+ok
+
+~~~
+var catch= 1;
+~~~
+
+ok
+
+~~~
+var finally= 1;
+~~~
+
+ok
+
+~~~
+var return= 1;
+~~~
+
+ok
+
+~~~
+var void= 1;
+~~~
+
+ok
+
+~~~
+var continue= 1;
+~~~
+
+ok
+
+~~~
+var for= 1;
+~~~
+
+ok
+
+~~~
+var switch= 1;
+~~~
+
+ok
+
+~~~
+var while= 1;
+~~~
+
+ok
+
+~~~
+var debugger= 1;
+~~~
+
+ok
+
+~~~
+var function= 1;
+~~~
+
+ok
+
+~~~
+var this= 1;
+~~~
+
+ok
+
+~~~
+var with= 1;
+~~~
+
+ok
+
+~~~
+var default= 1;
+~~~
+
+ok
+
+~~~
+var if= 1;
+~~~
+
+ok
+
+~~~
+var throw= 1;
+~~~
+
+ok
+
+~~~
+var delete= 1;
+~~~
+
+ok
+
+~~~
+var in= 1;
+~~~
+
+ok
+
+~~~
+var try= 1;
+~~~
+
+ok
+
+7.6.1.2 Future Reserved Words
+---
+
+~~~
+var class= 1;
+~~~
+
+ok
+
+~~~
+var enum= 1;
+~~~
+
+ok
+
+~~~
+var extends= 1;
+~~~
+
+ok
+
+~~~
+var super= 1;
+~~~
+
+ok
+
+~~~
+var const= 1;
+~~~
+
+ok
+
+~~~
+var export= 1;
+~~~
+
+ok
+
+~~~
+var import= 1;
+~~~
+
+ok
+
+Falta probar la mitad de las FutureReservedWords, son
+
+7.7 Punctuators
+---
+
+7.8 Literalls
+---
+
