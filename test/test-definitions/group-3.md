@@ -41,3 +41,25 @@ var mycar = new Car("Eagle", "Talon TSi", 1993);
 var square = function(number) { return number * number };
 var x = square(4) // x gets the value 16
 //------ PASS
+
+
+
+11.13 Assigment Operators
+11.13.1 Simple Assigment
+var x = 1; //PASS
+
+11.13.2 Compound Assigment
+var x = 1; x *= 1; //PASS
+var x = 1; x /= 1; //PASS
+var x = 1; x %= 1; //PASS
+var x = 1; x += 1; //PASS
+var x = 1; x -= 1; //PASS
+var x = 1; x <<= 1; //PASS
+var x = 1; x >>= 1; //PASS
+var x = 1; x >>>= 1; //PASS
+var x = 1; x &= 1; //PASS
+var x = 1; x ^= 1; //PASS
+var x = 1; x |= 1; //PASS
+
+11.14 Comma Operator
+a = b = 3, c = 4; //PASS
