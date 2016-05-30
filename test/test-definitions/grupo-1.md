@@ -16,13 +16,10 @@ ok
 ~~~
 a = b
 /c;
-//Result:
-a = b / c
 ~~~
 
 ok
 
-***
 
 7.1 Unicode Format-Control Characters
 ---
@@ -201,6 +198,30 @@ ok
 7.3 Line Terminators
 ---
 
+~~~
+var a = "\u000A";
+~~~
+
+ok
+
+~~~
+var a = "\u000D";
+~~~
+
+ok
+
+~~~
+var a = "\u2028";
+~~~
+
+ok
+
+~~~
+var a = "\u2029";
+~~~
+
+ok
+
 7.4 Comments
 ---
 
@@ -227,6 +248,7 @@ comentario
 */
 */
 var a=1;
+//Uncaught Error: Line 5: Unexpected token *
 ~~~
 
 ok
@@ -410,8 +432,7 @@ var try= 1;
 
 ok
 
-7.6.1.2 Future Reserved Words
----
+### 7.6.1.2 Future Reserved Words ###
 
 ~~~
 var class= 1;
@@ -455,11 +476,257 @@ var import= 1;
 
 ok
 
-Falta probar la mitad de las FutureReservedWords, son
+~~~
+"use strict"
+var implements= 1;
+~~~
+
+ok
+
+~~~
+"use strict"
+var let= 1;
+~~~
+
+ok
+
+~~~
+"use strict"
+var private= 1;
+~~~
+
+ok
+
+~~~
+"use strict"
+var public= 1;
+~~~
+
+ok
+
+~~~
+"use strict"
+var yield= 1;
+~~~
+
+ok
+
+~~~
+"use strict"
+var interface= 1;
+~~~
+
+ok
+
+~~~
+"use strict"
+var package= 1;
+~~~
+
+ok
+
+~~~
+"use strict"
+var protected= 1;
+~~~
+
+ok
+
+~~~
+"use strict"
+var static= 1;
+~~~
+
+ok
+
+~~~
+var implements= 1;
+var private= 1;
+var public= 1;
+var interface= 1;
+var package= 1;
+var protected= 1;
+var static= 1;
+~~~
+
+ok
+
+~~~
+var yield= 1;
+~~~
+
+not ok
+
+~~~
+var let= 1;
+~~~
+
+not ok
 
 7.7 Punctuators
 ---
 
+aca no hay nada para testear
+
 7.8 Literalls
+---
+
+### 7.8.3 Numeric Literals ###
+
+~~~
+var 3in= 1;
+~~~
+
+ok
+
+~~~
+if (0x1 !== 1)
+	console.log("ok");
+~~~
+
+ok
+
+~~~
+if (0x2 !== 2)
+	console.log("ok");
+~~~
+
+ok
+
+~~~
+if (0x3 !== 3)
+	console.log("ok");
+~~~
+
+ok
+
+~~~
+if (0x4 !== 4)
+	console.log("ok");
+~~~
+
+ok
+
+~~~
+if (0x5 !== 5)
+	console.log("ok");
+~~~
+
+ok
+
+~~~
+if (0x6 !== 6)
+	console.log("ok");
+~~~
+
+ok
+
+~~~
+if (0x7 !== 7)
+	console.log("ok");
+~~~
+
+ok
+
+~~~
+if (0x8 !== 8)
+	console.log("ok");
+~~~
+
+ok
+
+~~~
+if (0x9 !== 9)
+	console.log("ok");
+~~~
+
+ok
+
+~~~
+if (0xa !== 10)
+	console.log("ok");
+~~~
+
+ok
+
+~~~
+if (0xb !== 11)
+	console.log("ok");
+~~~
+
+ok
+
+~~~
+if (0xc !== 12)
+	console.log("ok");
+~~~
+
+ok
+
+~~~
+if (0xd !== 13)
+	console.log("ok");
+~~~
+
+ok
+
+~~~
+if (0xe !== 14)
+	console.log("ok");
+~~~
+
+ok
+
+~~~
+if (0xf !== 15)
+	console.log("ok");
+~~~
+
+ok
+
+~~~
+if (0xA !== 10)
+	console.log("ok");
+~~~
+
+ok
+
+~~~
+if (0xB !== 11)
+	console.log("ok");
+~~~
+
+ok
+
+~~~
+if (0xC !== 12)
+	console.log("ok");
+~~~
+
+ok
+
+~~~
+if (0xD !== 13)
+	console.log("ok");
+~~~
+
+ok
+
+~~~
+if (0xE !== 14)
+	console.log("ok");
+~~~
+
+ok
+
+~~~
+if (0xF !== 15)
+	console.log("ok");
+~~~
+
+ok
+
+
+7.9 Automatic Semicolon Insertion
 ---
 
