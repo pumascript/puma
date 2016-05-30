@@ -442,12 +442,42 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
             letterC: "y"
         }, "Passed!");
     });
-
-    test("Strict Mode Restrictions 1", function () {
-        var result = puma.evalPuma("\"use strict\"; var o = { p: 1, p: 2 };");
-        result.makeValue();
-        equal(result.value, "Line 1: Duplicate data property in object literal not allowed in strict mode", "Passed!");
+    
+    test("Strict Mode Restrictions 1", function(){
+        var errorMessage;
+        try {
+            var result = puma.evalPuma("\"use strict\"; var o = { p: 1, p: 2 };");
+        } catch (err) {
+            errorMessage = err.message;
+        }
+        equal( errorMessage, "Line 1: Duplicate data property in object literal not allowed in strict mode", "Passed!");
     });
-
+    
+       test("Strict Mode Restrictions 2", function(){ //??
+        var errorMessage;
+        try {
+            var result = puma.evalPuma("(function(eval){})");
+        } catch (err) {
+            errorMessage = err.message;
+        }
+        equal( errorMessage, "Line 1: Duplicate data property in object literal not allowed in strict mode", "Passed!");
+    });
+    
+    test("Strict Mode Restrictions 3", function(){
+        var errorMessage;
+        try {
+            var result = puma.evalPuma("(function eval(){'use strict';})");
+        } catch (err) {
+            errorMessage = err.message;
+        }
+        equal( errorMessage, "Line 1: Function name may not be eval or arguments in strict mode", "Passed!");
+    });
+    
+    //13.2 Creating Function Objects
+        test("Creating Function Objects", function () {
+        var result = puma.evalPuma("var F = function Add(x,y){return x+y}; F(2,3)");
+        result.makeValue();
+        equal(result.value, 5, "Passed!");
+    });
 
 });
