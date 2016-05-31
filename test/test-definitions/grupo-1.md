@@ -726,7 +726,157 @@ if (0xF !== 15)
 
 ok
 
+~~~
+"use strict"
+var a = 0124;
+Error: Octal literals are not allowed in strict mode.
+~~~
+
+ok
+
+### 7.8.4 String Literals ###
+
+~~~
+var abc = "\";
+Uncaught Error: Line 1: Unexpected token ILLEGAL
+~~~
+
+ok
+
+~~~
+"use strict"
+var a = "\0124";
+Error: Octal literals are not allowed in strict mode.
+~~~
+
+ok
+
+### 7.8.5: RegEx literals ###
+
+~~~
+var re1 = /(?:)/;
+var re2 = //;
+Error: Line 2: Unexpected end of input
+~~~
+
+ok
+
 
 7.9 Automatic Semicolon Insertion
 ---
 
+8 Types
+===
+
+8.1 The Undefined Type
+---
+
+~~~
+console.log(a);
+//muestra que el valor de a = undefined
+~~~
+
+ok
+
+8.2 The Null Type
+---
+
+~~~
+var a;
+console.log(a);
+//deberia ser undefined pero es null
+~~~
+
+not ok
+
+~~~
+var a = null;
+~~~
+
+ok
+
+8.3 The Boolean Type
+---
+
+~~~
+var x = true;
+var y = false;
+~~~
+
+ok
+
+8.4 The Number Type
+---
+
+~~~
+//to ECMAScript code, all NaN values are indistinguishable from each other
+var a = 1/0;
+var b = 1/0;
+var NaN1 = a/b;
+var NaN2 = 0/0;
+if (NaN1 !== NaN2)
+  console.log('error');
+//siempre muestra error
+
+var c = NaN;
+var d = NaN;
+if (c !== d)
+  console.log('error');
+//tambien muestra siempre error
+~~~
+
+not ok
+
+8.6 The Object Type
+---
+
+### 8.6.1 Property Attributes ###
+
+~~~
+var obj = {};
+obj.key = 1;
+Object.defineProperty(obj, 'key', {
+  writable: false,
+});
+obj.key = 2;
+console.log(Object.getOwnPropertyDescriptor(obj, 'key'));
+//muestra value: '1'
+~~~
+
+ok
+
+~~~
+var obj = {};
+obj.key = 1;
+Object.defineProperty(obj, 'key', {
+  configurable: true,
+  writable: false,
+});
+Object.defineProperty(obj, 'key', {
+  writable: true,
+});
+~~~
+
+ok
+
+~~~
+var obj = {};
+obj.key = 1;
+Object.defineProperty(obj, 'key', {
+  configurable: false,
+  writable: false,
+});
+Object.defineProperty(obj, 'key', {
+  writable: true,
+});
+Error: Cannot redefine property: key
+~~~
+
+ok
+
+### 8.6.2 Object Internal Properties and Methods ###
+
+8.7 The Reference Specification Type
+---
+
+de aca se usan todos metodos internos, no se si es exactamente testeable esto
