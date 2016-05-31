@@ -1,19 +1,10 @@
 7 Lexical Conventions
 ===
 
-a esto no lo entendí tanto y está incompleto...
-
-~~~javaScript
-var a=1;
-var b=2;
-var c=3;
-a = b / c;
 ~~~
-
-ok
-
-
-~~~
+var a;
+var b;
+var c;
 a = b
 /c;
 ~~~
