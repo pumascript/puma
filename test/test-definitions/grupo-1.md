@@ -765,6 +765,62 @@ ok
 7.9 Automatic Semicolon Insertion
 ---
 
+~~~
+{ 1 2 } 3
+//Error: Unexpected number
+~~~
+
+ok
+
+~~~
+{ 1
+2 } 3
+~~~
+
+ok
+
+~~~
+for (a; b
+)
+//Error: Unexpected token )
+~~~
+
+ok
+
+~~~
+var func = function(){return
+                    1+1}
+consoloe.log(func);
+//muestra undefined por consola
+~~~
+
+ok
+
+~~~
+var a;
+var b;
+var c;
+a = b
+++c
+~~~
+
+ok
+
+~~~
+if (a > b)
+else c = d
+//Error: Unexpected token else
+~~~
+
+ok
+
+~~~
+a = b + c
+(d + e).print()
+~~~
+
+ok
+
 8 Types
 ===
 
