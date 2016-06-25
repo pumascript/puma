@@ -51,7 +51,7 @@ var var1 = "a b" ;
 ok
 
 ~~~
-var var1="a \u0009 b ";
+var var1="a\u0009b ";
 //result:
 var var1="a \t b ";
 ~~~
@@ -189,6 +189,8 @@ ok
 7.3 Line Terminators
 ---
 
+esto no se puede testear
+
 ~~~
 var a = "\u000A";
 ~~~
@@ -215,6 +217,8 @@ ok
 
 7.4 Comments
 ---
+
+Esto ya estaba en los tests
 
 ~~~
 // comentario
@@ -771,9 +775,45 @@ ok
 ok
 
 ~~~
+var
+x
+~~~
+
+ok
+
+~~~
+var x
+= 1
+~~~
+
+ok
+
+~~~
+var x =
+1
+~~~
+
+ok
+
+~~~
+var x
+x = 1
+~~~
+
+ok
+
+~~~
+for (a
+b ; a++)
+Error: Line 2: Unexpected identifier
+~~~
+
+ok
+
+~~~
 for (a; b
-)
-//Error: Unexpected token )
+a++)
+//Error: Line 2: Unexpected identifier
 ~~~
 
 ok
@@ -781,18 +821,20 @@ ok
 ~~~
 var func = function(){return
                     1+1}
-consoloe.log(func);
+console.log(func);
 //muestra undefined por consola
 ~~~
 
-ok
+NO SE QUE ONDA
 
 ~~~
-var a;
-var b;
-var c;
-a = b
-++c
+var a=1;
+var b=1;
+a
+++
+b
+console.log(a, b)
+//1 2
 ~~~
 
 ok
@@ -810,7 +852,40 @@ a = b + c
 (d + e).print()
 ~~~
 
+NO SE
+
+~~~
+var text="";
+list1: {
+  list2: {
+    text += 1;
+    break
+    list1;
+    text += 2;
+  }
+  text +=3;
+}
+console.log(text)
+//Uncaught SyntaxError: Illegal break statement
+~~~
+
 ok
+
+~~~
+var text="";
+list1: {
+  list2: {
+    text += "a";
+    break list2;
+    text += "b";
+  }
+  text += "c";
+}
+console.log(text);
+//no muestra nada console.log()
+~~~
+
+not ok
 
 8 Types
 ===
@@ -926,4 +1001,89 @@ ok
 8.7 The Reference Specification Type
 ---
 
-de aca se usan todos metodos internos, no se si es exactamente testeable esto
+~~~
+console.log(a);
+//deberia mostrar ReferenceError: a is not defined; pero muestra a=undefined
+~~~
+
+not ok
+
+otras cosas
+---
+
+convierte las variables undefined a null
+
+~~~
+var a;
+var b = typeof(a);
+console.log(a);
+console.log(b);
+//null y object. Object está bien porque null es de tipo object
+~~~
+
+las labels no andan
+
+~~~
+console.log(1);
+label1: {console.log(2);}
+console.log(3);
+//13. Ignora el label
+~~~
+
+no funcionan break ni continue
+
+~~~
+var cero = 0;
+for(var i = 0; i<10; i++)
+{
+  cero++;
+  if (i === 5)
+  {
+    //console.log("estoy pasando por aca");
+    break;
+  }
+  if (i > 5)
+  {
+    //console.log("estoy por continuar");
+    continue;
+  }
+  cero--
+}
+console.log(i);
+console.log(cero);
+//10 y 0
+~~~
+
+eval() no anda, siempre devuelve undefined
+
+~~~
+var a = eval(var b = 1;);
+console.log(a);
+//undefined
+~~~
+
+no funciona la parte catch y finally de un try catch
+
+~~~
+try {
+    adddlert("Welcome guest!");
+}
+catch(err) {
+    var a = err.message
+}
+finally {
+		console.log("aaa");
+}
+console.log(a);
+~~~
+
+~~~
+try {
+    var a= eval("var break=1;"); 
+} catch (e) {
+    if (e instanceof SyntaxError) {
+      	console.log(e.message);
+    }
+}
+console.log(a);
+~~~
