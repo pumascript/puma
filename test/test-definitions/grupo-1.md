@@ -931,23 +931,15 @@ ok
 ---
 
 ~~~
-//to ECMAScript code, all NaN values are indistinguishable from each other
-var a = 1/0;
-var b = 1/0;
-var NaN1 = a/b;
-var NaN2 = 0/0;
-if (NaN1 !== NaN2)
-  console.log('error');
-//siempre muestra error
-
-var c = NaN;
-var d = NaN;
-if (c !== d)
-  console.log('error');
-//tambien muestra siempre error
+var a= 1.797693134862315807e+308;
+if (a < Infinity)
+  console.log("ok");
+var b= 1.797693134862315808e+308;
+if (b === Infinity)
+  console.log("ok");
 ~~~
 
-not ok
+ok
 
 8.6 The Object Type
 ---
@@ -1077,6 +1069,14 @@ finally {
 console.log(a);
 ~~~
 
+no se cual es el error acá pero esto no funciona y en javascript si
+
+~~~
+var hoy=new Date();
+console.log(hoy);
+//Uncaught TypeError: Object prototype may only be an Object or null: undefined
+~~~
+
 ~~~
 try {
     var a= eval("var break=1;"); 
@@ -1087,3 +1087,5 @@ try {
 }
 console.log(a);
 ~~~
+
+faltan test de reserverd words Y de 8

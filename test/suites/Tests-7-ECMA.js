@@ -203,6 +203,18 @@
      });
      */
      
+     test("7.8.2 Boolean Literals 1", function(){
+         var result = puma.evalPuma("var a = Boolean(true);");
+         result.makeValue();
+         ok(result.success && true === result.value, "Passed!");
+     });
+     
+      test("7.8.2 Boolean Literals 2", function(){
+         var result = puma.evalPuma("var a = Boolean(false);");
+         result.makeValue();
+         ok(result.success && false === result.value, "Passed!");
+     });
+     
      test("7.8.3 Numeric Literals: hex numbers: 0", function(){
          var result = puma.evalPuma("var a = false; if (0x0 === 0) a = true;");
          result.makeValue();
