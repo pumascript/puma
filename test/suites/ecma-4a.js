@@ -19,7 +19,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
             letterA: "z",
             letterB: "x",
             letterC: "y"
-        }, "Passed!");
+        }, "Passed!"); //TODO
     });
 
     test("Strict Mode Restrictions 1", function () {
@@ -35,11 +35,11 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     test("Strict Mode Restrictions 2", function () { //??
         var errorMessage;
         try {
-            var result = puma.evalPuma("(function(eval){})");
+            var result = puma.evalPuma("\"use strict\";(function (eval){})");
         } catch (err) {
             errorMessage = err.message;
         }
-        equal(errorMessage, "Line 1: Duplicate data property in object literal not allowed in strict mode", "Passed!");
+        equal(errorMessage, "Line 1: Parameter name eval or arguments is not allowed in strict mode", "Passed!");
     });
 
     test("Strict Mode Restrictions 3", function () {
@@ -66,9 +66,9 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Creates a function and uses prototype method", function () {
-        var result = puma.evalPuma("function operations (x,y) {this.x = x; this.y = y;} Object.defineProperties(operations.prototype, { varX: {get: function () { return this.x; },set: function (value) {this.x = value;}},varY: {get: function () {return this.y;},set: function (value) {this.y = value;}}});operations.prototype.add = function () {return this.x+this.y;};operations.prototype.sub = function () {return this.x-this.y;};operations.prototype.div = function () {if(this.y !== 0) {return this.x/this.y;}};operations.prototype.mul = function () {return this.x*this.y;};var op = new operations(2,3);op.mul();");
-        result.makeValue();
-        equal(result.value, '6', "Passed!");
+        var result = puma.evalPuma("function operations (x,y) {this.x = x; this.y = y;} operations.prototype.mul = function () {return this.x*this.y;};var op = new operations(2,3);op.mul();");
+        //result.makeValue();
+        equal(result.value, 6, "Passed!");
     });
 
     test("Creates a function and gets its internal value with a getter function", function () {
