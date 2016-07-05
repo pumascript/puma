@@ -5,9 +5,9 @@
 
 ## Intro
 
-PumaScript is a research programming language based on JavaScript and developed in the Universidad Tecnologica Nacional in Cordoba, Argentina.
+PumaScript is a research programming language that adds meta-pregramming capabilities to JavaScript and is develop at the Universidad Tecnologica Nacional (UTN-FRC) in Cordoba, Argentina.
 
-It has exactly the same syntax and semantic than regular JavaScript plus meta-programming capabilities and re-writing features.
+It has exactly the same syntax and semantic than regular JavaScript plus meta-programming capabilities such as introspection and re-writing features.
 
 A number of PumaScript features are based on LayerD project. Which is a meta-programming framework for statically typed languages.
 
@@ -22,7 +22,7 @@ grunt init
 
 ```
 
-After this PumaScript editor is ready to start coding. Open in any browser the file:
+After these steps PumaScript editor is ready to start coding. Open in any browser the file:
 
 ```
 editor/puma-editor.html
@@ -45,7 +45,7 @@ Any JavaScript program is a PumaScript program. Write the following snippet in t
     sum(5, 6);
 ```
 
-The sample declares the meta-function "sum" that takes two arguments. These arguments are not values but AST - Abstract Syntax Tree - of the actual arguments.
+The sample declares the meta-function "sum" that takes two arguments. These arguments are not values but AST (Abstract Syntax Tree) of the actual arguments.
 
 The return expression use the special function "pumaAst" to build a new AST and replace the identifiers "$a" and "$b" with the AST of the actual arguments. In the sample, "sum" is called with literals "5" and "6". 
 
@@ -82,9 +82,9 @@ jQuery(document.getElementById('#some-panel'));
 A meta-function can avoid re-writing the caller expression by returning null instead of the AST.
 
 
-## Use PumaScript with require
+## Using PumaScript with require
 
-PumaScript was developed as a AMD module so it can be used with any JS module loader. In order to use in your project copy the src folder to your project.
+PumaScript was developed as a AMD module so it can be used with any JavaScript module loader. In order to use in your project copy the src folder to your project.
 
 To include the functionality using requireJS into your code add the following:
 
@@ -92,7 +92,7 @@ To include the functionality using requireJS into your code add the following:
 <script data-main="/src/pumascript.js" src="require.js"></script>
 ```
 
-Now you can use it inside your code in this way:
+Now you can use PumaScript in your code in this way:
 
 ```
     var puma = require('pumascript');

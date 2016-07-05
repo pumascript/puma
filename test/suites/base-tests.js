@@ -291,12 +291,9 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
         equal(result.value, 4, "Passed!");
     });
     
-      /*
-     This test is when the support for new expression added
-     test("test for native string and property acess against object type", function(){
-     var result = puma.evalPuma("'hola'.substr(1) === new String('ola')");
-     equal( result.value, false, "Passed!");
-     });
-     */
-
+     /* This test is when the support for new expression added */
+    QUnit.skip("test for native string and property acess against object type", function(){
+        var result = puma.evalPuma("'hola'.substr(1) === new String('ola')");
+        equal( result.value, false, "Passed!");
+    });
 });
