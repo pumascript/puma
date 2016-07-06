@@ -1088,4 +1088,16 @@ try {
 console.log(a);
 ~~~
 
+~~~
+test("TEST 1", function(){
+        try {
+            puma.evalPuma("var break=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Unexpected token break", "Passed!");
+    });
+~~~
+
 faltan test de reserverd words Y de 8

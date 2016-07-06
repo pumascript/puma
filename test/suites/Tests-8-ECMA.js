@@ -4,7 +4,6 @@
          result.makeValue();
          ok(result.success && "undefined" === result.value, "Passed!");
      });
-     
      /*
      //this doesnt work, it shows that "a" is null instead of undefined
      test("8.2 Types: undefined 2", function(){

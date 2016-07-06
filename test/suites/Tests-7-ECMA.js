@@ -145,71 +145,496 @@
          ok(result.success && 1 === result.value, "Passed!");
      });
      
-     //Future reserved words works unless used with "use strict"
-     test("7.6.1 Future reserved words 1", function(){
+     test("7.6.1 Reserved Words: break", function(){
+        try {
+            puma.evalPuma("var break=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected token break", "Passed!");
+     });
+     
+     test("7.6.1 Reserved Words: do", function(){
+        try {
+            puma.evalPuma("var do=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected token do", "Passed!");
+     });
+     
+     test("7.6.1 Reserved Words: instanceof", function(){
+        try {
+            puma.evalPuma("var instanceof=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected token instanceof", "Passed!");
+     });
+     
+     test("7.6.1 Reserved Words: typeof", function(){
+        try {
+            puma.evalPuma("var typeof=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected token typeof", "Passed!");
+     });
+     
+     test("7.6.1 Reserved Words: case", function(){
+        try {
+            puma.evalPuma("var case=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected token case", "Passed!");
+     });
+     
+     test("7.6.1 Reserved Words: else", function(){
+        try {
+            puma.evalPuma("var else=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected token else", "Passed!");
+     });
+     
+     test("7.6.1 Reserved Words: new", function(){
+        try {
+            puma.evalPuma("var new=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected token new", "Passed!");
+     });
+     
+     test("7.6.1 Reserved Words: var", function(){
+        try {
+            puma.evalPuma("var var=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected token var", "Passed!");
+     });
+     
+     test("7.6.1 Reserved Words: catch", function(){
+        try {
+            puma.evalPuma("var catch=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected token catch", "Passed!");
+     });
+     
+     test("7.6.1 Reserved Words: finally", function(){
+        try {
+            puma.evalPuma("var finally=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected token finally", "Passed!");
+     });
+     
+     test("7.6.1 Reserved Words: return", function(){
+        try {
+            puma.evalPuma("var return=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected token return", "Passed!");
+     });
+     
+     test("7.6.1 Reserved Words: void", function(){
+        try {
+            puma.evalPuma("var void=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected token void", "Passed!");
+     });
+     
+     test("7.6.1 Reserved Words: continue", function(){
+        try {
+            puma.evalPuma("var continue=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected token continue", "Passed!");
+     });
+     
+     test("7.6.1 Reserved Words: for", function(){
+        try {
+            puma.evalPuma("var for=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected token for", "Passed!");
+     });
+     
+     test("7.6.1 Reserved Words: switch", function(){
+        try {
+            puma.evalPuma("var switch=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected token switch", "Passed!");
+     });
+     
+     test("7.6.1 Reserved Words: while", function(){
+        try {
+            puma.evalPuma("var while=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected token while", "Passed!");
+     });
+     
+     test("7.6.1 Reserved Words: debugger", function(){
+        try {
+            puma.evalPuma("var debugger=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected token debugger", "Passed!");
+     });
+     
+     test("7.6.1 Reserved Words: function", function(){
+        try {
+            puma.evalPuma("var function=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected token function", "Passed!");
+     });
+     
+     test("7.6.1 Reserved Words: this", function(){
+        try {
+            puma.evalPuma("var this=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected token this", "Passed!");
+     });
+     
+     test("7.6.1 Reserved Words: with", function(){
+        try {
+            puma.evalPuma("var with=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected token with", "Passed!");
+     });
+     
+     test("7.6.1 Reserved Words: default", function(){
+        try {
+            puma.evalPuma("var default=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected token default", "Passed!");
+     });
+     
+     test("7.6.1 Reserved Words: if", function(){
+        try {
+            puma.evalPuma("var if=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected token if", "Passed!");
+     });
+     
+     test("7.6.1 Reserved Words: throw", function(){
+        try {
+            puma.evalPuma("var throw=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected token throw", "Passed!");
+     });
+     
+     test("7.6.1 Reserved Words: delete", function(){
+        try {
+            puma.evalPuma("var delete=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected token delete", "Passed!");
+     });
+     
+     test("7.6.1 Reserved Words: in", function(){
+        try {
+            puma.evalPuma("var in=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected token in", "Passed!");
+     });
+     
+     test("7.6.1 Reserved Words: try", function(){
+        try {
+            puma.evalPuma("var try=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected token try", "Passed!");
+     });
+     
+     test("7.6.1.2 Future reserved words: class", function(){
+        try {
+            puma.evalPuma("var class=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected reserved word", "Passed!");
+     });
+     
+     test("7.6.1.2 Future reserved words: enum", function(){
+        try {
+            puma.evalPuma("var enum=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected reserved word", "Passed!");
+     });
+     
+     test("7.6.1.2 Future reserved words, without use strict: extends", function(){
+        try {
+            puma.evalPuma("var extends=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected reserved word", "Passed!");
+     });
+     
+     test("7.6.1.2 Future reserved words: super", function(){
+        try {
+            puma.evalPuma("var super=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected reserved word", "Passed!");
+     });
+     
+     /*
+     //throws Unexpected token const
+     test("7.6.1.2 Future reserved words: const", function(){
+        try {
+            puma.evalPuma("var const=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected reserved word", "Passed!");
+     });
+     */
+     
+     test("7.6.1.2 Future reserved words: export", function(){
+        try {
+            puma.evalPuma("var export=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected reserved word", "Passed!");
+     });
+     
+     test("7.6.1.2 Future reserved words: import", function(){
+        try {
+            puma.evalPuma("var import=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok( result === "Line 1: Unexpected reserved word", "Passed!");
+     });
+     
+     //The next future reserved words must work unless used with "use strict"
+     test("7.6.1.2 Future reserved words, with use strict: implements", function(){
+        try {
+            puma.evalPuma("\"use strict\" \n var implements=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok(result === "Line 2: Use of future reserved word in strict mode", "Passed!");
+     });
+     
+     test("7.6.1.2 Future reserved words, without use strict: implements", function(){
          var result = puma.evalPuma("var implements = 1;");
          result.makeValue();
          ok(result.success && 1 === result.value, "Passed!");
      });
      
-     test("7.6.1 Future reserved words 1", function(){
+     test("7.6.1.2 Future reserved words, with use strict: private", function(){
+        try {
+            puma.evalPuma("\"use strict\" \n var private=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok(result === "Line 2: Use of future reserved word in strict mode", "Passed!");
+     });
+     
+     test("7.6.1.2 Future reserved words, without use strict: private", function(){
          var result = puma.evalPuma("var private = 1;");
          result.makeValue();
          ok(result.success && 1 === result.value, "Passed!");
      });
      
-     test("7.6.1 Future reserved words 1", function(){
+     test("7.6.1.2 Future reserved words, with use strict: public", function(){
+        try {
+            puma.evalPuma("\"use strict\" \n var public=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok(result === "Line 2: Use of future reserved word in strict mode", "Passed!");
+     });
+     
+     test("7.6.1.2 Future reserved words, without use strict: public", function(){
          var result = puma.evalPuma("var public = 1;");
          result.makeValue();
          ok(result.success && 1 === result.value, "Passed!");
      });
      
-     test("7.6.1 Future reserved words 1", function(){
+     test("7.6.1.2 Future reserved words, with use strict: interface", function(){
+        try {
+            puma.evalPuma("\"use strict\" \n var interface=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok(result === "Line 2: Use of future reserved word in strict mode", "Passed!");
+     });
+     
+     test("7.6.1.2 Future reserved words, without use strict: interface", function(){
          var result = puma.evalPuma("var interface = 1;");
          result.makeValue();
          ok(result.success && 1 === result.value, "Passed!");
      });
      
-     test("7.6.1 Future reserved words 1", function(){
+     test("7.6.1.2 Future reserved words, with use strict: package", function(){
+        try {
+            puma.evalPuma("\"use strict\" \n var package=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok(result === "Line 2: Use of future reserved word in strict mode", "Passed!");
+     });
+     
+     test("7.6.1.2 Future reserved words, without use strict: package", function(){
          var result = puma.evalPuma("var package = 1;");
          result.makeValue();
          ok(result.success && 1 === result.value, "Passed!");
      });
      
-     test("7.6.1 Future reserved words 1", function(){
+     test("7.6.1.2 Future reserved words, with use strict: protected", function(){
+        try {
+            puma.evalPuma("\"use strict\" \n var protected=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok(result === "Line 2: Use of future reserved word in strict mode", "Passed!");
+     });
+     
+     test("7.6.1.2 Future reserved words, without use strict: protected", function(){
          var result = puma.evalPuma("var protected = 1;");
          result.makeValue();
          ok(result.success && 1 === result.value, "Passed!");
      });
      
-     test("7.6.1 Future reserved words 1", function(){
+     test("7.6.1.2 Future reserved words, with use strict: static", function(){
+        try {
+            puma.evalPuma("\"use strict\" \n var static=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok(result === "Line 2: Use of future reserved word in strict mode", "Passed!");
+     });
+     
+     test("7.6.1.2 Future reserved words, without use strict: static", function(){
          var result = puma.evalPuma("var static = 1;");
          result.makeValue();
          ok(result.success && 1 === result.value, "Passed!");
      });
      
+     
+     test("7.6.1.2 Future reserved words, with use strict: yield", function(){
+        try {
+            puma.evalPuma("\"use strict\" \n var yield=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok(result === "Line 2: Use of future reserved word in strict mode", "Passed!");
+     });
      /*
      //This tests fail. Uncaught Error: Unexpected token
-     test("7.6.1 Future reserved words 1", function(){
+     test("7.6.1.2 Future reserved words, without use strict: yield", function(){
          var result = puma.evalPuma("var yield = 1;");
          result.makeValue();
          ok(result.success && 1 === result.value, "Passed!");
      });
+     */
      
-     test("7.6.1 Future reserved words 1", function(){
+     test("7.6.1.2 Future reserved words, with use strict: let", function(){
+        try {
+            puma.evalPuma("\"use strict\" \n var let=1;"); 
+        }
+        catch (e) {
+            var result = e.message;
+  		}
+        ok(result === "Line 2: Use of future reserved word in strict mode", "Passed!");
+     });
+     
+     /*
+     test("7.6.1.2 Future reserved words, without use strict: let", function(){
          var result = puma.evalPuma("var let = 1;");
          result.makeValue();
          ok(result.success && 1 === result.value, "Passed!");
      });
      */
      
-     test("7.8.2 Boolean Literals 1", function(){
+     test("7.8.2 Boolean Literals: true", function(){
          var result = puma.evalPuma("var a = Boolean(true);");
          result.makeValue();
          ok(result.success && true === result.value, "Passed!");
      });
      
-      test("7.8.2 Boolean Literals 2", function(){
+      test("7.8.2 Boolean Literals: false", function(){
          var result = puma.evalPuma("var a = Boolean(false);");
          result.makeValue();
          ok(result.success && false === result.value, "Passed!");
