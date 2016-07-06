@@ -82,6 +82,8 @@ require([
         }
 
         if (programStr !== undefined && programStr !== null) {
+            //Exporting to window puma runtime
+            window.puma = puma;
             result = puma.evalPuma(programStr);
 
             this.setEditorValue(this._javaScriptEditor, result.output);
