@@ -4,14 +4,13 @@
          result.makeValue();
          ok(result.success && "undefined" === result.value, "Passed!");
      });
-     /*
-     //this doesnt work, it shows that "a" is null instead of undefined
-     test("8.2 Types: undefined 2", function(){
+     
+     //It shows that the type of "a" is Object instead of undefined, because "a" is null instead of undefined
+     QUnit.skip("8.2 Types: undefined 2", function(){
          var result = puma.evalPuma("var a; typeof a");
          result.makeValue();
          ok(result.success && "undefined" === result.value, "Passed!");
      });
-     */
      
      test("8.2 Types: null", function(){
          var result = puma.evalPuma("var a = null; typeof a");
@@ -55,12 +54,11 @@
          ok(result.success && 1 === result.value, "Passed!");
      });
      
-     /*
-     // Test fails because try catch in general doesn't work
-     test("8.6.1 Property attributes: configurable", function(){
+     // Try catch doesn't work
+     QUnit.skip("8.6.1 Property attributes: configurable", function(){
          var result = puma.evalPuma("var obj = {}; obj.key = 1; Object.defineProperty(obj, 'key', { configurable: true, writable: false, }); Object.defineProperty(obj, 'key', { configurable: false, }); try{Object.defineProperty(obj, 'key', { writable: true, });} catch(e) {var a = e.message;}");
          result.makeValue();
          ok(result.success && "Cannot redefine property: key" === result.value, "Passed!");
      });
-     */
+     
 });

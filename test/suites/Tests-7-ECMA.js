@@ -445,9 +445,8 @@
         ok( result === "Line 1: Unexpected reserved word", "Passed!");
      });
      
-     /*
      //throws Unexpected token const
-     test("7.6.1.2 Future reserved words: const", function(){
+     QUnit.skip("7.6.1.2 Future reserved words: const", function(){
         try {
             puma.evalPuma("var const=1;"); 
         }
@@ -456,7 +455,6 @@
   		}
         ok( result === "Line 1: Unexpected reserved word", "Passed!");
      });
-     */
      
      test("7.6.1.2 Future reserved words: export", function(){
         try {
@@ -601,14 +599,13 @@
   		}
         ok(result === "Line 2: Use of future reserved word in strict mode", "Passed!");
      });
-     /*
-     //This tests fail. Uncaught Error: Unexpected token
-     test("7.6.1.2 Future reserved words, without use strict: yield", function(){
+     
+     //Throws Uncaught Error: Unexpected token
+     QUnit.skip("7.6.1.2 Future reserved words, without use strict: yield", function(){
          var result = puma.evalPuma("var yield = 1;");
          result.makeValue();
          ok(result.success && 1 === result.value, "Passed!");
      });
-     */
      
      test("7.6.1.2 Future reserved words, with use strict: let", function(){
         try {
@@ -620,13 +617,12 @@
         ok(result === "Line 2: Use of future reserved word in strict mode", "Passed!");
      });
      
-     /*
-     test("7.6.1.2 Future reserved words, without use strict: let", function(){
+     //Throws Uncaught Error: Unexpected token
+     QUnit.skip("7.6.1.2 Future reserved words, without use strict: let", function(){
          var result = puma.evalPuma("var let = 1;");
          result.makeValue();
          ok(result.success && 1 === result.value, "Passed!");
      });
-     */
      
      test("7.8.2 Boolean Literals: true", function(){
          var result = puma.evalPuma("var a = Boolean(true);");
