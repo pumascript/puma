@@ -19,7 +19,8 @@ require.config({
 var suites = [
         './suites/base-tests.js',
         './suites/runtime-tests.js',
-        './suites/integration-tests.js'
+        './suites/integration-tests.js',
+        './suites/ecma-11'
     ];
 
 require(suites, function () {
