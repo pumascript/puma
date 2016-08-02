@@ -42,8 +42,8 @@ module.exports = function (grunt) {
             default_options: {
                 options: {},
                 files: {
-                    'test/grunt-test/tmp/result.js': ['test/grunt-test/puma-test.js']
-                }
+                    'test/grunt-test/tmp/result.js': ['test/grunt-test/puma-test.js','test/grunt-test/puma-test2.js']
+                },
             }
         },
 
