@@ -43,7 +43,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
     test("Property Accessors",function () {
         var result = puma.evalPuma("var object = {}; object['property'] = 'value'; object['property'];");
         result.makeValue();
-        equal(result.value(),'value',"Passed!");
+        equal(result.value,'value',"Passed!");
     });
 
     test("The new operator",function () {
@@ -68,66 +68,66 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
     test("Increment",function () {
         var result = puma.evalPuma("var x = 0; x++; ");
         result.makeValue();
-        equal(result.value(),1,"Passed!");
+        equal(result.value,1,"Passed!");
     });
 
     test("Decrement",function () {
         var result = puma.evalPuma("var x = 1; x--; ");
         result.makeValue();
-        equal(result.value(),0,"Passed!");
+        equal(result.value,0,"Passed!");
     });
 
     module("11.4 Unary Operators");
 
     test("Delete Operator",function () {
-        var result = puma.evalPuma("var x = {}; x.property = 'property'; delete x.property; x.property;");
+        var result = puma.evalPuma("var x = {}; x.property = 'propertyThatShouldNotBe'; delete x.property; x.property;");
         result.makeValue();
-        equal(result.value(),null,"Passed!");
+        equal(result.value,undefined,"Passed!");
     });
 
     test("Void Operator",function () {
         var result = puma.evalPuma("void 0");
-        equal(result.value(),undefined,"Passed!");
+        equal(result.value,undefined,"Passed!");
     });
 
     test("TypeOf Operator",function () {
         var result = puma.evalPuma("typeof true;");
-        equal(result.value(),boolean,"Passed!");
+        equal(result.value,"boolean","Passed!");
     });
 
     test("Prefix Increment Operator",function () {
         var result = puma.evalPuma("var x=0; ++x;");
         result.makeValue();
-        equal(result.value(),1,"Passed!");
+        equal(result.value,1,"Passed!");
     });
 
     test("Prefix Decrement Operator",function () {
         var result = puma.evalPuma("var x=1; --x;");
         result.makeValue();
-        equal(result.value(),0,"Passed!");
+        equal(result.value,0,"Passed!");
     });
 
     test("Unary + Operator",function () {
         var result = puma.evalPuma("var x=-10; +x;");
         result.makeValue();
-        equal(result.value(),-10,"Passed!");
+        equal(result.value,-10,"Passed!");
     });
 
     test("Unary - Operator",function () {
         var result = puma.evalPuma("var x=-10; -x;");
         result.makeValue();
-        equal(result.value(),10,"Passed!");
+        equal(result.value,10,"Passed!");
     });
 
     test("Bitwise NOT Operator ( ~ )",function () {
         var result = puma.evalPuma("var x= 10; ~x;");
         result.makeValue();
-        equal(result.value(),-11,"Passed!");
+        equal(result.value,-11,"Passed!");
     });
 
     test("Logical NOT Operator ( ! )",function () {
         var result = puma.evalPuma("!false;");
-        equal(result.value(),true,"Passed!");
+        equal(result.value,true,"Passed!");
     });
 
     module("11.5 Multiplicative Operators and 11.6 Additive Operators");
@@ -135,24 +135,24 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
      test("Multiplicative and Additive Operators",function () {
          var result = puma.evalPuma("2 * 3 / 4 + 5 - 6 % 2;");
          result.makeValue();
-         equal(result.value(),6.5,"Passed!");
+         equal(result.value,6.5,"Passed!");
      });
 
     module("11.7 Bitwise Shift Operators");
 
      test("The Left Shift Operator ( << )",function () {
         var result = puma.evalPuma("8 << 2;");
-        equal(result.value(),32,"Passed!");
+        equal(result.value,32,"Passed!");
     });
 
     test("The Signed Right Shift Operator ( >> )",function () {
         var result = puma.evalPuma("9 >> 2;");
-        equal(result.value(),2,"Passed!");
+        equal(result.value,2,"Passed!");
     });
 
     test("The Unsigned Right Shift Operator ( >>> )",function () {
         var result = puma.evalPuma("19>>>2");
-        equal(result.value(),4,"Passed!");
+        equal(result.value,4,"Passed!");
     });
 
     module("11.8 Relational Operators");
@@ -180,7 +180,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
     test("instanceof Operator",function () {
         var result = puma.evalPuma("var x={}; x instanceof Object;");
         result.makeValue();
-        equal(result.value(),true,"Passed!");
+        equal(result.value,true,"Passed!");
     });
 
     test("In Operator",function () {
@@ -202,7 +202,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
 
     test("=== Operator",function () {
         var result = puma.evalPuma("3 === '3';");
-        ok(!result.success,"Passed!");
+        ok(!result.value,"Passed!");
     });
 
     test("!== Operator",function () {
@@ -214,17 +214,17 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
 
     test("& Operator",function () {
         var result = puma.evalPuma("14 & 9;");
-        equal(result.value(),8,"Passed!");
+        equal(result.value,8,"Passed!");
     });
 
     test("| Operator",function () {
         var result = puma.evalPuma("14 | 9");
-        equal(result.value(),15,"Passed!");
+        equal(result.value,15,"Passed!");
     });
 
     test("^ Operator",function () {
         var result = puma.evalPuma("14 ^ 9");
-        equal(result.value(),7,"Passed!");
+        equal(result.value,7,"Passed!");
     });
 
     module("11.11 Binary Logical Operators");
@@ -252,8 +252,9 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
     module("11.13 Assignment Operators");
 
     test("Simple Assigment",function () {
-        var result = puma.evalPuma(" x = 5; y = 10; x = y");
-        equal(result.value(),10,"Passed!");
+        var result = puma.evalPuma(" x = 5; y = 10; x = y; x;");
+        result.makeValue();
+        equal(result.value,10,"Passed!");
     });
 
   /*  test("*= Operator",function () {
@@ -325,8 +326,9 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
 
     module("11.14 Comma Operators");
 
-    test("",function () {
+    test("Comma Operators",function () {
         var result = puma.evalPuma("function myFunc () {var x = 0; return (x += 1,x*=2, x);}; myFunc();");
-        equal(result.value(),2,"Passed!");
+        result.makeValue();
+        equal(result.value,2,"Passed!");
     });
 });
