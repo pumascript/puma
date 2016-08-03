@@ -1,13 +1,13 @@
 define(['pumascript', 'esprima'], function(puma, esprima) {
 
-  test("toBoolean(undefined) conversion test", function () {
-    var result = puma.evalPuma("Boolean(undefined)");
-    ok(result.success && false === result.value, "Pass!");
-  });
+  test("toBoolean undefined conversion test", function () {
+    	var result = puma.evalPuma("Boolean(undefined)");
+    	ok(result.success && false === result.value, "Pass!");
+	});
 
   test("toBoolean(null) conversion test", function () {
-    var result = puma.evalPuma("Boolean(null)");
-    ok(result.success && false === result.value, "Pass!");
+    	var result = puma.evalPuma("Boolean(null)");
+    	ok(result.success && false === result.value, "Pass!");
   });
 
   test("toBoolean(true) conversion test", function () {
