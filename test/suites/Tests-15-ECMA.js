@@ -58,7 +58,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 'Clotho', "Passed!");
     });
     
-    QUnit.skip("Inirect Call to Eval", function () {
+    QUnit.skip("Indirect Call to Eval", function () {
         var result = puma.evalPuma("var indirectEval = (1, eval); indirectEval(\"var f = 'Atropos'; f;\");");
         result.makeValue();
         equal(result.success, true, "Passed!");
