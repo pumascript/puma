@@ -44,7 +44,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         }
     });
     
-    test("Function Properties of the Global Object: eval(string)", function () {
+    test("Function Properties of the Global Object: eval()", function () {
         var result = puma.evalPuma("eval(\"var f = 'Lachesis'; f === 'Lachesis';\");");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -58,12 +58,142 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 'Clotho', "Passed!");
     });
     
-    QUnit.skip("Function Properties of the Global Object: eval(string)", function () {
+    QUnit.skip("Inirect Call to Eval", function () {
         var result = puma.evalPuma("var indirectEval = (1, eval); indirectEval(\"var f = 'Atropos'; f;\");");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 'Atropos', "Passed!");
     });
+    
+    test("parseInt(string, radix)", function () {
+        var result = puma.evalPuma("parseInt (' +2027ADX', 16);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 2107309, "Passed!");
+    });
+    
+    test("parseInt(invalidParse)", function () {
+        var result = puma.evalPuma("parseInt ('0xT');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, typeof NaN, "Passed!");
+    });
+    
+    test("parseFloat(string)", function () {
+        var result = puma.evalPuma("parseFloat(' -20.7N');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, -20.7, "Passed!");
+    });
+    
+    test("parseFloat(invalidParse)", function () {
+        var result = puma.evalPuma("parseFloat('UD4');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, typeof NaN, "Passed!");
+    });
+    
+    test("isNaN(number)", function () {
+        var result = puma.evalPuma("isNaN(0/0);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, true, "Passed!");
+    });
+    
+    test("isFinite(number)", function () {
+        var result = puma.evalPuma("isFinite(2);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, true, "Passed!");
+    });
+    
+    test("encodeURI(string)", function () {
+        var result = puma.evalPuma("encodeURI('https://www.googleapis.com/customsearch/v1?key=#5475&name=Malik, Faridah&birth=1999:Dearborn, Michigan, USA');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, "https://www.googleapis.com/customsearch/v1?key=#5475&name=Malik,%20Faridah&birth=1999:Dearborn,%20Michigan,%20USA", "Passed!");
+    });
+    
+    test("decodeURI(string)", function () {
+        var result = puma.evalPuma("decodeURI('https://www.googleapis.com/customsearch/v1?key=#5475&name=Malik,%20Faridah&birth=1999:Dearborn,%20Michigan,%20USA')");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, "https://www.googleapis.com/customsearch/v1?key=#5475&name=Malik, Faridah&birth=1999:Dearborn, Michigan, USA", "Passed!");
+    });
+    
+    test("encodeURIComponent(string)", function () {
+        var result = puma.evalPuma("encodeURIComponent('https://www.googleapis.com/customsearch/v1?key=5475&name=Malik, Faridah&birth=1999:Dearborn, Michigan@USA');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, "https%3A%2F%2Fwww.googleapis.com%2Fcustomsearch%2Fv1%3Fkey%3D5475%26name%3DMalik%2C%20Faridah%26birth%3D1999%3ADearborn%2C%20Michigan%40USA", "Passed!");
+    });
+    
+    test("decodeURIComponent(string)", function () {
+        var result = puma.evalPuma("decodeURIComponent('https%3A%2F%2Fwww.googleapis.com%2Fcustomsearch%2Fv1%3Fkey%3D5475%26name%3DMalik%2C%20Faridah%26birth%3D1999%3ADearborn%2C%20Michigan%40USA')");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, "https://www.googleapis.com/customsearch/v1?key=5475&name=Malik, Faridah&birth=1999:Dearborn, Michigan@USA", "Passed!");
+    });
+    
+    test("Object(undefined)", function () {
+        var result = puma.evalPuma("Object(undefined)");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(JSON.stringify(result.value), JSON.stringify(new Object(undefined)), "Passed!");
+    });
+    
+    test("Object(value)", function () {
+        var result = puma.evalPuma("Object(4)");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(JSON.stringify(result.value), JSON.stringify(new Object(4)), "Passed!");
+    });
+        
+    QUnit.skip("Object Constructor", function () {
+        obj = new Object({Name:'LEO', Terminal:25000});
+        var result = puma.evalPuma("new Object({Name:'LEO', Terminal:25000});");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(JSON.stringify(result.value), JSON.stringify(obj), "Passed!");
+    });
+    
+    /*
+    test("", function () {
+        var result = puma.evalPuma("");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, , "Passed!");
+    });
+    
+    test("", function () {
+        var result = puma.evalPuma("");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, , "Passed!");
+    });
+    
+    test("", function () {
+        var result = puma.evalPuma("");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, , "Passed!");
+    });
+    
+    test("", function () {
+        var result = puma.evalPuma("");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, , "Passed!");
+    });
+    
+    
+    test("", function () {
+        var result = puma.evalPuma("");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, , "Passed!");
+    });
+    */
     
     // Below tests done by Juan Guzmán [Gh tag]
     
