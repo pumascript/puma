@@ -157,6 +157,41 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(JSON.stringify(result.value), JSON.stringify(obj), "Passed!");
     });
     
+    QUnit.skip("Object.prototype", function () {
+        var result = puma.evalPuma("Object.prototype.isPrototypeOf(Object());");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, true, "Passed!");
+    });
+    
+    test("Object.getPrototypeOf(Object)", function () {
+        var a = Array('Atropos', 'Clotho', 'Lachesis');
+        var result = puma.evalPuma("Object.getPrototypeOf(Array());");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.isPrototypeOf(a), true, "Passed!");
+    });
+    
+    test("Object.getOwnPropertyDescriptor(O,P)", function () {
+        var c = { value: 42, writable: true, enumerable: true, configurable: true }; 
+        var result = puma.evalPuma("var o, d; o = { bar: 42 }; d = Object.getOwnPropertyDescriptor(o, 'bar');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(JSON.stringify(result.value), JSON.stringify(c), "Passed!");
+    });
+    
+    //   If the argument to this method is not an object it will cause a TypeError. As of ES6, a non-object argument will be coerced to an object.   //
+    
+    test("Object.getOwnPropertyNames(Object)", function () {
+        var c = ["0", "1", "2", "length"];
+        var result = puma.evalPuma("var arr = ['Alpha', 'Beta', 'Gamma']; Object.getOwnPropertyNames(arr);")
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(JSON.stringify(result.value), JSON.stringify(c), "Passed!");
+    });
+    
+    //   If the argument to this method is not an object it will cause a TypeError. As of ES6, a non-object argument will be coerced to an object.   //
+    
     /*
     test("", function () {
         var result = puma.evalPuma("");
@@ -165,28 +200,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, , "Passed!");
     });
     
-    test("", function () {
-        var result = puma.evalPuma("");
-        result.makeValue();
-        equal(result.success, true, "Passed!");
-        equal(result.value, , "Passed!");
-    });
-    
-    test("", function () {
-        var result = puma.evalPuma("");
-        result.makeValue();
-        equal(result.success, true, "Passed!");
-        equal(result.value, , "Passed!");
-    });
-    
-    test("", function () {
-        var result = puma.evalPuma("");
-        result.makeValue();
-        equal(result.success, true, "Passed!");
-        equal(result.value, , "Passed!");
-    });
-    
-    
+    /*
     test("", function () {
         var result = puma.evalPuma("");
         result.makeValue();
