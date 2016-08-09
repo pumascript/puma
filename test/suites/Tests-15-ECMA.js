@@ -192,22 +192,106 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     
     //   If the argument to this method is not an object it will cause a TypeError. As of ES6, a non-object argument will be coerced to an object.   //
     
-    /*
-    test("", function () {
-        var result = puma.evalPuma("");
+    test("Function Properties of the Math Object: atan2(y,x)", function () {
+        var result = puma.evalPuma("Math.atan2(25, 90);");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value, , "Passed!");
+        equal(result.value, 0.27094685033842053, "Passed!");
     });
     
-    /*
-    test("", function () {
-        var result = puma.evalPuma("");
+    test("Function Properties of the Math Object: ceil(x)", function () {
+        var result = puma.evalPuma("Math.ceil(20.01);");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value, , "Passed!");
+        equal(result.value, 21, "Passed!");
     });
-    */
+    
+    test("Function Properties of the Math Object: cos(x)", function () {
+        var result = puma.evalPuma("Math.cos(6);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 0.960170286650366, "Passed!");
+    });
+    
+    test("Function Properties of the Math Object: exp(x)", function () {
+        var result = puma.evalPuma("Math.exp(4);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 54.598150033144236, "Passed!");
+    });
+    
+    test("Function Properties of the Math Object: floor(x)", function () {
+        var result = puma.evalPuma("Math.floor(21.01);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 21, "Passed!");
+    });
+    
+    test("Function Properties of the Math Object: log(x)", function () {
+        var result = puma.evalPuma("Math.log(10);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 2.302585092994046, "Passed!");
+    });
+    
+    test("Function Properties of the Math Object: max([ value1 [ , value2 [ , … ]]])", function () {
+        var result = puma.evalPuma("Math.max(9,12,5);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 12, "Passed!");
+    });
+    
+    test("Function Properties of the Math Object: min ([ value1 [ , value2 [ , … ]]])", function () {
+        var result = puma.evalPuma("Math.min(9,12,5);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 5, "Passed!");
+    });
+    
+    test("Function Properties of the Math Object: pow(x,y)", function () {
+        var result = puma.evalPuma("Math.pow(9,5);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 59049, "Passed!");
+    });
+    
+    test("Function Properties of the Math Object: random()", function () {
+        var result = puma.evalPuma("Math.random();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+        equal(result.value >= 0, true, "Passed!");
+        equal(result.value < 1, true, "Passed!");
+    });
+    
+    test("Function Properties of the Math Object: round(x)", function () {
+        var result = puma.evalPuma("Math.round(65.5256);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 66, "Passed!");
+    });
+    
+    test("Function Properties of the Math Object: sin(x)", function () {
+        var result = puma.evalPuma("Math.sin(6);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, -0.27941549819892586, "Passed!");
+    });
+    
+    test("Function Properties of the Math Object: sqrt(x)", function () {
+        var result = puma.evalPuma("Math.sqrt(4);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 2, "Passed!");
+    });
+    
+    test("Function Properties of the Math Object: tan(x)", function () {
+        var result = puma.evalPuma("Math.tan(6);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, -0.29100619138474915, "Passed!");
+    });    
+    
     
     // Below tests done by Juan Guzmán [Gh tag]
     
