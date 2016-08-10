@@ -190,7 +190,34 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(JSON.stringify(result.value), JSON.stringify(c), "Passed!");
     });
     
-    //   If the argument to this method is not an object it will cause a TypeError. As of ES6, a non-object argument will be coerced to an object.   //
+    //   TODO: Ask about stringify comparing!   //
+    
+    test("Object.create(O [, Properties])", function () {
+        var c = { value: "Puma", writable: true, enumerable: false, configurable: false };
+        var result = puma.evalPuma("var o = Object.create(Object.getPrototypeOf(Object), { foo: { writable: true, configurable: false, enumerable: false, value: 'Puma' }, bar: { value: 20 } } );");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.bar, 20, "Passed!");
+        equal(JSON.stringify(Object.getOwnPropertyDescriptor(result.value, 'foo')), JSON.stringify(c), "Passed!");
+    });
+    
+    test("Object.defineProperty(O, P, Attributes)", function () {
+        var c = { value: "Rawr!", writable: true, enumerable: false, configurable: true };
+        var result = puma.evalPuma("var o = Object(); Object.defineProperty(o, 'puma', { configurable: true, writable: true, value: 'Rawr!' } ); o;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");     
+        equal(JSON.stringify(Object.getOwnPropertyDescriptor(result.value, 'puma')), JSON.stringify(c), "Passed!");
+    });
+    
+    test("Object.defineProperties(O, Properties)", function () {
+        var c = { value: "Rawr!", writable: true, enumerable: false, configurable: false };
+        var result = puma.evalPuma("var o = Object(); Object.defineProperties(o, { 'puma': { writable: true, value: 'Rawr!' }, 'script': { value: true } } ); o;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");     
+        equal(JSON.stringify(Object.getOwnPropertyDescriptor(result.value, 'puma')), JSON.stringify(c), "Passed!");
+        equal(result.value.script, true, "Passed!");
+    });
+    
     
     test("Function Properties of the Math Object: atan2(y,x)", function () {
         var result = puma.evalPuma("Math.atan2(25, 90);");
