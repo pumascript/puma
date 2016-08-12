@@ -17,12 +17,12 @@ require.config({
 * @enum containing the list of test suites to execute
 */
 var suites = [
-       /* './suites/base-tests.js',
+        './suites/base-tests.js',
         './suites/runtime-tests.js',
         './suites/integration-tests.js',
         './suites/Tests-7-ECMA.js',
         './suites/Tests-8-ECMA.js',
-        './suites/test-9-ecma.js', */
+        './suites/test-9-ecma.js',
         './suites/Tests-15-ECMA.js'
     ];
 
