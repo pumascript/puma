@@ -1,7 +1,11 @@
 /*          PUMASCRIPT TEST SUITE FOR ECMA COMPLIANCE
  *                        SECTION 15
  */
+
 define(['pumascript', 'esprima'], function (puma, esprima) {
+    
+    
+    //   Section 15.1: The Global Object   //
     
     test("Value Properties of the Global Object: NaN", function () {
         var result = puma.evalPuma("NaN");
@@ -135,6 +139,9 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, "https://www.googleapis.com/customsearch/v1?key=5475&name=Malik, Faridah&birth=1999:Dearborn, Michigan@USA", "Passed!");
     });
     
+    
+    //   Section 15.2: Object Objects   //
+    
     test("Object(undefined)", function () {
         var result = puma.evalPuma("Object(undefined)");
         result.makeValue();
@@ -190,12 +197,9 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(JSON.stringify(result.value), JSON.stringify(c), "Passed!");
     });
     
-    //   TODO: Ask about stringify comparing!   //
-    //   TODO: See why Object.prototype throws undefined Error, circunvented by getting Object Prototype with Object.getPrototypeOf(Object) Property.   //
-    
     test("Object.create(O [, Properties])", function () {
         var c = { value: "Puma", writable: true, enumerable: false, configurable: false };
-        var result = puma.evalPuma("var o = Object.create(Object.getPrototypeOf(Object), { foo: { writable: true, configurable: false, enumerable: false, value: 'Puma' }, bar: { value: 20 } } );");
+        var result = puma.evalPuma("var o = Object.create(null, { foo: { writable: true, configurable: false, enumerable: false, value: 'Puma' }, bar: { value: 20 } } );");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.bar, 20, "Passed!");
@@ -219,27 +223,9 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.script, true, "Passed!");
     });
     
-    QUnit.skip("Object.seal(O)", function () {
-        var c = { value: "Shaher", writable: true, enumerable: false, configurable: false };
-        var result = puma.evalPuma("var Fallen = Object.create(Object.prototype, { name: { writable: true, configurable: true, value: 'Shaher' } } ); Object.seal(Fallen);");
-        result.makeValue();
-        equal(result.success, true, "Passed!");
-        equal(JSON.stringify(Object.getOwnPropertyDescriptor(result.value, 'name')), JSON.stringify(c), "Passed!");
-        equal(Object.isExtensible(result.value), false, "Passed!");
-    });
-    
     test("Object.seal(O)", function () {
         var c = { value: "Shaher", writable: true, enumerable: false, configurable: false };
-        var result = puma.evalPuma("var Fallen = Object.create(Object.getPrototypeOf(Object), { name: { writable: true, configurable: true, value: 'Shaher' } } ); Object.seal(Fallen);");
-        result.makeValue();
-        equal(result.success, true, "Passed!");
-        equal(JSON.stringify(Object.getOwnPropertyDescriptor(result.value, 'name')), JSON.stringify(c), "Passed!");
-        equal(Object.isExtensible(result.value), false, "Passed!");
-    });
-    
-    QUnit.skip("Object.freeze(O)", function () {
-        var c = { value: "Shaher", writable: false, enumerable: false, configurable: false };
-        var result = puma.evalPuma("var Fallen = Object.create(Object.prototype, { name: { writable: true, configurable: true, value: 'Shaher' } } ); Object.freeze(Fallen);");
+        var result = puma.evalPuma("var Fallen = Object.create(null, { name: { writable: true, configurable: true, value: 'Shaher' } } ); Object.seal(Fallen);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(JSON.stringify(Object.getOwnPropertyDescriptor(result.value, 'name')), JSON.stringify(c), "Passed!");
@@ -248,80 +234,44 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     
     test("Object.freeze(O)", function () {
         var c = { value: "Shaher", writable: false, enumerable: false, configurable: false };
-        var result = puma.evalPuma("var Fallen = Object.create(Object.getPrototypeOf(Object), { name: { writable: true, configurable: true, value: 'Shaher' } } ); Object.freeze(Fallen);");
+        var result = puma.evalPuma("var Fallen = Object.create(null, { name: { writable: true, configurable: true, value: 'Shaher' } } ); Object.freeze(Fallen);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(JSON.stringify(Object.getOwnPropertyDescriptor(result.value, 'name')), JSON.stringify(c), "Passed!");
         equal(Object.isExtensible(result.value), false, "Passed!");
     });
     
-    QUnit.skip("Object.preventExtensions(O)", function () {
-        var result = puma.evalPuma("var Fallen = Object.create(Object.prototype, { name: { writable: true, configurable: true, value: 'Shaher' } } ); Object.preventExtensions(Fallen);");
-        result.makeValue();
-        equal(result.success, true, "Passed!");
-        equal(Object.isExtensible(result.value), false, "Passed!");
-    });
-    
     test("Object.preventExtensions(O)", function () {
-        var result = puma.evalPuma("var Fallen = Object.create(Object.getPrototypeOf(Object), { name: { writable: true, configurable: true, value: 'Shaher' } } ); Object.preventExtensions(Fallen);");
+        var result = puma.evalPuma("var Fallen = Object.create(null, { name: { writable: true, configurable: true, value: 'Shaher' } } ); Object.preventExtensions(Fallen);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(Object.isExtensible(result.value), false, "Passed!");
-    });
-    
-    QUnit.skip("Object.isSealed(O)", function () {
-        var result = puma.evalPuma("var Fallen = Object.create(Object.prototype, { name: { writable: true, configurable: true, value: 'Shaher' } } ); Object.seal(Fallen); Object.isSealed(Fallen);");
-        result.makeValue();
-        equal(result.success, true, "Passed!");
-        equal(result.value, true, "Passed!");
     });
     
     test("Object.isSealed(O)", function () {
-        var result = puma.evalPuma("var Fallen = Object.create(Object.getPrototypeOf(Object), { name: { writable: true, configurable: true, value: 'Shaher' } } ); Object.seal(Fallen); Object.isSealed(Fallen);");
-        result.makeValue();
-        equal(result.success, true, "Passed!");
-        equal(result.value, true, "Passed!");
-    });
-    
-    QUnit.skip("Object.isFrozen(O)", function () {
-        var result = puma.evalPuma("var Fallen = Object.create(Object.prototype, { name: { writable: true, configurable: true, value: 'Shaher' } } ); Object.freeze(Fallen); Object.isFrozen(Fallen);");
+        var result = puma.evalPuma("var Fallen = Object.create(null, { name: { writable: true, configurable: true, value: 'Shaher' } } ); Object.seal(Fallen); Object.isSealed(Fallen);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, true, "Passed!");
     });
     
     test("Object.isFrozen(O)", function () {
-        var result = puma.evalPuma("var Fallen = Object.create(Object.getPrototypeOf(Object), { name: { writable: true, configurable: true, value: 'Shaher' } } ); Object.freeze(Fallen); Object.isFrozen(Fallen);");
+        var result = puma.evalPuma("var Fallen = Object.create(null, { name: { writable: true, configurable: true, value: 'Shaher' } } ); Object.freeze(Fallen); Object.isFrozen(Fallen);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, true, "Passed!");
     });
     
-    QUnit.skip("Object.isExtensible(O)", function () {
-        var result = puma.evalPuma("var Fallen = Object.create(Object.prototype, { name: { writable: true, configurable: true, value: 'Shaher' } } ); Object.preventExtensions(Fallen); Object.isExtensible(Fallen);");
-        result.makeValue();
-        equal(result.success, true, "Passed!");
-        equal(result.value, false, "Passed!");
-    });
-    
     test("Object.isExtensible(O)", function () {
-        var result = puma.evalPuma("var Fallen = Object.create(Object.getPrototypeOf(Object), { name: { writable: true, configurable: true, value: 'Shaher' } } ); Object.preventExtensions(Fallen); Object.isExtensible(Fallen);");
+        var result = puma.evalPuma("var Fallen = Object.create(null, { name: { writable: true, configurable: true, value: 'Shaher' } } ); Object.preventExtensions(Fallen); Object.isExtensible(Fallen);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, false, "Passed!");
-    });
-    
-    QUnit.skip("Object.keys(O)", function () {
-        var a = ["name", "lv", "lead"];
-        var result = puma.evalPuma("var Fallen = Object.create(Object.prototype, { name: { writable:true, configurable:true, enumerable:true, value: 'Shaher' }, hp: { writable:true, enumerable:false, value: 617 }, lv: { configurable: true, enumerable: true, value: 32 }, lead: { configurable: false, enumerable: true, value: true } } ); Object.keys(Fallen);");
-        result.makeValue();
-        equal(result.success, true, "Passed!");
-        equal(JSON.stringify(result.value), JSON.stringify(a), "Passed!");
     });
     
     test("Object.keys(O)", function () {
         var a = ["name", "lv", "lead"];
-        var result = puma.evalPuma("var Fallen = Object.create(Object.getPrototypeOf(Object), { name: { writable:true, configurable:true, enumerable:true, value: 'Shaher' }, hp: { writable:true, enumerable:false, value: 617 }, lv: { configurable: true, enumerable: true, value: 32 }, lead: { configurable: false, enumerable: true, value: true } } ); Object.keys(Fallen);");
+        var result = puma.evalPuma("var Fallen = Object.create(null, { name: { writable:true, configurable:true, enumerable:true, value: 'Shaher' }, hp: { writable:true, enumerable:false, value: 617 }, lv: { configurable: true, enumerable: true, value: 32 }, lead: { configurable: false, enumerable: true, value: true } } ); Object.keys(Fallen);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(JSON.stringify(result.value), JSON.stringify(a), "Passed!");
@@ -335,6 +285,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
         
     
+    //   Section 15.8: The Math Object   //
     
     test("Value Properties of the Math Object: E", function () {
         var result = puma.evalPuma("Math.E;");
@@ -518,7 +469,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, -0.29100619138474915, "Passed!");
-    });    
+    });
     
     
     // Below tests done by Juan Guzmán [Gh tag]
