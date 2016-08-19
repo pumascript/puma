@@ -15,11 +15,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     test("function definiton 2", function () {
         var result = puma.evalPuma("function testA (a, b, c) {return {letterA: a, letterB:b, letterC : c}}; var test = testA('z', 'x', 'y'); test");
         result.makeValue();
-        equal(result.value, {
-            letterA: "z",
-            letterB: "x",
-            letterC: "y"
-        }, "Passed!"); //TODO
+        equal(result.value, {letterA: "z",letterB: "x",letterC: "y"}, "Passed!"); //TODO
     });
 
     test("Strict Mode Restrictions 1", function () {
@@ -66,15 +62,15 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Creates a function and uses prototype method", function () {
-        var result = puma.evalPuma("function operations (x,y) {this.x = x; this.y = y;} operations.prototype.mul = function () {return this.x*this.y;};var op = new operations(2,3);op.mul();");
+        var result = puma.evalPuma("function operations (x,y) {this.x = x; this.y = y;} operations.prototype.mul = function () {return this.x*this.y;};var op = new operations(2,3); op.mul();");
         //result.makeValue();
         equal(result.value, 6, "Passed!");
     });
 
     test("Creates a function and gets its internal value with a getter function", function () {
-        var result = puma.evalPuma("function operations (x,y) {this.x = x; this.y = y;} Object.defineProperties(operations.prototype, { varX: {get: function () { return this.x; },set: function (value) {this.x = value;}},varY: {get: function () {return this.y;},set: function (value) {this.y = value;}}});operations.prototype.add = function () {return this.x+this.y;};operations.prototype.sub = function () {return this.x-this.y;};operations.prototype.div = function () {if(this.y !== 0) {return this.x/this.y;}};operations.prototype.mul = function () {return this.x*this.y;};var op = new operations(2,3);op.varX;");
+        var result = puma.evalPuma("function operations (x) {this.x = x;} Object.defineProperties(operations.prototype, { varX: {get: function () { return this.x; },set: function (value) {this.x = value;}}});operations.prototype.add = function (num) {return this.x+num;};var op = new operations(2);op.varX;");
         result.makeValue();
-        equal(result.value, '2', "Passed!");
+        equal(result.value, 2, "Passed!");
     });
 
     test("Creates a function and calls its internal method", function () {
@@ -86,7 +82,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     test("Function Object creation", function () {
         var result = puma.evalPuma("var test = new Object();");
         result.makeValue();
-        equal(result.value, 'undefined', "Passed!");
+        equal(result.value, {}, "Passed!");
     });
 
     //ECMA 14
