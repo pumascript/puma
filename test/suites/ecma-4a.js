@@ -13,9 +13,9 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 'a1', "Passed!");
     });
     test("function definiton 2", function () {
-        var result = puma.evalPuma("function testA (a, b, c) {return {letterA: a, letterB:b, letterC : c}}; var test = testA('z', 'x', 'y'); test");
+        var result = puma.evalPuma("function testA (a, b, c) {return {letterA: a, letterB:b, letterC : c}}; var test = testA('z', 'x', 'y'); test.letterA;");
         result.makeValue();
-        equal(result.value, {letterA: "z",letterB: "x",letterC: "y"}, "Passed!"); //TODO
+        equal(result.value, "z" , "Passed!"); //TODO
     });
 
     test("Strict Mode Restrictions 1", function () {
@@ -80,9 +80,9 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Function Object creation", function () {
-        var result = puma.evalPuma("var test = new Object();");
+        var result = puma.evalPuma("var test = {};test;");
         result.makeValue();
-        equal(result.value, {}, "Passed!");
+        equal(typeof result.value, "object", "Passed!");
     });
 
     //ECMA 14
