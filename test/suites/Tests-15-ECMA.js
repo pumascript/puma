@@ -283,7 +283,71 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.success, true, "Passed!");
         equal(result.value, true, "Passed!");
     });
-        
+    
+    QUnit.skip("Object.prototype.toString()", function () {
+        var result = puma.evalPuma("var toStringP = Object.prototype.toString; toStringP.call(Math);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, '[object Math]', "Passed!");
+    });
+    
+    QUnit.skip("Object.prototype.toString(): undefined", function () {
+        var result = puma.evalPuma("var toStringU = Object.prototype.toString; toStringU.call(undefined);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, '[object Undefined]', "Passed!");
+    });
+    
+    QUnit.skip("Object.prototype.toString(): null", function () {
+        var result = puma.evalPuma("var toStringN = Object.prototype.toString; toStringN.call(null);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, '[object Null]', "Passed!");
+    });
+    
+    QUnit.skip("Object.prototype.toLocaleString()", function () {
+        var result = puma.evalPuma("var toLocaleStringP = Object.prototype.toLocaleString; toLocaleStringP.call(Math);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, '[object Math]', "Passed!");
+    });
+    
+    QUnit.skip("Object.prototype.valueOf()", function () {
+        var oni = Object.create(null, { height: { value: 1 }, width: { value: 6 }, color: { value: 'red' } });
+        var result = puma.evalPuma("var ono = Object.create(null, { height: { value: 1 }, width: { value: 6 }, color: { value: 'red' } }); var valueOfO = Object.prototype.valueOf; valueOfO.call(ono);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+        equal(result.value.height, 1, "Passed!");
+        equal(result.value.width, 6, "Passed!");
+        equal(result.value.color, 'red', "Passed!");
+    });
+    
+    QUnit.skip("Object.prototype.hasOwnProperty(V)", function () {
+        var result = puma.evalPuma("var ono = Object.create(null, { height: { value: 1 }, width: { value: 6 }, color: { value: 'red' } }); Object.prototype.hasOwnProperty.call(ono, 'color');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, true, "Passed!");
+    });
+    
+    QUnit.skip("Object.prototype.isPrototypeOf(V)", function () {
+        var result = puma.evalPuma("var oni = Object.create(null); oni.prototype = Object.prototype; oni.prototype.isPrototypeOf(Object);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, true, "Passed!");
+    });
+    
+    QUnit.skip("Object.prototype.propertyIsEnumerable(V)", function () {
+        var result = puma.evalPuma("var ono = Object.create(null, { color: { enumerable: true, value: 'red' }, range: { enumerable: false, value: 'red' } }); var pIE = Object.prototype.propertyIsEnumerable; pIE.call(ono, 'color') && !pIE.call(ono, 'range');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, true, "Passed!");
+    });
+    
+    
+    //   Section 15.3: Function Objects   //
+    
+    
     
     //   Section 15.8: The Math Object   //
     
