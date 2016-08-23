@@ -1,5 +1,3 @@
-/*global console */
-
 /*
  * pumascript-grunt
  *
@@ -10,19 +8,15 @@ module.exports = function (grunt) {
     'use strict';
 
     grunt.registerMultiTask('puma', 'Meta-programming features for Javascript', function () {
-
+  
         var puma = require('../dist/pumascript.js');
-
         // Iterate over all specified files in gruntfile.
         this.files.forEach(function (file) {
             var res = "";
             file.src.filter(function(filepath){
                 //Concatenate them
-                res = grunt.file.read(filepath);
+                res += grunt.file.read(filepath);
             });
-
-            // Eval all the file concatenation
-            console.log("INPUT :" + res);
 
             // Eval all the file concatenation
             var result = puma.evalPuma(res);
