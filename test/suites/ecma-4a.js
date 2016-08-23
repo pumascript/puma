@@ -15,7 +15,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     test("function definiton 2", function () {
         var result = puma.evalPuma("function testA (a, b, c) {return {letterA: a, letterB:b, letterC : c}}; var test = testA('z', 'x', 'y'); test.letterA;");
         result.makeValue();
-        equal(result.value, "z" , "Passed!"); //TODO
+        equal(result.value, "z", "Passed!"); //TODO
     });
 
     test("Strict Mode Restrictions 1", function () {
@@ -63,12 +63,13 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
 
     test("Creates a function and uses prototype method", function () {
         var result = puma.evalPuma("function operations (x,y) {this.x = x; this.y = y;} operations.prototype.mul = function () {return this.x*this.y;};var op = new operations(2,3); op.mul();");
-        //result.makeValue();
+        result.makeValue();
         equal(result.value, 6, "Passed!");
     });
 
-    test("Creates a function and gets its internal value with a getter function", function () {
-        var result = puma.evalPuma("function operations (x) {this.x = x;} Object.defineProperties(operations.prototype, { varX: {get: function () { return this.x; },set: function (value) {this.x = value;}}});operations.prototype.add = function (num) {return this.x+num;};var op = new operations(2);op.varX;");
+
+    qunit.skip("Creates a function and gets its internal value with a getter function", function () {
+        var result = puma.evalPuma("function operations(x) {this._x = x;}Object.defineProperty(operations.prototype, 'x', {get: function () {return this._x;}});var op = new operations(2);op.x;");
         result.makeValue();
         equal(result.value, 2, "Passed!");
     });
