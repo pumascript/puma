@@ -296,4 +296,40 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
         var result = puma.evalPuma("'hola'.substr(1) === new String('ola')");
         equal( result.value, false, "Passed!");
     });
+    
+    
+    QUnit.skip("test Date object", function(){
+        var result = puma.evalPuma("var var1 = new Date()");
+        ok(result.success, "Passed!");
+    });
+    
+    QUnit.skip("test undefined variable", function(){
+         var result = puma.evalPuma("var a; var b = typeof(a);");
+         result.makeValue();
+         ok(result.success && "undefined" === result.value, "Passed!");
+    });
+    
+    QUnit.skip("test labels", function(){
+         var result = puma.evalPuma("label1: {a = 1;}");
+         result.makeValue();
+         ok(result.success && 1 === result.value, "Passed!");
+    });
+    
+    QUnit.skip("test break in for", function(){
+         var result = puma.evalPuma("var a = 0; for(var i = 0; i<10; i++) {if (a >= 0)  break; a++;}");
+         result.makeValue();
+         ok(result.success && 0 === result.value, "Passed!");
+    });
+    
+    QUnit.skip("test continue in for", function(){
+         var result = puma.evalPuma("var a = 0; for(var i = 0; i<10; i++) {if (a >= 0)  continue; a++;}");
+         result.makeValue();
+         ok(result.success && 0 === result.value, "Passed!");
+    });
+    
+    QUnit.skip("test continue in for", function(){
+         var result = puma.evalPuma("var a = eval(var b = 1;); a;");
+         result.makeValue();
+         ok(result.success && 0 === result.value, "Passed!");
+    });
 });
