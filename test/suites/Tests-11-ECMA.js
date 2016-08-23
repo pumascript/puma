@@ -18,7 +18,8 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
 
     test("The this Keyword",function () {
         var result = puma.evalPuma("this.document;");
-        equal(result.value,this.document,"Passed!");
+        result.makeValue();
+        deepEqual(result.value,this.document,"Passed!");
     });
 
     test("Array Initializer",function () {
@@ -252,77 +253,76 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
     module("11.13 Assignment Operators");
 
     test("Simple Assigment",function () {
-        var result = puma.evalPuma(" x = 5; y = 10; x = y; x;");
+        var result = puma.evalPuma("x = 5; y = 10; x = y; x;");
         result.makeValue();
         equal(result.value,10,"Passed!");
     });
 
-  /*  test("*= Operator",function () {
-        var result = puma.evalPuma("");
-        ok(result.success,"Passed!");
-        equal(result.value(),,"Passed!");
+    test("*= Operator",function () {
+        var result = puma.evalPuma("x = 5; y = 10; x *= y; x;");
+        result.makeValue();
+        equal(result.value,50,"Passed!");
     });
 
     test("/= Operator",function () {
-        var result = puma.evalPuma("");
-        ok(result.success,"Passed!");
-        equal(result.value(),,"Passed!");
+        var result = puma.evalPuma("x = 10; y = 5; x /= y; x;");
+        result.makeValue();
+        equal(result.value,2,"Passed!");
     });
 
     test("%= Operator",function () {
-        var result = puma.evalPuma("");
-        ok(result.success,"Passed!");
-        equal(result.value(),,"Passed!");
+        var result = puma.evalPuma("x = 10; y = 5; x %= y; x;");
+        result.makeValue();
+        equal(result.value,0,"Passed!");
     });
 
     test("+= Operator",function () {
-        var result = puma.evalPuma("");
-        ok(result.success,"Passed!");
-        equal(result.value(),,"Passed!");
+        var result = puma.evalPuma("x = 5; y = 10; x += y; x;");
+        result.makeValue();
+        equal(result.value,15,"Passed!");
     });
 
     test("-= Operator",function () {
-        var result = puma.evalPuma("");
-        ok(result.success,"Passed!");
-        equal(result.value(),,"Passed!");
+        var result = puma.evalPuma("x = 10; y = 5; x -= y; x;");
+        result.makeValue();
+        equal(result.value,5,"Passed!");
     });
 
     test("<<= Operator",function () {
-        var result = puma.evalPuma("");
-        ok(result.success,"Passed!");
-        equal(result.value(),,"Passed!");
+        var result = puma.evalPuma("x = 8; y = 2; x <<= y; x;");
+        result.makeValue();
+        equal(result.value,32,"Passed!");
     });
 
     test(">>= Operator",function () {
-        var result = puma.evalPuma("");
-        ok(result.success,"Passed!");
-        equal(result.value(),,"Passed!");
+        var result = puma.evalPuma("x = 9; y = 2; x >>= y; x;");
+        result.makeValue();
+        equal(result.value,2,"Passed!");
     });
 
     test(">>>= Operator",function () {
-        var result = puma.evalPuma("");
-        ok(result.success,"Passed!");
-        equal(result.value(),,"Passed!");
+        var result = puma.evalPuma("x = 19; y = 2; x >>>= y; x;");
+        result.makeValue();
+        equal(result.value,4,"Passed!");
     });
 
     test("&= Operator",function () {
-        var result = puma.evalPuma("");
-        ok(result.success,"Passed!");
-        equal(result.value(),,"Passed!");
+        var result = puma.evalPuma("x = 14; y = 9; x &= y; x;");
+        result.makeValue();
+        equal(result.value,8,"Passed!");
     });
 
     test("^= Operator",function () {
-        var result = puma.evalPuma("");
-        ok(result.success,"Passed!");
-        equal(result.value(),,"Passed!");
+        var result = puma.evalPuma("x = 14; y = 9; x ^= y; x;");
+        result.makeValue();
+        equal(result.value,7,"Passed!");
     });
 
     test("|= Operator",function () {
-        var result = puma.evalPuma("");
-        ok(result.success,"Passed!");
-        equal(result.value(),,"Passed!");
+        var result = puma.evalPuma("x = 14; y = 9; x |= y; x;");
+        result.makeValue();
+        equal(result.value,15,"Passed!");
     });
-    */
 
     module("11.14 Comma Operators");
 
