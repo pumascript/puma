@@ -1,7 +1,7 @@
 /*global require, QUnit */
 
 /*
- *      PUMASCRIPT MAIN ENTRY FILE FOR TEST                  
+ *      PUMASCRIPT MAIN ENTRY FILE FOR TEST
  *  @file: file that includes the dependencies and executions fof RequireJS.
  */
 
@@ -14,13 +14,16 @@ require.config({
 
 
 /**
-* @enum containing the list of test suites to execute 
+* @enum containing the list of test suites to execute
 */
 var suites = [
         './suites/base-tests.js',
         './suites/runtime-tests.js',
         './suites/integration-tests.js',
-        './suites/ecma-11'
+        './suites/Tests-7-ECMA.js',
+        './suites/Tests-8-ECMA.js',
+        './suites/test-9-ecma.js',
+        './suites/Tests-11-ECMA.js'
     ];
 
 require(suites, function () {
