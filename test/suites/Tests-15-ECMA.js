@@ -347,6 +347,150 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     
     //   Section 15.3: Function Objects   //
     
+    test("The Function Constructor Called as a Function", function () {
+        var a = new Function();
+        var result = puma.evalPuma("var e = Function(); e.toString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, a.toString(), "Passed!");
+    });
+    
+    QUnit.skip("The Function Constructor Called as a new Function", function () {
+        var a = new Function();
+        var result = puma.evalPuma("var e = new Function(); e.toString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, a.toString(), "Passed!");
+    });
+    
+    test("Function(p1,p2, … ,pn,body)", function () {
+        var result = puma.evalPuma("var r = Function('x', 'fx', 'h', 'd', 'return x+fx+h+d'); r.call(this,6,8,7,0);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 21, "Passed!");
+    });
+    
+    QUnit.skip("The Function Constructor", function () {
+        var result = puma.evalPuma("var r = new Function('Sapph', 'ire', 'AMD', 'R', 'return Sapph+ire+AMD+R'); r.call(this,9,3,8,0);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 20, "Passed!");
+    });
+    
+    QUnit.skip("Function.prototype", function () {
+        var result = puma.evalPuma("Function.prototype;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 'function () {}', "Passed!");
+    });
+    
+    test("Function.length", function () {
+        var result = puma.evalPuma("Function.length;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 1, "Passed!");
+    });
+    
+    QUnit.skip("Properties of the Function Prototype Object", function () {
+        var result = puma.evalPuma("Function.prototype.length;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 0, "Passed!");
+    });
+    
+    QUnit.skip("Function.prototype.constructor", function () {
+        var c = Function('character', 'dialog', "return character+': \"'+dialog+'\"'").prototype.constructor.toString();
+        var result = puma.evalPuma("var transcript = Function('character', 'dialog', \"return character+': \\\"'+dialog+'\\\"'\"); transcript.prototype.constructor;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("Function.prototype.constructor.toString()", function () {
+        var c = Function('character', 'dialog', "return character+': \"'+dialog+'\"'").prototype.constructor.toString();
+        var result = puma.evalPuma("var transcript = Function('character', 'dialog', \"return character+': \\\"'+dialog+'\\\"'\"); transcript.prototype.constructor.toString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, c, "Passed!");
+    });
+    
+    QUnit.skip("Function.prototype.toString()", function () {
+        var result = puma.evalPuma("var transcript = Function('character', 'dialog', \"return character+': \\\"'+dialog+'\\\"'\"); transcript.prototype.toString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, '[object Object]', "Passed!");
+    });
+    
+    test("Function.prototype.apply(thisArg, argArray)", function () {
+        var result = puma.evalPuma("var transcript = Function('character', 'dialog', \"return character+': \\\"'+dialog+'\\\"'\"); transcript.apply(this, ['Eleanor', \"I'm sorry, Alphonse. I couldn't keep my promise...\"]);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, "Eleanor: \"I'm sorry, Alphonse. I couldn't keep my promise...\"", "Passed!");
+    });
+    
+    test("Function.prototype.call(thisArg [, arg1 [, arg2, … ]])", function () {
+        var result = puma.evalPuma("var transcript = Function('character', 'dialog', \"return character+': \\\"'+dialog+'\\\"'\"); transcript.call(this, 'Alphonse', \"Good-bye, Eleanor.\");");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, "Alphonse: \"Good-bye, Eleanor.\"", "Passed!");
+    });
+    
+    QUnit.skip("Function.prototype.bind(thisArg [, arg1 [, arg2, … ]])", function () {
+        var result = puma.evalPuma("var scope = 'global'; var order = { action: 'move', scope: 'flank', subject: 'ridge', getScope: Function('return this.scope;') }; var unbound_scope = order.getScope; var order_scope = unbound_scope.bind(order); order_scope();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 'flank', "Passed!");
+    });
+    
+    QUnit.skip("[[Call]] internal method", function () {
+        var result = puma.evalPuma("var scope = 'global'; var order = { action: 'move', scope: 'flank', subject: 'ridge', getScope: Function('return this.scope;') }; var unbound_scope = order.getScope; var order_scope = unbound_scope.bind(order); order_scope.call(this);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 'flank', "Passed!");
+    });
+    
+    QUnit.skip("[[Construct]] internal method", function () {
+        var result = puma.evalPuma("var scope = 'global'; var order = { action: 'move', scope: 'flank', subject: 'ridge', getScope: Function('return this.scope;') }; var unbound_scope = order.getScope; var order_scope = unbound_scope.bind(order); var o = new order_scope; o.toString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, '[object Object]', "Passed!");
+    });
+    
+    QUnit.skip("[[HasInstance]] internal method", function () {
+        var result = puma.evalPuma("var scope = 'global'; var order = { action: 'move', scope: 'flank', subject: 'ridge', getScope: Function('return this.scope;') }; var unbound_scope = order.getScope; var order_scope = unbound_scope.bind(order); var o = new order_scope; o instanceof unbound_scope;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, true, "Passed!");
+    });
+    
+    test("Properties of Function Instances: length", function () {
+        var result = puma.evalPuma("var str = Function('item', 'quantity', 'location', \"console.log('NOT IMPLEMENTED...');\"); str.length;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 3, "Passed!");
+    });
+    
+    QUnit.skip("Properties of Function Instances: prototype", function () {
+        var s = "function store(item, quantity, location) { console.log('NOT IMPLEMENTED...'); }"
+        var result = puma.evalPuma("var str = Function('item', 'quantity', 'location', \"console.log('NOT IMPLEMENTED...');\"); str.prototype;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.constructor.toString(), s, "Passed!");
+    });
+    
+    QUnit.skip("[[HasInstance]] (V)", function () {
+        var result = puma.evalPuma("function store(item, quantity, location) { /**/ }; var a = new store; a instanceof store;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, true, "Passed!");
+    });
+    
+    test("[[Get]] (P)", function () {
+        var result = puma.evalPuma("var foo = function store(item, quantity, location) { /**/ }; foo.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 'store', "Passed!");
+    });
     
     
     //   Section 15.8: The Math Object   //
