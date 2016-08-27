@@ -493,6 +493,96 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
     
+    //   Section 15.6: Boolean Objects   //
+    
+    test("The Boolean Constructor Called as a Function", function () {
+        var result = puma.evalPuma("var b = Boolean();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, false, "Passed!");
+    });
+    
+    test("Boolean(value)", function () {
+        var result = puma.evalPuma("var b = Boolean(1);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, true, "Passed!");
+    });
+    
+    QUnit.skip("The Boolean Constructor", function () {
+        var result = puma.evalPuma("var b = new Boolean();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+        equal(result.value.valueOf(), false, "Passed!");
+    });
+    
+    QUnit.skip("new Boolean(value)", function () {
+        var result = puma.evalPuma("var b = new Boolean(1);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+        equal(result.value.valueOf(), true, "Passed!");
+    });
+    
+    test("Properties of the Boolean Constructor", function () {
+        var c = Function.prototype.toString();
+        var result = puma.evalPuma("Boolean.constructor;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.length, 1, "Passed!");
+        equal(result.value.prototype.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("Boolean.prototype", function () {
+        var result = puma.evalPuma("Boolean.prototype;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.valueOf(), false, "Passed!");
+    });
+    
+    test("Properties of the Boolean Prototype Object", function () {
+        var pd = { value: false, writable: false, enumerable: false, configurable: false };
+        var result = puma.evalPuma("Object.getOwnPropertyDescriptor(Boolean, 'prototype');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(JSON.stringify(result.value), JSON.stringify(pd), "Passed!");
+    });
+    
+    QUnit.skip("Boolean.prototype.constructor", function () {
+        var c = "function Boolean() {\n    [native code]\n}"
+        var result = puma.evalPuma("Boolean.prototype.constructor;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("Boolean.prototype.toString()", function () {
+        var result = puma.evalPuma("var b = Boolean(true); b.toString()");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, "true", "Passed!");
+    });
+    
+    QUnit.skip("Boolean.prototype.valueOf()", function () {
+        var result = puma.evalPuma("var b = Boolean(true); b.valueOf()");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, true, "Passed!");
+    });
+    
+    QUnit.skip("Properties of Boolean Instances", function () {
+        var result = puma.evalPuma("var b = true; b.valueOf();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, true, "Passed!");
+    });
+    
+    
+    //   Section 15.7: Number Objects   //
+    
+    
+    
     //   Section 15.8: The Math Object   //
     
     test("Value Properties of the Math Object: E", function () {
