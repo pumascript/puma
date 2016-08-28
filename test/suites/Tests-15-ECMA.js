@@ -558,14 +558,14 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
     QUnit.skip("Boolean.prototype.toString()", function () {
-        var result = puma.evalPuma("var b = Boolean(true); b.toString()");
+        var result = puma.evalPuma("var b = Boolean(true); b.toString();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, "true", "Passed!");
     });
     
     QUnit.skip("Boolean.prototype.valueOf()", function () {
-        var result = puma.evalPuma("var b = Boolean(true); b.valueOf()");
+        var result = puma.evalPuma("var b = Boolean(true); b.valueOf();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, true, "Passed!");
@@ -581,6 +581,86 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     
     //   Section 15.7: Number Objects   //
     
+    test("The Number Constructor Called as a Function", function () {
+        var result = puma.evalPuma("var n = Number();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 0, "Passed!");
+    });
+    
+    test("Number([value])", function () {
+        var result = puma.evalPuma("var n = Number(2);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 2, "Passed!");
+    });
+    
+    QUnit.skip("The Number Constructor", function () {
+        var result = puma.evalPuma("var n = new Number();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+        equal(result.value.valueOf(), 0, "Passed!");
+    });
+    
+    QUnit.skip("new Number([value])", function () {
+        var result = puma.evalPuma("var n = new Number(2);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+        equal(result.value.valueOf(), 2, "Passed!");
+    });
+    
+    test("Properties of the Number Constructor", function () {
+        var c = Function.prototype.toString();
+        var result = puma.evalPuma("Number.constructor;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.length, 1, "Passed!");
+        equal(result.value.prototype.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("Number.prototype", function () {
+        var result = puma.evalPuma("Number.prototype;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.valueOf(), 0, "Passed!");
+    });
+    
+    test("Number.MAX_VALUE", function () {
+        var result = puma.evalPuma("Number.MAX_VALUE;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 1.7976931348623157e+308, "Passed!");
+    });
+    
+    test("Number.MIN_VALUE", function () {
+        var result = puma.evalPuma("Number.MIN_VALUE;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 5e-324, "Passed!");
+    });
+    
+    test("Number.NaN", function () {
+        var result = puma.evalPuma("Number.NaN;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(isNaN(result.value), true, "Passed!");
+    });
+    
+    test("Number.NEGATIVE_INFINITY", function () {
+        var result = puma.evalPuma("Number.NEGATIVE_INFINITY;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, -Infinity, "Passed!");
+    });
+    
+    test("Number.POSITIVE_INFINITY", function () {
+        var result = puma.evalPuma("Number.POSITIVE_INFINITY;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, Infinity, "Passed!");
+    });
     
     
     //   Section 15.8: The Math Object   //
