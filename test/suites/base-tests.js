@@ -91,7 +91,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
     });
 
     test("for statement 1", function(){
-        var result = puma.evalPuma("for(var i=0;i<2;i=i+1) { j+=1; }");
+        var result = puma.evalPuma("var j; for(var i=0;i<2;i=i+1) { j+=1; }");
         equal(result.value, 2, "Passed!");
     });
 
@@ -101,12 +101,12 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
     });
 
     test("for statement 3", function(){
-        var result = puma.evalPuma("var b=true; for(var i=0;b;i=i+1) { if(i>5)b=false; j+=1;}");
+        var result = puma.evalPuma("var b=true; var j; for(var i=0;b;i=i+1) { if(i>5)b=false; j+=1;}");
         equal(result.value, 7, "Passed!");
     });
 
     test("for statement update test", function(){
-        var result = puma.evalPuma("var first = true; var firstValue = -1; for(var i=5;i<7;i=i+1) { console.log(i); if(first){ firstValue = i; first = false; }  j+=1; } console.log(firstValue); firstValue;");
+        var result = puma.evalPuma("var first = true; var firstValue = -1; var j; for(var i=5;i<7;i=i+1) { console.log(i); if(first){ firstValue = i; first = false; }  j+=1; } console.log(firstValue); firstValue;");
         result.makeValue();
         equal(result.value, 5, "Passed!");
     });

@@ -25,7 +25,8 @@ var suites = [
         './suites/test-9-ecma.js',
         './suites/test-12-ecma.js',
         './suites/test-13-ecma.js',
-    ];
+        './suites/Tests-15-ECMA.js'
+];
 
 require(suites, function () {
     // Required to make it work under phantomjs environment
