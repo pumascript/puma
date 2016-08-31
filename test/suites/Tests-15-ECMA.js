@@ -662,7 +662,73 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, Infinity, "Passed!");
     });
     
+    test("Properties of the Number Prototype Object", function () {
+        var pd = { value: 0, writable: false, enumerable: false, configurable: false };
+        var result = puma.evalPuma("Object.getOwnPropertyDescriptor(Number, 'prototype');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(JSON.stringify(result.value), JSON.stringify(pd), "Passed!");
+    });
     
+    QUnit.skip("Number.prototype.constructor", function () {
+        var c = "function Number() {\n    [native code]\n}"
+        var result = puma.evalPuma("Number.prototype.constructor;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), c, "Passed!");
+    });
+    
+    test("Number.prototype.toString([radix])", function () {
+        var result = puma.evalPuma("var n = Number(2029); n.toString(16);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, "7ed", "Passed!");
+    });
+    
+    test("Number.prototype.toLocaleString()", function () {
+        var a = 2029; var c = a.toLocaleString();
+        var result = puma.evalPuma("var n = Number(2029); n.toLocaleString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, c, "Passed!");
+    });
+    
+    test("Number.prototype.valueOf()", function () {
+        var result = puma.evalPuma("var n = Number(2027); n.valueOf();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 2027, "Passed!");
+    });
+    
+    test("Number.prototype.toFixed(fractionDigits)", function () {
+        var result = puma.evalPuma("var n = Number(0.08); n.toFixed(4);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, "0.0800", "Passed!");
+    });
+    
+    test("Number.prototype.toExponential(fractionDigits)", function () {
+        var result = puma.evalPuma("var n = Number(290.8882087); n.toExponential(3);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, "2.909e+2", "Passed!");
+    });
+    
+    test("Number.prototype.toPrecision(precision)", function () {
+        var result = puma.evalPuma("var n = Number(4.8481368); n.toPrecision(4);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, "4.848", "Passed!");
+    });
+    
+    test("Properties of Number Instances", function () {
+        var result = puma.evalPuma("var n = 2; n.valueOf();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 2, "Passed!");
+    });
+    
+        
     //   Section 15.8: The Math Object   //
     
     test("Value Properties of the Math Object: E", function () {
