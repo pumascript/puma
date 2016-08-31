@@ -916,6 +916,31 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
     
+    //   Section 15.12: The JSON Object   //
+    
+    test("JSON.parse(text)", function () {
+        var result = puma.evalPuma("JSON.parse('{\"Name\":\"LEO\",\"Terminal\":25000}');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(JSON.stringify(result.value), '{"Name":"LEO","Terminal":25000}', "Passed!");
+    });
+    
+    test("JSON.parse(text [, reviver ])", function () {
+        var result = puma.evalPuma("JSON.parse('{\"1\": 1, \"2\": 2, \"3\": {\"4\": 4, \"5\": {\"6\": 6}}}', function(k, v) { return v; });");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(JSON.stringify(result.value), "{\"1\":1,\"2\":2,\"3\":{\"4\":4,\"5\":{\"6\":6}}}", "Passed!");
+    });
+    
+    /*
+    test("JSON.parse(text [, reviver ])", function () {
+        var result = puma.evalPuma("var foo = {foundation: \"Mozilla\", model: \"box\", week: 45, transport: \"car\", month: 7}; var j = JSON.stringify(foo, function (key, value) {  if (typeof value === \"string\") {  return undefined;  } return value; }); console.log(j);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, "{\"week\":45,\"month\":7}", "Passed!");
+    });
+    */
+    
     // Below tests done by Juan Guzmán [Gh tag]
     
     QUnit.skip("15.4.2.1 new Array ( [ item0 [ , item1 [ , ... ] ] ] )", function () {
