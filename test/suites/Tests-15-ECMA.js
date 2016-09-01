@@ -527,11 +527,11 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     
     test("Properties of the Boolean Constructor", function () {
         var c = Function.prototype.toString();
-        var result = puma.evalPuma("Boolean.constructor;");
+        var result = puma.evalPuma("Boolean;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.length, 1, "Passed!");
-        equal(result.value.prototype.toString(), c, "Passed!");
+        equal(result.value.constructor.prototype.toString(), c, "Passed!");
     });
     
     QUnit.skip("Boolean.prototype", function () {
@@ -613,11 +613,11 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     
     test("Properties of the Number Constructor", function () {
         var c = Function.prototype.toString();
-        var result = puma.evalPuma("Number.constructor;");
+        var result = puma.evalPuma("Number;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.length, 1, "Passed!");
-        equal(result.value.prototype.toString(), c, "Passed!");
+        equal(result.value.constructor.prototype.toString(), c, "Passed!");
     });
     
     QUnit.skip("Number.prototype", function () {
@@ -925,6 +925,301 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(typeof result.value, 'string', "Passed!");
     });
     
+    test("Date( [ year [, month [, date [, hours [, minutes [, seconds [, ms ]]]]]]])", function () {
+        var result = puma.evalPuma("Date(1992, 3, 21, 'violets', 'blue', 'microwave', 'banana');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'string', "Passed!");
+    });
+    
+    QUnit.skip("The Date Constructor", function () {
+        var result = puma.evalPuma("new Date();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+    });
+    
+    QUnit.skip("new Date(year, month [, date [, hours [, minutes [, seconds [, ms ]]]]])", function () {
+        var result = puma.evalPuma("new Date(1993, 8, 24, 23, 58, 32, 12);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+    });
+    
+    QUnit.skip("new Date(value)", function () {
+        var result = puma.evalPuma("new Date(2595461133867);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+    });
+    
+    QUnit.skip("new Date()", function () {
+        var result = puma.evalPuma("new Date();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(Object.isExtensible(result.value), true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+    });
+    
+    test("Properties of the Date Constructor", function () {
+        var c = Function.prototype.toString();
+        var result = puma.evalPuma("Date;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.length, 7, "Passed!");
+        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype", function () {
+        var result = puma.evalPuma("Date.prototype;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+    });
+    
+    test("Date.parse(string)", function () {
+        var result = puma.evalPuma("Date.parse('Feb 31, 1933');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, -1162328400000, "Passed!");
+    });
+    
+    test("Date.UTC (year, month [, date [, hours [, minutes [, seconds [, ms ]]]]])", function () {
+        var result = puma.evalPuma("Date.UTC(1971, 6, 28, 0, 14, 7, 802);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 49508047802, "Passed!");
+    });
+    
+    test("Date.now()", function () {
+        var result = puma.evalPuma("Date.now();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    test("Properties of the Date Prototype Object", function () {
+        var result = puma.evalPuma("Object.getOwnPropertyDescriptor(Date, 'prototype');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        //equal(result.value, NaN, "Passed!");
+        equal(result.value.writable, false, "Passed!");
+        equal(result.value.enumerable, false, "Passed!");
+        equal(result.value.configurable, false, "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.constructor", function () {
+        var c = "function Date() {\n    [native code]\n}"
+        var result = puma.evalPuma("Date.prototype.constructor;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.toString()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.toString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'string', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.toDateString()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.toDateString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'string', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.toTimeString()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.toTimeString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'string', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.toLocaleString()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.toLocaleString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'string', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.toLocaleDateString()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.toLocaleDateString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'string', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.toLocaleTimeString()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.toLocaleTimeString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'string', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.valueOf()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.valueOf();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getTime()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getTime();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getFullYear()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getFullYear();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getUTCFullYear()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getUTCFullYear();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getMonth()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getMonth();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getUTCMonth()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getUTCMonth();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getDate()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getDate();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getUTCDate()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getUTCDate();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getDay()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getDay();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getUTCDay()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getUTCDay();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getHours()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getHours();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getUTCHours()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getUTCHours();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getMinutes()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getMinutes();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getUTCMinutes()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getUTCMinutes();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getSeconds()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getSeconds();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getUTCSeconds()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getUTCSeconds();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getMilliseconds()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getMilliseconds();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getUTCMilliseconds()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getUTCMilliseconds();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getTimezoneOffset()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getTimezoneOffset();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    // Do set
+    
+    QUnit.skip("Date.prototype.toUTCString()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.toUTCString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'string', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.toISOString()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.toISOString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'string', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.toJSON(key)", function () {
+        var result = puma.evalPuma("var d = new Date(); d.toJSON(1);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'string', "Passed!");
+    });
+    
+    test("Properties of Date Instances", function () {
+        var result = puma.evalPuma("var d = Date(); d.valueOf();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'string', "Passed!");
+    });
     
     //   Section 15.12: The JSON Object   //
     
