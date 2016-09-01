@@ -932,14 +932,24 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(JSON.stringify(result.value), "{\"1\":1,\"2\":2,\"3\":{\"4\":4,\"5\":{\"6\":6}}}", "Passed!");
     });
     
-    /*
-    test("JSON.parse(text [, reviver ])", function () {
-        var result = puma.evalPuma("var foo = {foundation: \"Mozilla\", model: \"box\", week: 45, transport: \"car\", month: 7}; var j = JSON.stringify(foo, function (key, value) {  if (typeof value === \"string\") {  return undefined;  } return value; }); console.log(j);");
+    test("JSON.stringify(text)", function () {
+        var c = '{"Name":"LEO","Terminal":25000}';
+        var result = puma.evalPuma("JSON.stringify({\"Name\":\"LEO\",\"Terminal\":25000});");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value, "{\"week\":45,\"month\":7}", "Passed!");
+        equal(result.value, '{"Name":"LEO","Terminal":25000}', "Passed!");
     });
-    */
+    
+    test("JSON.stringify ( value [ , replacer [ , space ] ] )", function () {
+        /*var c = JSON.stringify({ foundation: "Mozilla", model: "box", week: 45, transport: "car", month: 7, working: false }, function (key, value) { if (typeof value === "string") { return undefined; } return value; }, '\t');*/
+        
+        var result = puma.evalPuma("var foo = { foundation: \"Mozilla\", model: \"box\", week: 45, transport: \"car\", month: 7, working: false }; var j = JSON.stringify(foo, Function('key', 'value', 'if (typeof value === \"string\") { return undefined; } return value;'), \"\t\");");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, "{\n\t\"week\": 45,\n\t\"month\": 7,\n\t\"working\": false\n}", "Passed!");
+        //equal(result.value, c, "Passed!");
+    });
+    
     
     // Below tests done by Juan Guzmán [Gh tag]
     
