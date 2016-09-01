@@ -11,7 +11,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         var result = puma.evalPuma("NaN");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(typeof result.value, typeof NaN, "Passed!");
+        equal(isNaN(result.value), true, "Passed!");
     });
     
     test("Value Properties of the Global Object: Infinity", function () {
@@ -80,7 +80,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         var result = puma.evalPuma("parseInt ('0xT');");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(typeof result.value, typeof NaN, "Passed!");
+        equal(isNaN(result.value), true, "Passed!");
     });
     
     test("parseFloat(string)", function () {
@@ -94,7 +94,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         var result = puma.evalPuma("parseFloat('UD4');");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(typeof result.value, typeof NaN, "Passed!");
+        equal(isNaN(result.value), true, "Passed!");
     });
     
     test("isNaN(number)", function () {
@@ -913,6 +913,16 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, -0.29100619138474915, "Passed!");
+    });
+    
+    
+    //   Section 15.9: Date Objects   //
+    
+    test("The Date Constructor Called as a Function", function () {
+        var result = puma.evalPuma("Date();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'string', "Passed!");
     });
     
     
