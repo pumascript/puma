@@ -1344,6 +1344,675 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
     
+    //   Section 15.11: Error Objects   //
+    
+    test("The Error Constructor Called as a Function", function () {
+        var result = puma.evalPuma("var e = Error(); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.name, 'Error', "Passed!");
+    });
+    
+    test("Error(message)", function () {
+        var result = puma.evalPuma("Error('lp0 on fire');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.message, 'lp0 on fire', "Passed!");
+    });
+    
+    QUnit.skip("The Error Constructor", function () {
+        var result = puma.evalPuma("var e = new Error('lp0 on fire'); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.name, 'Error', "Passed!");
+    });
+    
+    QUnit.skip("new Error(message)", function () {
+        var result = puma.evalPuma("var e = new Error(); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.message, 'lp0 on fire', "Passed!");
+    });
+    
+    test("Properties of the Error Constructor", function () {
+        var c = Function.prototype.toString();
+        var result = puma.evalPuma("Error;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.length, 1, "Passed!");
+        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("Error.prototype", function () {
+        var result = puma.evalPuma("Error.prototype;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), 'Error', "Passed!");
+    });
+    
+    test("Properties of the Error Prototype Object", function () {
+        var result = puma.evalPuma("Object.getOwnPropertyDescriptor(Error, 'prototype');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.writable, false, "Passed!");
+        equal(result.value.enumerable, false, "Passed!");
+        equal(result.value.configurable, false, "Passed!");
+    });
+    
+    QUnit.skip("Error.prototype.constructor", function () {
+        var c = "function Error() {\n    [native code]\n}"
+        var result = puma.evalPuma("Error.prototype.constructor;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("Error.prototype.name", function () {
+        var result = puma.evalPuma("Error.prototype.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(Error.prototype.toString(), 'Error', "Passed!");
+    });
+    
+    QUnit.skip("Error.prototype.message", function () {
+        var result = puma.evalPuma("Error.prototype.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(Error.prototype.toString(), '', "Passed!");
+    });
+    
+    QUnit.skip("Error.prototype.toString()", function () {
+        var result = puma.evalPuma("var e = new Error('Does not compute.'); e.toString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 'Error: Does not compute.', "Passed!");
+    });
+    
+    test("Properties of Error Instances", function () {
+        var result = puma.evalPuma("var e = Error(); e.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 'Error', "Passed!");
+    });
+    
+    /*
+        NOTE
+                Since puma throws Type Error by own account when it stumbles upon 
+                most of the errors herein tested, discerning the error thrown in 
+                runtime by the original script seems not possible/profitable.
+                Particular error instances are then not compared or either compared
+                against general instance Error.
+        
+        END OF NOTE
+    */
+    
+    /////       EvalError not implemented in ECMA-262 edition number 5.1       /////
+    
+    /*
+    test("EvalError: XXXXX", function () {
+        try {
+            var result = puma.evalPuma("new Array(-1);");
+        }
+        catch (e) {
+            if (e instanceof EvalError) {
+            equal(e.message, "HERE ERROR MESSAGE TO BE THROWN", "Passed!");
+            }
+        }
+    });
+    */
+    
+    test("RangeError: new Array(len)", function () {
+        try {
+            var result = puma.evalPuma("var a = new Array(-1);");
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                equal(true, true, "Passed!");
+            }
+        }
+    });
+    
+    /////       TEMPLATE LEFT AS REFERENCE FOR FUTURE CODING       /////
+    
+    /*
+    test("RangeError: XXXXX", function () {
+        try {
+            var result = puma.evalPuma("HERE ERROR THROWING CODE;");
+        }
+        catch (e) {
+            if (e instanceof RangeError) {
+                equal(e.message, "HERE ERROR MESSAGE TO BE THROWN", "Passed!");
+        }
+    });
+    */
+    
+    QUnit.skip("ReferenceError: GetValue(V)", function () {
+        try {
+            var result = puma.evalPuma("var u = UndefinedVariable;");
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                equal(true, true, "Passed!");
+            }
+        }
+    });
+    
+    /////       TEMPLATE LEFT AS REFERENCE FOR FUTURE CODING       /////
+    
+    /*
+    test("ReferenceError: XXXXX", function () {
+        try {
+            var result = puma.evalPuma("HERE ERROR THROWING CODE;");
+        }
+        catch (e) {
+            if (e instanceof EvalError) {
+                equal(e.message, "HERE ERROR MESSAGE TO BE THROWN", "Passed!");
+            }
+        }
+    });
+    */
+    
+    test("SyntaxError: Object Initialiser", function () {
+        try {
+            var result = puma.evalPuma("obj = new Object({Name:'LEO', Terminal:25000, Trayectorie:'Panchaea}); obj;");
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                equal(true, true, "Passed!");
+            }
+        }
+    });
+    
+    /////       TEMPLATE LEFT AS REFERENCE FOR FUTURE CODING       /////
+    
+    /*
+    test("SyntaxError: XXXXX", function () {
+        try {
+            var result = puma.evalPuma("HERE ERROR THROWING CODE;");
+        }
+        catch (e) {
+            if (e instanceof SyntaxError) {
+                equal(e.message, "HERE ERROR MESSAGE TO BE THROWN", "Passed!");
+            }
+        }
+    });
+    */
+    
+    QUnit.skip("TypeError: Object Internal Properties and Methods", function () {
+        try {
+            var result = puma.evalPuma("Object().put(this);");
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                equal(true, true, "Passed!");
+            }
+        }
+    });
+    
+    /////       TEMPLATE LEFT AS REFERENCE FOR FUTURE CODING       /////
+    
+    /*
+    test("TypeError: XXXXX", function () {
+        try {
+            var result = puma.evalPuma("HERE ERROR THROWING CODE;");
+        }
+        catch (e) {
+            if (e instanceof TypeError) {
+                equal(e.message, "HERE ERROR MESSAGE TO BE THROWN", "Passed!");
+            }
+        }
+    });
+    */
+    
+    test("URIError: decodeURI(encodedURI)", function () {
+        try {
+            var result = puma.evalPuma("decodeURI('%');");
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                equal(true, true, "Passed!");
+            }
+        }
+    });
+    
+    /////       TEMPLATE LEFT AS REFERENCE FOR FUTURE CODING       /////
+    
+    /*
+    test("TypeError: XXXXX", function () {
+        try {
+            var result = puma.evalPuma("HERE ERROR THROWING CODE;");
+        }
+        catch (e) {
+            if (e instanceof TypeError) {
+                equal(e.message, "HERE ERROR MESSAGE TO BE THROWN", "Passed!");
+            }
+        }
+    });
+    */
+    
+    // Native Error Tests: URIError
+    
+    // Native Error Tests: RangeError
+    
+    test("The RangeError Constructor Called as a Function", function () {
+        var result = puma.evalPuma("var e = RangeError(); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.name, 'RangeError', "Passed!");
+    });
+    
+    test("RangeError(message)", function () {
+        var result = puma.evalPuma("RangeError('lp0 on fire');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.message, 'lp0 on fire', "Passed!");
+    });
+    
+    QUnit.skip("The RangeError Constructor", function () {
+        var result = puma.evalPuma("var e = new RangeError('lp0 on fire'); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.name, 'RangeError', "Passed!");
+    });
+    
+    QUnit.skip("new RangeError(message)", function () {
+        var result = puma.evalPuma("var e = new RangeError(); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.message, 'lp0 on fire', "Passed!");
+    });
+    
+    test("Properties of the RangeError Constructor", function () {
+        var c = Function.prototype.toString();
+        var result = puma.evalPuma("RangeError;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.length, 1, "Passed!");
+        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("RangeError.prototype", function () {
+        var result = puma.evalPuma("RangeError.prototype;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");console.log();
+        equal(result.value.toString(), 'RangeError', "Passed!");
+    });
+    
+    test("Properties of the RangeError Prototype Object", function () {
+        var result = puma.evalPuma("Object.getOwnPropertyDescriptor(RangeError, 'prototype');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.writable, false, "Passed!");
+        equal(result.value.enumerable, false, "Passed!");
+        equal(result.value.configurable, false, "Passed!");
+    });
+    
+    QUnit.skip("RangeError.prototype.constructor", function () {
+        var c = "function RangeError() {\n    [native code]\n}"
+        var result = puma.evalPuma("RangeError.prototype.constructor;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("RangeError.prototype.name", function () {
+        var result = puma.evalPuma("RangeError.prototype.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(RangeError.prototype.toString(), 'RangeError', "Passed!");
+    });
+    
+    QUnit.skip("RangeError.prototype.message", function () {
+        var result = puma.evalPuma("RangeError.prototype.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(RangeError.prototype.toString(), '', "Passed!");
+    });
+    
+    test("Properties of RangeError Instances", function () {
+        var result = puma.evalPuma("var e = RangeError(); e.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 'RangeError', "Passed!");
+    });
+    
+    // Native Error Tests: ReferenceError
+    
+    test("The ReferenceError Constructor Called as a Function", function () {
+        var result = puma.evalPuma("var e = ReferenceError(); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.name, 'ReferenceError', "Passed!");
+    });
+    
+    test("ReferenceError(message)", function () {
+        var result = puma.evalPuma("ReferenceError('lp0 on fire');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.message, 'lp0 on fire', "Passed!");
+    });
+    
+    QUnit.skip("The ReferenceError Constructor", function () {
+        var result = puma.evalPuma("var e = new ReferenceError('lp0 on fire'); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.name, 'ReferenceError', "Passed!");
+    });
+    
+    QUnit.skip("new ReferenceError(message)", function () {
+        var result = puma.evalPuma("var e = new ReferenceError(); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.message, 'lp0 on fire', "Passed!");
+    });
+    
+    test("Properties of the ReferenceError Constructor", function () {
+        var c = Function.prototype.toString();
+        var result = puma.evalPuma("ReferenceError;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.length, 1, "Passed!");
+        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("ReferenceError.prototype", function () {
+        var result = puma.evalPuma("ReferenceError.prototype;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), 'ReferenceError', "Passed!");
+    });
+    
+    test("Properties of the ReferenceError Prototype Object", function () {
+        var result = puma.evalPuma("Object.getOwnPropertyDescriptor(ReferenceError, 'prototype');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.writable, false, "Passed!");
+        equal(result.value.enumerable, false, "Passed!");
+        equal(result.value.configurable, false, "Passed!");
+    });
+    
+    QUnit.skip("ReferenceError.prototype.constructor", function () {
+        var c = "function ReferenceError() {\n    [native code]\n}"
+        var result = puma.evalPuma("ReferenceError.prototype.constructor;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("ReferenceError.prototype.name", function () {
+        var result = puma.evalPuma("ReferenceError.prototype.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(ReferenceError.prototype.toString(), 'ReferenceError', "Passed!");
+    });
+    
+    QUnit.skip("ReferenceError.prototype.message", function () {
+        var result = puma.evalPuma("ReferenceError.prototype.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(ReferenceError.prototype.toString(), '', "Passed!");
+    });
+    
+    test("Properties of ReferenceError Instances", function () {
+        var result = puma.evalPuma("var e = ReferenceError(); e.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 'ReferenceError', "Passed!");
+    });
+    
+    // Native Error Tests: SyntaxError
+
+    test("The SyntaxError Constructor Called as a Function", function () {
+        var result = puma.evalPuma("var e = SyntaxError(); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.name, 'SyntaxError', "Passed!");
+    });
+    
+    test("SyntaxError(message)", function () {
+        var result = puma.evalPuma("SyntaxError('lp0 on fire');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.message, 'lp0 on fire', "Passed!");
+    });
+    
+    QUnit.skip("The SyntaxError Constructor", function () {
+        var result = puma.evalPuma("var e = new SyntaxError('lp0 on fire'); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.name, 'SyntaxError', "Passed!");
+    });
+    
+    QUnit.skip("new SyntaxError(message)", function () {
+        var result = puma.evalPuma("var e = new SyntaxError(); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.message, 'lp0 on fire', "Passed!");
+    });
+    
+    test("Properties of the SyntaxError Constructor", function () {
+        var c = Function.prototype.toString();
+        var result = puma.evalPuma("SyntaxError;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.length, 1, "Passed!");
+        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("SyntaxError.prototype", function () {
+        var result = puma.evalPuma("SyntaxError.prototype;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), 'SyntaxError', "Passed!");
+    });
+    
+    test("Properties of the SyntaxError Prototype Object", function () {
+        var result = puma.evalPuma("Object.getOwnPropertyDescriptor(SyntaxError, 'prototype');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.writable, false, "Passed!");
+        equal(result.value.enumerable, false, "Passed!");
+        equal(result.value.configurable, false, "Passed!");
+    });
+    
+    QUnit.skip("SyntaxError.prototype.constructor", function () {
+        var c = "function SyntaxError() {\n    [native code]\n}"
+        var result = puma.evalPuma("SyntaxError.prototype.constructor;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("SyntaxError.prototype.name", function () {
+        var result = puma.evalPuma("SyntaxError.prototype.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(SyntaxError.prototype.toString(), 'SyntaxError', "Passed!");
+    });
+    
+    QUnit.skip("SyntaxError.prototype.message", function () {
+        var result = puma.evalPuma("SyntaxError.prototype.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(SyntaxError.prototype.toString(), '', "Passed!");
+    });
+    
+    test("Properties of SyntaxError Instances", function () {
+        var result = puma.evalPuma("var e = SyntaxError(); e.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 'SyntaxError', "Passed!");
+    });
+    
+    // Native Error Tests: TypeError
+
+    test("The TypeError Constructor Called as a Function", function () {
+        var result = puma.evalPuma("var e = TypeError(); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.name, 'TypeError', "Passed!");
+    });
+    
+    test("TypeError(message)", function () {
+        var result = puma.evalPuma("TypeError('lp0 on fire');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.message, 'lp0 on fire', "Passed!");
+    });
+    
+    QUnit.skip("The TypeError Constructor", function () {
+        var result = puma.evalPuma("var e = new TypeError('lp0 on fire'); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.name, 'TypeError', "Passed!");
+    });
+    
+    QUnit.skip("new TypeError(message)", function () {
+        var result = puma.evalPuma("var e = new TypeError(); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.message, 'lp0 on fire', "Passed!");
+    });
+    
+    test("Properties of the TypeError Constructor", function () {
+        var c = Function.prototype.toString();
+        var result = puma.evalPuma("TypeError;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.length, 1, "Passed!");
+        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("TypeError.prototype", function () {
+        var result = puma.evalPuma("TypeError.prototype;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), 'TypeError', "Passed!");
+    });
+    
+    test("Properties of the TypeError Prototype Object", function () {
+        var result = puma.evalPuma("Object.getOwnPropertyDescriptor(TypeError, 'prototype');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.writable, false, "Passed!");
+        equal(result.value.enumerable, false, "Passed!");
+        equal(result.value.configurable, false, "Passed!");
+    });
+    
+    QUnit.skip("TypeError.prototype.constructor", function () {
+        var c = "function TypeError() {\n    [native code]\n}"
+        var result = puma.evalPuma("TypeError.prototype.constructor;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("TypeError.prototype.name", function () {
+        var result = puma.evalPuma("TypeError.prototype.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(TypeError.prototype.toString(), 'TypeError', "Passed!");
+    });
+    
+    QUnit.skip("TypeError.prototype.message", function () {
+        var result = puma.evalPuma("TypeError.prototype.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(TypeError.prototype.toString(), '', "Passed!");
+    });
+    
+    test("Properties of TypeError Instances", function () {
+        var result = puma.evalPuma("var e = TypeError(); e.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 'TypeError', "Passed!");
+    });
+    
+    // Native Error Tests: URIError
+
+    test("The URIError Constructor Called as a Function", function () {
+        var result = puma.evalPuma("var e = URIError(); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.name, 'URIError', "Passed!");
+    });
+    
+    test("URIError(message)", function () {
+        var result = puma.evalPuma("URIError('lp0 on fire');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.message, 'lp0 on fire', "Passed!");
+    });
+    
+    QUnit.skip("The URIError Constructor", function () {
+        var result = puma.evalPuma("var e = new URIError('lp0 on fire'); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.name, 'URIError', "Passed!");
+    });
+    
+    QUnit.skip("new URIError(message)", function () {
+        var result = puma.evalPuma("var e = new URIError(); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.message, 'lp0 on fire', "Passed!");
+    });
+    
+    test("Properties of the URIError Constructor", function () {
+        var c = Function.prototype.toString();
+        var result = puma.evalPuma("URIError;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.length, 1, "Passed!");
+        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("URIError.prototype", function () {
+        var result = puma.evalPuma("URIError.prototype;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), 'URIError', "Passed!");
+    });
+    
+    test("Properties of the URIError Prototype Object", function () {
+        var result = puma.evalPuma("Object.getOwnPropertyDescriptor(URIError, 'prototype');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.writable, false, "Passed!");
+        equal(result.value.enumerable, false, "Passed!");
+        equal(result.value.configurable, false, "Passed!");
+    });
+    
+    QUnit.skip("URIError.prototype.constructor", function () {
+        var c = "function URIError() {\n    [native code]\n}"
+        var result = puma.evalPuma("URIError.prototype.constructor;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("URIError.prototype.name", function () {
+        var result = puma.evalPuma("URIError.prototype.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(URIError.prototype.toString(), 'URIError', "Passed!");
+    });
+    
+    QUnit.skip("URIError.prototype.message", function () {
+        var result = puma.evalPuma("URIError.prototype.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(URIError.prototype.toString(), '', "Passed!");
+    });
+    
+    test("Properties of URIError Instances", function () {
+        var result = puma.evalPuma("var e = URIError(); e.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 'URIError', "Passed!");
+    });
+    
+    
     //   Section 15.12: The JSON Object   //
     
     test("JSON.parse(text)", function () {
