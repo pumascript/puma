@@ -1,9 +1,3 @@
-/**
- * Created by Leo on 10/7/2016.
- */
-
-/*global define, test, ok, equal */
-
 /*
  *              PUMASCRIPT ECMA-11 TEST SUITE
  *  @file: Base expressions test suite for the language
@@ -80,7 +74,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
 
     module("11.4 Unary Operators");
 
-    test("Delete Operator",function () {
+    QUnit.skip("Delete Operator",function () {
         var result = puma.evalPuma("var x = {}; x.property = 'propertyThatShouldNotBe'; delete x.property; x.property;");
         result.makeValue();
         equal(result.value,undefined,"Passed!");
@@ -158,7 +152,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
 
     module("11.8 Relational Operators");
 
-     test("< Operator",function () {
+    test("< Operator",function () {
         var result = puma.evalPuma("0 < 1;");
         ok(result.value,"Passed!");
     });
@@ -184,7 +178,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
         equal(result.value,true,"Passed!");
     });
 
-    test("In Operator",function () {
+    QUnit.skip("In Operator",function () {
         var result = puma.evalPuma("1 in [0,1];");
         ok(result.value,"Passed!");
     });
@@ -241,15 +235,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
     });
 
     module("11.12 Conditional Operators");
-    /*
 
-     test("",function () {
-     var result = puma.evalPuma("");
-     ok(result.success,"Passed!");
-     equal(result.value(),,"Passed!");
-     });
-
-     */
     module("11.13 Assignment Operators");
 
     test("Simple Assigment",function () {
@@ -264,7 +250,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
         equal(result.value,50,"Passed!");
     });
 
-    test("/= Operator",function () {
+    QUnit.skip("/= Operator",function () {
         var result = puma.evalPuma("x = 10; y = 5; x /= y; x;");
         result.makeValue();
         equal(result.value,2,"Passed!");
@@ -326,7 +312,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
 
     module("11.14 Comma Operators");
 
-    test("Comma Operators",function () {
+    QUnit.skip("Comma Operators",function () {
         var result = puma.evalPuma("function myFunc () {var x = 0; return (x += 1,x*=2, x);}; myFunc();");
         result.makeValue();
         equal(result.value,2,"Passed!");
