@@ -11,7 +11,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         var result = puma.evalPuma("NaN");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(typeof result.value, typeof NaN, "Passed!");
+        equal(isNaN(result.value), true, "Passed!");
     });
     
     test("Value Properties of the Global Object: Infinity", function () {
@@ -80,7 +80,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         var result = puma.evalPuma("parseInt ('0xT');");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(typeof result.value, typeof NaN, "Passed!");
+        equal(isNaN(result.value), true, "Passed!");
     });
     
     test("parseFloat(string)", function () {
@@ -94,7 +94,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         var result = puma.evalPuma("parseFloat('UD4');");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(typeof result.value, typeof NaN, "Passed!");
+        equal(isNaN(result.value), true, "Passed!");
     });
     
     test("isNaN(number)", function () {
@@ -347,8 +347,388 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     
     //   Section 15.3: Function Objects   //
     
+    test("The Function Constructor Called as a Function", function () {
+        var a = new Function();
+        var result = puma.evalPuma("var e = Function(); e.toString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, a.toString(), "Passed!");
+    });
+    
+    QUnit.skip("The Function Constructor Called as a new Function", function () {
+        var a = new Function();
+        var result = puma.evalPuma("var e = new Function(); e.toString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, a.toString(), "Passed!");
+    });
+    
+    test("Function(p1,p2, … ,pn,body)", function () {
+        var result = puma.evalPuma("var r = Function('x', 'fx', 'h', 'd', 'return x+fx+h+d'); r.call(this,6,8,7,0);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 21, "Passed!");
+    });
+    
+    QUnit.skip("The Function Constructor", function () {
+        var result = puma.evalPuma("var r = new Function('Sapph', 'ire', 'AMD', 'R', 'return Sapph+ire+AMD+R'); r.call(this,9,3,8,0);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 20, "Passed!");
+    });
+    
+    QUnit.skip("Function.prototype", function () {
+        var result = puma.evalPuma("Function.prototype;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 'function () {}', "Passed!");
+    });
+    
+    test("Function.length", function () {
+        var result = puma.evalPuma("Function.length;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 1, "Passed!");
+    });
+    
+    QUnit.skip("Properties of the Function Prototype Object", function () {
+        var result = puma.evalPuma("Function.prototype.length;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 0, "Passed!");
+    });
+    
+    QUnit.skip("Function.prototype.constructor", function () {
+        var c = Function('character', 'dialog', "return character+': \"'+dialog+'\"'").prototype.constructor.toString();
+        var result = puma.evalPuma("var transcript = Function('character', 'dialog', \"return character+': \\\"'+dialog+'\\\"'\"); transcript.prototype.constructor;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("Function.prototype.constructor.toString()", function () {
+        var c = Function('character', 'dialog', "return character+': \"'+dialog+'\"'").prototype.constructor.toString();
+        var result = puma.evalPuma("var transcript = Function('character', 'dialog', \"return character+': \\\"'+dialog+'\\\"'\"); transcript.prototype.constructor.toString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, c, "Passed!");
+    });
+    
+    QUnit.skip("Function.prototype.toString()", function () {
+        var result = puma.evalPuma("var transcript = Function('character', 'dialog', \"return character+': \\\"'+dialog+'\\\"'\"); transcript.prototype.toString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, '[object Object]', "Passed!");
+    });
+    
+    test("Function.prototype.apply(thisArg, argArray)", function () {
+        var result = puma.evalPuma("var transcript = Function('character', 'dialog', \"return character+': \\\"'+dialog+'\\\"'\"); transcript.apply(this, ['Eleanor', \"I'm sorry, Alphonse. I couldn't keep my promise...\"]);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, "Eleanor: \"I'm sorry, Alphonse. I couldn't keep my promise...\"", "Passed!");
+    });
+    
+    test("Function.prototype.call(thisArg [, arg1 [, arg2, … ]])", function () {
+        var result = puma.evalPuma("var transcript = Function('character', 'dialog', \"return character+': \\\"'+dialog+'\\\"'\"); transcript.call(this, 'Alphonse', \"Good-bye, Eleanor.\");");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, "Alphonse: \"Good-bye, Eleanor.\"", "Passed!");
+    });
+    
+    QUnit.skip("Function.prototype.bind(thisArg [, arg1 [, arg2, … ]])", function () {
+        var result = puma.evalPuma("var scope = 'global'; var order = { action: 'move', scope: 'flank', subject: 'ridge', getScope: Function('return this.scope;') }; var unbound_scope = order.getScope; var order_scope = unbound_scope.bind(order); order_scope();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 'flank', "Passed!");
+    });
+    
+    QUnit.skip("[[Call]] internal method", function () {
+        var result = puma.evalPuma("var scope = 'global'; var order = { action: 'move', scope: 'flank', subject: 'ridge', getScope: Function('return this.scope;') }; var unbound_scope = order.getScope; var order_scope = unbound_scope.bind(order); order_scope.call(this);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 'flank', "Passed!");
+    });
+    
+    QUnit.skip("[[Construct]] internal method", function () {
+        var result = puma.evalPuma("var scope = 'global'; var order = { action: 'move', scope: 'flank', subject: 'ridge', getScope: Function('return this.scope;') }; var unbound_scope = order.getScope; var order_scope = unbound_scope.bind(order); var o = new order_scope; o.toString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, '[object Object]', "Passed!");
+    });
+    
+    QUnit.skip("[[HasInstance]] internal method", function () {
+        var result = puma.evalPuma("var scope = 'global'; var order = { action: 'move', scope: 'flank', subject: 'ridge', getScope: Function('return this.scope;') }; var unbound_scope = order.getScope; var order_scope = unbound_scope.bind(order); var o = new order_scope; o instanceof unbound_scope;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, true, "Passed!");
+    });
+    
+    test("Properties of Function Instances: length", function () {
+        var result = puma.evalPuma("var str = Function('item', 'quantity', 'location', \"console.log('NOT IMPLEMENTED...');\"); str.length;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 3, "Passed!");
+    });
+    
+    QUnit.skip("Properties of Function Instances: prototype", function () {
+        var s = "function store(item, quantity, location) { console.log('NOT IMPLEMENTED...'); }"
+        var result = puma.evalPuma("var str = Function('item', 'quantity', 'location', \"console.log('NOT IMPLEMENTED...');\"); str.prototype;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.constructor.toString(), s, "Passed!");
+    });
+    
+    QUnit.skip("[[HasInstance]] (V)", function () {
+        var result = puma.evalPuma("function store(item, quantity, location) { /**/ }; var a = new store; a instanceof store;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, true, "Passed!");
+    });
+    
+    test("[[Get]] (P)", function () {
+        var result = puma.evalPuma("var foo = function store(item, quantity, location) { /**/ }; foo.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 'store', "Passed!");
+    });
     
     
+    //   Section 15.6: Boolean Objects   //
+    
+    test("The Boolean Constructor Called as a Function", function () {
+        var result = puma.evalPuma("var b = Boolean();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, false, "Passed!");
+    });
+    
+    test("Boolean(value)", function () {
+        var result = puma.evalPuma("var b = Boolean(1);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, true, "Passed!");
+    });
+    
+    QUnit.skip("The Boolean Constructor", function () {
+        var result = puma.evalPuma("var b = new Boolean();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+        equal(result.value.valueOf(), false, "Passed!");
+    });
+    
+    QUnit.skip("new Boolean(value)", function () {
+        var result = puma.evalPuma("var b = new Boolean(1);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+        equal(result.value.valueOf(), true, "Passed!");
+    });
+    
+    test("Properties of the Boolean Constructor", function () {
+        var c = Function.prototype.toString();
+        var result = puma.evalPuma("Boolean;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.length, 1, "Passed!");
+        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("Boolean.prototype", function () {
+        var result = puma.evalPuma("Boolean.prototype;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.valueOf(), false, "Passed!");
+    });
+    
+    test("Properties of the Boolean Prototype Object", function () {
+        var pd = { value: false, writable: false, enumerable: false, configurable: false };
+        var result = puma.evalPuma("Object.getOwnPropertyDescriptor(Boolean, 'prototype');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(JSON.stringify(result.value), JSON.stringify(pd), "Passed!");
+    });
+    
+    QUnit.skip("Boolean.prototype.constructor", function () {
+        var c = "function Boolean() {\n    [native code]\n}"
+        var result = puma.evalPuma("Boolean.prototype.constructor;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("Boolean.prototype.toString()", function () {
+        var result = puma.evalPuma("var b = Boolean(true); b.toString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, "true", "Passed!");
+    });
+    
+    QUnit.skip("Boolean.prototype.valueOf()", function () {
+        var result = puma.evalPuma("var b = Boolean(true); b.valueOf();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, true, "Passed!");
+    });
+    
+    QUnit.skip("Properties of Boolean Instances", function () {
+        var result = puma.evalPuma("var b = true; b.valueOf();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, true, "Passed!");
+    });
+    
+    
+    //   Section 15.7: Number Objects   //
+    
+    test("The Number Constructor Called as a Function", function () {
+        var result = puma.evalPuma("var n = Number();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 0, "Passed!");
+    });
+    
+    test("Number([value])", function () {
+        var result = puma.evalPuma("var n = Number(2);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 2, "Passed!");
+    });
+    
+    QUnit.skip("The Number Constructor", function () {
+        var result = puma.evalPuma("var n = new Number();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+        equal(result.value.valueOf(), 0, "Passed!");
+    });
+    
+    QUnit.skip("new Number([value])", function () {
+        var result = puma.evalPuma("var n = new Number(2);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+        equal(result.value.valueOf(), 2, "Passed!");
+    });
+    
+    test("Properties of the Number Constructor", function () {
+        var c = Function.prototype.toString();
+        var result = puma.evalPuma("Number;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.length, 1, "Passed!");
+        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("Number.prototype", function () {
+        var result = puma.evalPuma("Number.prototype;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.valueOf(), 0, "Passed!");
+    });
+    
+    test("Number.MAX_VALUE", function () {
+        var result = puma.evalPuma("Number.MAX_VALUE;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 1.7976931348623157e+308, "Passed!");
+    });
+    
+    test("Number.MIN_VALUE", function () {
+        var result = puma.evalPuma("Number.MIN_VALUE;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 5e-324, "Passed!");
+    });
+    
+    test("Number.NaN", function () {
+        var result = puma.evalPuma("Number.NaN;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(isNaN(result.value), true, "Passed!");
+    });
+    
+    test("Number.NEGATIVE_INFINITY", function () {
+        var result = puma.evalPuma("Number.NEGATIVE_INFINITY;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, -Infinity, "Passed!");
+    });
+    
+    test("Number.POSITIVE_INFINITY", function () {
+        var result = puma.evalPuma("Number.POSITIVE_INFINITY;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, Infinity, "Passed!");
+    });
+    
+    test("Properties of the Number Prototype Object", function () {
+        var pd = { value: 0, writable: false, enumerable: false, configurable: false };
+        var result = puma.evalPuma("Object.getOwnPropertyDescriptor(Number, 'prototype');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(JSON.stringify(result.value), JSON.stringify(pd), "Passed!");
+    });
+    
+    QUnit.skip("Number.prototype.constructor", function () {
+        var c = "function Number() {\n    [native code]\n}"
+        var result = puma.evalPuma("Number.prototype.constructor;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), c, "Passed!");
+    });
+    
+    test("Number.prototype.toString([radix])", function () {
+        var result = puma.evalPuma("var n = Number(2029); n.toString(16);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, "7ed", "Passed!");
+    });
+    
+    test("Number.prototype.toLocaleString()", function () {
+        var a = 2029; var c = a.toLocaleString();
+        var result = puma.evalPuma("var n = Number(2029); n.toLocaleString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, c, "Passed!");
+    });
+    
+    test("Number.prototype.valueOf()", function () {
+        var result = puma.evalPuma("var n = Number(2027); n.valueOf();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 2027, "Passed!");
+    });
+    
+    test("Number.prototype.toFixed(fractionDigits)", function () {
+        var result = puma.evalPuma("var n = Number(0.08); n.toFixed(4);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, "0.0800", "Passed!");
+    });
+    
+    test("Number.prototype.toExponential(fractionDigits)", function () {
+        var result = puma.evalPuma("var n = Number(290.8882087); n.toExponential(3);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, "2.909e+2", "Passed!");
+    });
+    
+    test("Number.prototype.toPrecision(precision)", function () {
+        var result = puma.evalPuma("var n = Number(4.8481368); n.toPrecision(4);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, "4.848", "Passed!");
+    });
+    
+    test("Properties of Number Instances", function () {
+        var result = puma.evalPuma("var n = 2; n.valueOf();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 2, "Passed!");
+    });
+    
+        
     //   Section 15.8: The Math Object   //
     
     test("Value Properties of the Math Object: E", function () {
@@ -533,6 +913,1138 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, -0.29100619138474915, "Passed!");
+    });
+    
+    
+    //   Section 15.9: Date Objects   //
+    
+    test("The Date Constructor Called as a Function", function () {
+        var result = puma.evalPuma("Date();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'string', "Passed!");
+    });
+    
+    test("Date( [ year [, month [, date [, hours [, minutes [, seconds [, ms ]]]]]]])", function () {
+        var result = puma.evalPuma("Date(1992, 3, 21, 'violets', 'blue', 'microwave', 'banana');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'string', "Passed!");
+    });
+    
+    QUnit.skip("The Date Constructor", function () {
+        var result = puma.evalPuma("new Date();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+    });
+    
+    QUnit.skip("new Date(year, month [, date [, hours [, minutes [, seconds [, ms ]]]]])", function () {
+        var result = puma.evalPuma("new Date(1993, 8, 24, 23, 58, 32, 12);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+    });
+    
+    QUnit.skip("new Date(value)", function () {
+        var result = puma.evalPuma("new Date(2595461133867);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+    });
+    
+    QUnit.skip("new Date()", function () {
+        var result = puma.evalPuma("new Date();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(Object.isExtensible(result.value), true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+    });
+    
+    test("Properties of the Date Constructor", function () {
+        var c = Function.prototype.toString();
+        var result = puma.evalPuma("Date;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.length, 7, "Passed!");
+        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype", function () {
+        var result = puma.evalPuma("Date.prototype;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+    });
+    
+    test("Date.parse(string)", function () {
+        var result = puma.evalPuma("Date.parse('Feb 31, 1933');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    test("Date.UTC(year, month [, date [, hours [, minutes [, seconds [, ms ]]]]])", function () {
+        var result = puma.evalPuma("Date.UTC(1971, 6, 28, 0, 14, 7, 802);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    test("Date.now()", function () {
+        var result = puma.evalPuma("Date.now();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    test("Properties of the Date Prototype Object", function () {
+        var result = puma.evalPuma("Object.getOwnPropertyDescriptor(Date, 'prototype');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        //equal(result.value, NaN, "Passed!");
+        equal(result.value.writable, false, "Passed!");
+        equal(result.value.enumerable, false, "Passed!");
+        equal(result.value.configurable, false, "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.constructor", function () {
+        var c = "function Date() {\n    [native code]\n}"
+        var result = puma.evalPuma("Date.prototype.constructor;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.toString()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.toString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'string', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.toDateString()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.toDateString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'string', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.toTimeString()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.toTimeString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'string', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.toLocaleString()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.toLocaleString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'string', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.toLocaleDateString()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.toLocaleDateString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'string', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.toLocaleTimeString()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.toLocaleTimeString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'string', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.valueOf()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.valueOf();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getTime()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getTime();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getFullYear()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getFullYear();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getUTCFullYear()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getUTCFullYear();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getMonth()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getMonth();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getUTCMonth()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getUTCMonth();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getDate()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getDate();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getUTCDate()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getUTCDate();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getDay()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getDay();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getUTCDay()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getUTCDay();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getHours()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getHours();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getUTCHours()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getUTCHours();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getMinutes()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getMinutes();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getUTCMinutes()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getUTCMinutes();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getSeconds()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getSeconds();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getUTCSeconds()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getUTCSeconds();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getMilliseconds()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getMilliseconds();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getUTCMilliseconds()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getUTCMilliseconds();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.getTimezoneOffset()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.getTimezoneOffset();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.setTime(time)", function () {
+        var result = puma.evalPuma("var d = new Date(); d.setTime(6983020800000);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.setTime(time)", function () {
+        var result = puma.evalPuma("var d = new Date(); d.setTime(6983020800000); d;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.getTime(), 6983020800000, "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.setMilliseconds(ms)", function () {
+        var result = puma.evalPuma("var d = new Date(); d.setMilliseconds(250); d;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(d.getMilliseconds(), 250, "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.setUTCMilliseconds(ms)", function () {
+        var result = puma.evalPuma("var d = new Date(); d.setUTCMilliseconds(750); d;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(d.getUTCMilliseconds(), 750, "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.setSeconds(sec [, ms ])", function () {
+        var result = puma.evalPuma("var d = new Date(); d.setSeconds(4, 465); d;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.valued.getSeconds(), 4, "Passed!");
+        equal(result.valued.getMilliseconds(), 465, "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.setUTCSeconds(sec [, ms ])", function () {
+        var result = puma.evalPuma("var d = new Date(); d.setUTCSeconds(4, 465); d;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.valued.getUTCSeconds(), 4, "Passed!");
+        equal(result.valued.getUTCMilliseconds(), 465, "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.setMinutes(min [, sec [, ms ]])", function () {
+        var result = puma.evalPuma("var d = new Date(); d.setMinutes(16, 4, 465); d;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.valued.getMinutes(), 16, "Passed!");
+        equal(result.valued.getSeconds(), 4, "Passed!");
+        equal(result.valued.getMilliseconds(), 465, "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.setUTCMinutes(min [, sec [, ms ]])", function () {
+        var result = puma.evalPuma("var d = new Date(); d.setUTCMinutes(16, 4, 465); d;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.valued.getUTCMinutes(), 16, "Passed!");
+        equal(result.valued.getUTCSeconds(), 4, "Passed!");
+        equal(result.valued.getUTCMilliseconds(), 465, "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.setHours(hour [, min [, sec [, ms ]]])", function () {
+        var result = puma.evalPuma("var d = new Date(); d.setHours(5, 16, 4, 465); d;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.valued.getHours(), 5, "Passed!");
+        equal(result.valued.getMinutes(), 16, "Passed!");
+        equal(result.valued.getSeconds(), 4, "Passed!");
+        equal(result.valued.getMilliseconds(), 465, "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.setUTCHours(hour [, min [, sec [, ms ]]])", function () {
+        var result = puma.evalPuma("var d = new Date(); d.setUTCHours(5, 16, 4, 465); d;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.valued.getUTCHours(), 5, "Passed!");
+        equal(result.valued.getUTCMinutes(), 16, "Passed!");
+        equal(result.valued.getUTCSeconds(), 4, "Passed!");
+        equal(result.valued.getUTCMilliseconds(), 465, "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.setDate(date)", function () {
+        var result = puma.evalPuma("var d = new Date(); d.setDate(15);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.setUTCDate(date)", function () {
+        var result = puma.evalPuma("var d = new Date(); d.setUTCDate(15);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.setMonth(month [, date ])", function () {
+        var result = puma.evalPuma("var d = new Date(); d.setMonth(3, 14);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.setUTCMonth(month [, date ])", function () {
+        var result = puma.evalPuma("var d = new Date(); d.setUTCMonth(3, 14);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.setFullYear(year [, month [, date ]])", function () {
+        var result = puma.evalPuma("var d = new Date(); d.setFullYear(2191, 3, 14);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.setUTCFullYear(year [, month [, date ]])", function () {
+        var result = puma.evalPuma("var d = new Date(); d.setUTCFullYear(2191, 3, 14);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'number', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.toUTCString()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.toUTCString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'string', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.toISOString()", function () {
+        var result = puma.evalPuma("var d = new Date(); d.toISOString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'string', "Passed!");
+    });
+    
+    QUnit.skip("Date.prototype.toJSON(key)", function () {
+        var result = puma.evalPuma("var d = new Date(); d.toJSON(1);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'string', "Passed!");
+    });
+    
+    test("Properties of Date Instances", function () {
+        var result = puma.evalPuma("var d = Date(); d.valueOf();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'string', "Passed!");
+    });
+    
+    
+    //   Section 15.11: Error Objects   //
+    
+    test("The Error Constructor Called as a Function", function () {
+        var result = puma.evalPuma("var e = Error(); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.name, 'Error', "Passed!");
+    });
+    
+    test("Error(message)", function () {
+        var result = puma.evalPuma("Error('lp0 on fire');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.message, 'lp0 on fire', "Passed!");
+    });
+    
+    QUnit.skip("The Error Constructor", function () {
+        var result = puma.evalPuma("var e = new Error('lp0 on fire'); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.name, 'Error', "Passed!");
+    });
+    
+    QUnit.skip("new Error(message)", function () {
+        var result = puma.evalPuma("var e = new Error(); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.message, 'lp0 on fire', "Passed!");
+    });
+    
+    test("Properties of the Error Constructor", function () {
+        var c = Function.prototype.toString();
+        var result = puma.evalPuma("Error;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.length, 1, "Passed!");
+        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("Error.prototype", function () {
+        var result = puma.evalPuma("Error.prototype;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), 'Error', "Passed!");
+    });
+    
+    test("Properties of the Error Prototype Object", function () {
+        var result = puma.evalPuma("Object.getOwnPropertyDescriptor(Error, 'prototype');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.writable, false, "Passed!");
+        equal(result.value.enumerable, false, "Passed!");
+        equal(result.value.configurable, false, "Passed!");
+    });
+    
+    QUnit.skip("Error.prototype.constructor", function () {
+        var c = "function Error() {\n    [native code]\n}"
+        var result = puma.evalPuma("Error.prototype.constructor;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("Error.prototype.name", function () {
+        var result = puma.evalPuma("Error.prototype.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(Error.prototype.toString(), 'Error', "Passed!");
+    });
+    
+    QUnit.skip("Error.prototype.message", function () {
+        var result = puma.evalPuma("Error.prototype.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(Error.prototype.toString(), '', "Passed!");
+    });
+    
+    QUnit.skip("Error.prototype.toString()", function () {
+        var result = puma.evalPuma("var e = new Error('Does not compute.'); e.toString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 'Error: Does not compute.', "Passed!");
+    });
+    
+    test("Properties of Error Instances", function () {
+        var result = puma.evalPuma("var e = Error(); e.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 'Error', "Passed!");
+    });
+    
+    /*
+        NOTE
+                Since puma throws Type Error by own account when it stumbles upon 
+                most of the errors herein tested, discerning the error thrown in 
+                runtime by the original script seems not possible/profitable.
+                Particular error instances are then not compared or either compared
+                against general instance Error.
+        
+        END OF NOTE
+    */
+    
+    /////       EvalError not implemented in ECMA-262 edition number 5.1       /////
+    
+    /*
+    test("EvalError: XXXXX", function () {
+        try {
+            var result = puma.evalPuma("new Array(-1);");
+        }
+        catch (e) {
+            if (e instanceof EvalError) {
+            equal(e.message, "HERE ERROR MESSAGE TO BE THROWN", "Passed!");
+            }
+        }
+    });
+    */
+    
+    test("RangeError: new Array(len)", function () {
+        try {
+            var result = puma.evalPuma("var a = new Array(-1);");
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                equal(true, true, "Passed!");
+            }
+        }
+    });
+    
+    /////       TEMPLATE LEFT AS REFERENCE FOR FUTURE CODING       /////
+    
+    /*
+    test("RangeError: XXXXX", function () {
+        try {
+            var result = puma.evalPuma("HERE ERROR THROWING CODE;");
+        }
+        catch (e) {
+            if (e instanceof RangeError) {
+                equal(e.message, "HERE ERROR MESSAGE TO BE THROWN", "Passed!");
+        }
+    });
+    */
+    
+    QUnit.skip("ReferenceError: GetValue(V)", function () {
+        try {
+            var result = puma.evalPuma("var u = UndefinedVariable;");
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                equal(true, true, "Passed!");
+            }
+        }
+    });
+    
+    /////       TEMPLATE LEFT AS REFERENCE FOR FUTURE CODING       /////
+    
+    /*
+    test("ReferenceError: XXXXX", function () {
+        try {
+            var result = puma.evalPuma("HERE ERROR THROWING CODE;");
+        }
+        catch (e) {
+            if (e instanceof EvalError) {
+                equal(e.message, "HERE ERROR MESSAGE TO BE THROWN", "Passed!");
+            }
+        }
+    });
+    */
+    
+    test("SyntaxError: Object Initialiser", function () {
+        try {
+            var result = puma.evalPuma("obj = new Object({Name:'LEO', Terminal:25000, Trayectorie:'Panchaea}); obj;");
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                equal(true, true, "Passed!");
+            }
+        }
+    });
+    
+    /////       TEMPLATE LEFT AS REFERENCE FOR FUTURE CODING       /////
+    
+    /*
+    test("SyntaxError: XXXXX", function () {
+        try {
+            var result = puma.evalPuma("HERE ERROR THROWING CODE;");
+        }
+        catch (e) {
+            if (e instanceof SyntaxError) {
+                equal(e.message, "HERE ERROR MESSAGE TO BE THROWN", "Passed!");
+            }
+        }
+    });
+    */
+    
+    QUnit.skip("TypeError: Object Internal Properties and Methods", function () {
+        try {
+            var result = puma.evalPuma("Object().put(this);");
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                equal(true, true, "Passed!");
+            }
+        }
+    });
+    
+    /////       TEMPLATE LEFT AS REFERENCE FOR FUTURE CODING       /////
+    
+    /*
+    test("TypeError: XXXXX", function () {
+        try {
+            var result = puma.evalPuma("HERE ERROR THROWING CODE;");
+        }
+        catch (e) {
+            if (e instanceof TypeError) {
+                equal(e.message, "HERE ERROR MESSAGE TO BE THROWN", "Passed!");
+            }
+        }
+    });
+    */
+    
+    test("URIError: decodeURI(encodedURI)", function () {
+        try {
+            var result = puma.evalPuma("decodeURI('%');");
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                equal(true, true, "Passed!");
+            }
+        }
+    });
+    
+    /////       TEMPLATE LEFT AS REFERENCE FOR FUTURE CODING       /////
+    
+    /*
+    test("TypeError: XXXXX", function () {
+        try {
+            var result = puma.evalPuma("HERE ERROR THROWING CODE;");
+        }
+        catch (e) {
+            if (e instanceof TypeError) {
+                equal(e.message, "HERE ERROR MESSAGE TO BE THROWN", "Passed!");
+            }
+        }
+    });
+    */
+    
+    // Native Error Tests: URIError
+    
+    // Native Error Tests: RangeError
+    
+    test("The RangeError Constructor Called as a Function", function () {
+        var result = puma.evalPuma("var e = RangeError(); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.name, 'RangeError', "Passed!");
+    });
+    
+    test("RangeError(message)", function () {
+        var result = puma.evalPuma("RangeError('lp0 on fire');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.message, 'lp0 on fire', "Passed!");
+    });
+    
+    QUnit.skip("The RangeError Constructor", function () {
+        var result = puma.evalPuma("var e = new RangeError('lp0 on fire'); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.name, 'RangeError', "Passed!");
+    });
+    
+    QUnit.skip("new RangeError(message)", function () {
+        var result = puma.evalPuma("var e = new RangeError(); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.message, 'lp0 on fire', "Passed!");
+    });
+    
+    test("Properties of the RangeError Constructor", function () {
+        var c = Function.prototype.toString();
+        var result = puma.evalPuma("RangeError;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.length, 1, "Passed!");
+        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("RangeError.prototype", function () {
+        var result = puma.evalPuma("RangeError.prototype;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");console.log();
+        equal(result.value.toString(), 'RangeError', "Passed!");
+    });
+    
+    test("Properties of the RangeError Prototype Object", function () {
+        var result = puma.evalPuma("Object.getOwnPropertyDescriptor(RangeError, 'prototype');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.writable, false, "Passed!");
+        equal(result.value.enumerable, false, "Passed!");
+        equal(result.value.configurable, false, "Passed!");
+    });
+    
+    QUnit.skip("RangeError.prototype.constructor", function () {
+        var c = "function RangeError() {\n    [native code]\n}"
+        var result = puma.evalPuma("RangeError.prototype.constructor;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("RangeError.prototype.name", function () {
+        var result = puma.evalPuma("RangeError.prototype.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(RangeError.prototype.toString(), 'RangeError', "Passed!");
+    });
+    
+    QUnit.skip("RangeError.prototype.message", function () {
+        var result = puma.evalPuma("RangeError.prototype.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(RangeError.prototype.toString(), '', "Passed!");
+    });
+    
+    test("Properties of RangeError Instances", function () {
+        var result = puma.evalPuma("var e = RangeError(); e.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 'RangeError', "Passed!");
+    });
+    
+    // Native Error Tests: ReferenceError
+    
+    test("The ReferenceError Constructor Called as a Function", function () {
+        var result = puma.evalPuma("var e = ReferenceError(); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.name, 'ReferenceError', "Passed!");
+    });
+    
+    test("ReferenceError(message)", function () {
+        var result = puma.evalPuma("ReferenceError('lp0 on fire');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.message, 'lp0 on fire', "Passed!");
+    });
+    
+    QUnit.skip("The ReferenceError Constructor", function () {
+        var result = puma.evalPuma("var e = new ReferenceError('lp0 on fire'); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.name, 'ReferenceError', "Passed!");
+    });
+    
+    QUnit.skip("new ReferenceError(message)", function () {
+        var result = puma.evalPuma("var e = new ReferenceError(); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.message, 'lp0 on fire', "Passed!");
+    });
+    
+    test("Properties of the ReferenceError Constructor", function () {
+        var c = Function.prototype.toString();
+        var result = puma.evalPuma("ReferenceError;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.length, 1, "Passed!");
+        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("ReferenceError.prototype", function () {
+        var result = puma.evalPuma("ReferenceError.prototype;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), 'ReferenceError', "Passed!");
+    });
+    
+    test("Properties of the ReferenceError Prototype Object", function () {
+        var result = puma.evalPuma("Object.getOwnPropertyDescriptor(ReferenceError, 'prototype');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.writable, false, "Passed!");
+        equal(result.value.enumerable, false, "Passed!");
+        equal(result.value.configurable, false, "Passed!");
+    });
+    
+    QUnit.skip("ReferenceError.prototype.constructor", function () {
+        var c = "function ReferenceError() {\n    [native code]\n}"
+        var result = puma.evalPuma("ReferenceError.prototype.constructor;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("ReferenceError.prototype.name", function () {
+        var result = puma.evalPuma("ReferenceError.prototype.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(ReferenceError.prototype.toString(), 'ReferenceError', "Passed!");
+    });
+    
+    QUnit.skip("ReferenceError.prototype.message", function () {
+        var result = puma.evalPuma("ReferenceError.prototype.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(ReferenceError.prototype.toString(), '', "Passed!");
+    });
+    
+    test("Properties of ReferenceError Instances", function () {
+        var result = puma.evalPuma("var e = ReferenceError(); e.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 'ReferenceError', "Passed!");
+    });
+    
+    // Native Error Tests: SyntaxError
+
+    test("The SyntaxError Constructor Called as a Function", function () {
+        var result = puma.evalPuma("var e = SyntaxError(); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.name, 'SyntaxError', "Passed!");
+    });
+    
+    test("SyntaxError(message)", function () {
+        var result = puma.evalPuma("SyntaxError('lp0 on fire');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.message, 'lp0 on fire', "Passed!");
+    });
+    
+    QUnit.skip("The SyntaxError Constructor", function () {
+        var result = puma.evalPuma("var e = new SyntaxError('lp0 on fire'); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.name, 'SyntaxError', "Passed!");
+    });
+    
+    QUnit.skip("new SyntaxError(message)", function () {
+        var result = puma.evalPuma("var e = new SyntaxError(); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.message, 'lp0 on fire', "Passed!");
+    });
+    
+    test("Properties of the SyntaxError Constructor", function () {
+        var c = Function.prototype.toString();
+        var result = puma.evalPuma("SyntaxError;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.length, 1, "Passed!");
+        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("SyntaxError.prototype", function () {
+        var result = puma.evalPuma("SyntaxError.prototype;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), 'SyntaxError', "Passed!");
+    });
+    
+    test("Properties of the SyntaxError Prototype Object", function () {
+        var result = puma.evalPuma("Object.getOwnPropertyDescriptor(SyntaxError, 'prototype');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.writable, false, "Passed!");
+        equal(result.value.enumerable, false, "Passed!");
+        equal(result.value.configurable, false, "Passed!");
+    });
+    
+    QUnit.skip("SyntaxError.prototype.constructor", function () {
+        var c = "function SyntaxError() {\n    [native code]\n}"
+        var result = puma.evalPuma("SyntaxError.prototype.constructor;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("SyntaxError.prototype.name", function () {
+        var result = puma.evalPuma("SyntaxError.prototype.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(SyntaxError.prototype.toString(), 'SyntaxError', "Passed!");
+    });
+    
+    QUnit.skip("SyntaxError.prototype.message", function () {
+        var result = puma.evalPuma("SyntaxError.prototype.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(SyntaxError.prototype.toString(), '', "Passed!");
+    });
+    
+    test("Properties of SyntaxError Instances", function () {
+        var result = puma.evalPuma("var e = SyntaxError(); e.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 'SyntaxError', "Passed!");
+    });
+    
+    // Native Error Tests: TypeError
+
+    test("The TypeError Constructor Called as a Function", function () {
+        var result = puma.evalPuma("var e = TypeError(); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.name, 'TypeError', "Passed!");
+    });
+    
+    test("TypeError(message)", function () {
+        var result = puma.evalPuma("TypeError('lp0 on fire');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.message, 'lp0 on fire', "Passed!");
+    });
+    
+    QUnit.skip("The TypeError Constructor", function () {
+        var result = puma.evalPuma("var e = new TypeError('lp0 on fire'); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.name, 'TypeError', "Passed!");
+    });
+    
+    QUnit.skip("new TypeError(message)", function () {
+        var result = puma.evalPuma("var e = new TypeError(); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.message, 'lp0 on fire', "Passed!");
+    });
+    
+    test("Properties of the TypeError Constructor", function () {
+        var c = Function.prototype.toString();
+        var result = puma.evalPuma("TypeError;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.length, 1, "Passed!");
+        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("TypeError.prototype", function () {
+        var result = puma.evalPuma("TypeError.prototype;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), 'TypeError', "Passed!");
+    });
+    
+    test("Properties of the TypeError Prototype Object", function () {
+        var result = puma.evalPuma("Object.getOwnPropertyDescriptor(TypeError, 'prototype');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.writable, false, "Passed!");
+        equal(result.value.enumerable, false, "Passed!");
+        equal(result.value.configurable, false, "Passed!");
+    });
+    
+    QUnit.skip("TypeError.prototype.constructor", function () {
+        var c = "function TypeError() {\n    [native code]\n}"
+        var result = puma.evalPuma("TypeError.prototype.constructor;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("TypeError.prototype.name", function () {
+        var result = puma.evalPuma("TypeError.prototype.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(TypeError.prototype.toString(), 'TypeError', "Passed!");
+    });
+    
+    QUnit.skip("TypeError.prototype.message", function () {
+        var result = puma.evalPuma("TypeError.prototype.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(TypeError.prototype.toString(), '', "Passed!");
+    });
+    
+    test("Properties of TypeError Instances", function () {
+        var result = puma.evalPuma("var e = TypeError(); e.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 'TypeError', "Passed!");
+    });
+    
+    // Native Error Tests: URIError
+
+    test("The URIError Constructor Called as a Function", function () {
+        var result = puma.evalPuma("var e = URIError(); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.name, 'URIError', "Passed!");
+    });
+    
+    test("URIError(message)", function () {
+        var result = puma.evalPuma("URIError('lp0 on fire');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.message, 'lp0 on fire', "Passed!");
+    });
+    
+    QUnit.skip("The URIError Constructor", function () {
+        var result = puma.evalPuma("var e = new URIError('lp0 on fire'); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.name, 'URIError', "Passed!");
+    });
+    
+    QUnit.skip("new URIError(message)", function () {
+        var result = puma.evalPuma("var e = new URIError(); e;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.message, 'lp0 on fire', "Passed!");
+    });
+    
+    test("Properties of the URIError Constructor", function () {
+        var c = Function.prototype.toString();
+        var result = puma.evalPuma("URIError;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.length, 1, "Passed!");
+        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("URIError.prototype", function () {
+        var result = puma.evalPuma("URIError.prototype;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), 'URIError', "Passed!");
+    });
+    
+    test("Properties of the URIError Prototype Object", function () {
+        var result = puma.evalPuma("Object.getOwnPropertyDescriptor(URIError, 'prototype');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.writable, false, "Passed!");
+        equal(result.value.enumerable, false, "Passed!");
+        equal(result.value.configurable, false, "Passed!");
+    });
+    
+    QUnit.skip("URIError.prototype.constructor", function () {
+        var c = "function URIError() {\n    [native code]\n}"
+        var result = puma.evalPuma("URIError.prototype.constructor;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("URIError.prototype.name", function () {
+        var result = puma.evalPuma("URIError.prototype.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(URIError.prototype.toString(), 'URIError', "Passed!");
+    });
+    
+    QUnit.skip("URIError.prototype.message", function () {
+        var result = puma.evalPuma("URIError.prototype.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(URIError.prototype.toString(), '', "Passed!");
+    });
+    
+    test("Properties of URIError Instances", function () {
+        var result = puma.evalPuma("var e = URIError(); e.name;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 'URIError', "Passed!");
+    });
+    
+    
+    //   Section 15.12: The JSON Object   //
+    
+    test("JSON.parse(text)", function () {
+        var result = puma.evalPuma("JSON.parse('{\"Name\":\"LEO\",\"Terminal\":25000}');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(JSON.stringify(result.value), '{"Name":"LEO","Terminal":25000}', "Passed!");
+    });
+    
+    test("JSON.parse(text [, reviver ])", function () {
+        var result = puma.evalPuma("JSON.parse('{\"1\": 1, \"2\": 2, \"3\": {\"4\": 4, \"5\": {\"6\": 6}}}', function(k, v) { return v; });");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(JSON.stringify(result.value), "{\"1\":1,\"2\":2,\"3\":{\"4\":4,\"5\":{\"6\":6}}}", "Passed!");
+    });
+    
+    test("JSON.stringify(text)", function () {
+        var c = '{"Name":"LEO","Terminal":25000}';
+        var result = puma.evalPuma("JSON.stringify({\"Name\":\"LEO\",\"Terminal\":25000});");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, '{"Name":"LEO","Terminal":25000}', "Passed!");
+    });
+    
+    test("JSON.stringify ( value [ , replacer [ , space ] ] )", function () {
+        /*var c = JSON.stringify({ foundation: "Mozilla", model: "box", week: 45, transport: "car", month: 7, working: false }, function (key, value) { if (typeof value === "string") { return undefined; } return value; }, '\t');*/
+        
+        var result = puma.evalPuma("var foo = { foundation: \"Mozilla\", model: \"box\", week: 45, transport: \"car\", month: 7, working: false }; var j = JSON.stringify(foo, Function('key', 'value', 'if (typeof value === \"string\") { return undefined; } return value;'), \"\t\");");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, "{\n\t\"week\": 45,\n\t\"month\": 7,\n\t\"working\": false\n}", "Passed!");
+        //equal(result.value, c, "Passed!");
     });
     
     
