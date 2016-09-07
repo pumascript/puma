@@ -5,7 +5,7 @@
  *  @file: Base expressions test suite for the language
  */
 define(['pumascript', 'esprima'], function (puma, esprima) {
-    //EMAC 13 Function Definition
+    //ECMA 13 Function Definition
 
     test("function definiton 1", function () {
         var result = puma.evalPuma("function testA (a) {return a}; var test = testA('a1'); test");
@@ -15,7 +15,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     test("function definiton 2", function () {
         var result = puma.evalPuma("function testA (a, b, c) {return {letterA: a, letterB:b, letterC : c}}; var test = testA('z', 'x', 'y'); test.letterA;");
         result.makeValue();
-        equal(result.value, "z", "Passed!"); //TODO
+        equal(result.value, "z", "Passed!");
     });
 
     test("Strict Mode Restrictions 1", function () {
@@ -28,7 +28,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(errorMessage, "Line 1: Duplicate data property in object literal not allowed in strict mode", "Passed!");
     });
 
-    test("Strict Mode Restrictions 2", function () { //??
+    test("Strict Mode Restrictions 2", function () {
         var errorMessage;
         try {
             var result = puma.evalPuma("\"use strict\";(function (eval){})");
@@ -76,7 +76,6 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
 
     QUnit.skip("Creates a function and calls its internal method", function () {
         var result = puma.evalPuma("function Square (side) {this.side = side;this.area = function () {return this.side * this.side;}}var s1 = new Square(2);s1.area();");
-        //result.makeValue();
         equal(result.value, '4', "Passed!");
     });
 
@@ -85,8 +84,6 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         result.makeValue();
         equal(typeof result.value, "object", "Passed!");
     });
-
-    //ECMA 14
 
 
 });

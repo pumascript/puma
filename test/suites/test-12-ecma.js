@@ -40,8 +40,6 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 1, "Passed!");
     });
 
-    // TODO testear The production VariableDeclaration : Identifier Initialiser is evaluated as follows:
-
     test("variable declaration in strict mode: 'eval' as identifier", function () {
         var exceptionMessage;
         try {
@@ -49,7 +47,6 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         } catch (e) {
             exceptionMessage = e.message;
         }
-        //result.makeValue();
         equal(exceptionMessage, "Line 1: Variable name may not be eval or arguments in strict mode", "Passed!");
     });
 
@@ -60,7 +57,6 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         } catch (e) {
             exceptionMessage = e.message;
         }
-        //result.makeValue();
         equal(exceptionMessage, "Line 1: Variable name may not be eval or arguments in strict mode", "Passed!");
     });
 
@@ -112,7 +108,6 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     //Revisar
     QUnit.skip("for (ExpressionNoIn ; Expression ; ) Statement", function () {
         var result = puma.evalPuma("for(var i = 0; i < 10 ; ) i++; i;");
-        //result.makeValue();
         equal(result.value, 10, "Passed!");
     });
 
@@ -321,13 +316,14 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         }
         equal(errorMessage, "someString", "Passed!");
     });
-
+    //PumaScript no evalua los throw
     QUnit.skip("throw number", function () {
-        var errorMessage;
+        var errorMessage = null;
         try {
             var result = puma.evalPuma("throw 42");
         } catch (err) {
-            errorMessage = err.message;
+            console.log(err);
+            errorMessage = err;
         }
         equal(errorMessage, 42, "Passed!");
     });
@@ -343,13 +339,3 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
 });
-
-/* VER COMO PROBAR ESTO EN LA CONSOLA
-    test("try catch", function(){
-        var result = puma.evalPuma("try { return; } catch (err) { m = err.message; } m;");
-        result.makeValue();
-        equal( result.value, "Line 1: Illegal return statement", "Passed!");
-    });
-    */
-
-// TODO testear debugger
