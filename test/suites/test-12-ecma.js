@@ -76,9 +76,20 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         result.makeValue();
         equal(result.value, 1, "Passed!");
     });
+    test("if statement : true with curly", function () {
+        var result = puma.evalPuma("if (true) {1;} else{2;}");
+        result.makeValue();
+        equal(result.value, 1, "Passed!");
+    })
 
     test("if statement: false", function () {
         var result = puma.evalPuma("if (false) 1; else 2;");
+        result.makeValue();
+        equal(result.value, 2, "Passed!");
+    });
+
+    test("if statement: false with curly", function () {
+        var result = puma.evalPuma("if (false){1;} else {2;}");
         result.makeValue();
         equal(result.value, 2, "Passed!");
     });
@@ -86,7 +97,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     QUnit.skip("do Statement while (Expression)", function () {
         var result = puma.evalPuma("var a = 0;  do {a++; }while (a<10); a;");
         result.makeValue();
-        equal(result.value, 10, "Passed!");
+        equal(result.value, 9, "Passed!");
     });
 
     test("while (Expression) Statement", function () {
