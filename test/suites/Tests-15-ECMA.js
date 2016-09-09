@@ -42,7 +42,6 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         }
         catch (e) {
             if (e instanceof SyntaxError) {
-            /*    equal(e.message, "missing variable name", "Passed!");     beats me as of why this doesn't work */
                 equal(true, true, "Passed!");
             }
         }
@@ -595,6 +594,13 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 2, "Passed!");
     });
     
+    test("Number([string])", function () {
+        var result = puma.evalPuma("var n = Number('3');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 3, "Passed!");
+    });
+    
     QUnit.skip("The Number Constructor", function () {
         var result = puma.evalPuma("var n = new Number();");
         result.makeValue();
@@ -609,6 +615,14 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'object', "Passed!");
         equal(result.value.valueOf(), 2, "Passed!");
+    });
+    
+    QUnit.skip("new Number([string])", function () {
+        var result = puma.evalPuma("var n = new Number('3');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+        equal(result.value.valueOf(), 3, "Passed!");
     });
     
     test("Properties of the Number Constructor", function () {
@@ -1002,7 +1016,6 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         var result = puma.evalPuma("Object.getOwnPropertyDescriptor(Date, 'prototype');");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        //equal(result.value, NaN, "Passed!");
         equal(result.value.writable, false, "Passed!");
         equal(result.value.enumerable, false, "Passed!");
         equal(result.value.configurable, false, "Passed!");
@@ -2037,61 +2050,10 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, '{"Name":"LEO","Terminal":25000}', "Passed!");
     });
     
-    test("JSON.stringify ( value [ , replacer [ , space ] ] )", function () {
-        /*var c = JSON.stringify({ foundation: "Mozilla", model: "box", week: 45, transport: "car", month: 7, working: false }, function (key, value) { if (typeof value === "string") { return undefined; } return value; }, '\t');*/
-        
+    test("JSON.stringify ( value [ , replacer [ , space ] ] )", function () {        
         var result = puma.evalPuma("var foo = { foundation: \"Mozilla\", model: \"box\", week: 45, transport: \"car\", month: 7, working: false }; var j = JSON.stringify(foo, Function('key', 'value', 'if (typeof value === \"string\") { return undefined; } return value;'), \"\t\");");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, "{\n\t\"week\": 45,\n\t\"month\": 7,\n\t\"working\": false\n}", "Passed!");
-        //equal(result.value, c, "Passed!");
-    });
-    
-    
-    // Below tests done by Juan Guzmán [Gh tag]
-    
-    QUnit.skip("15.4.2.1 new Array ( [ item0 [ , item1 [ , ... ] ] ] )", function () {
-        var result = puma.evalPuma("var a = new Array()");
-        ok(result.success && typeof a == "object", "Passed!");
-    });
-    QUnit.skip("15.4.2.1 new Array ( [ item0 [ , item1 [ , ... ] ] ] )", function () {
-        var result = puma.evalPuma("var a = new Array ('a','b')");
-        ok(result.success && a[1] == 'b' && a[0] == 'a' && a.length == 2, "Passed!");
-    });
-    QUnit.skip("15.4.4.1 Array.prototype.constructor ", function () {
-        var result = puma.evalPuma("var a = Array.prototype.constructor");
-        ok(result.success && typeof a == "function", "Passed!");
-    });
-    QUnit.skip("15.4.4.2 Array.prototype.toString ( )", function () {
-        var result = puma.evalPuma("var a = Array.prototype.toString ( )");
-        ok(result.success && typeof a == "string" && a.length == 0, "Passed!");
-    });
-    QUnit.skip("15.4.4.3 Array.prototype.toLocaleString ( )", function () {
-        var result = puma.evalPuma("var a = Array.prototype.toLocaleString ()");
-        ok(result.success && typeof a == "string" && a.length == 0, "Passed!");
-    });
-    QUnit.skip("15.4.4.4 Array.prototype.concat ( [ item1 [ , item2 [ , … ] ] ] )", function () {
-        var result = puma.evalPuma("var a = Array.prototype.concat ( 1,2)");
-        ok(result.success && a[1] == '2' && a[0] == '1' && a.length == 2, "Passed!");
-    });
-    QUnit.skip("15.5.4.1 String.prototype.constructor", function () {
-        var result = puma.evalPuma("var a = String.prototype.constructor");
-        ok(result.success && typeof a == "function", "Passed!");
-    });
-    QUnit.skip("15.5.4.2 String.prototype.toString ( )", function () {
-        var result = puma.evalPuma("var a = String.prototype.toString ( )");
-        ok(result.success && typeof a == "string" && a.length == 0, "Passed!");
-    });
-    QUnit.skip("15.5.4.3 String.prototype.valueOf ( )", function () {
-        var result = puma.evalPuma("var a = 'juan'");
-        ok(result.success && a.valueOf() == 'juan', "Passed!");
-    });
-    QUnit.skip("15.6.2.1 new Boolean (value)", function () {
-        var result = puma.evalPuma("var a = new Boolean (true)");
-        ok(result.success && typeof a == "string" && a == true, "Passed!");
-    });
-    QUnit.skip("15.6.4.1 Boolean.prototype.constructor", function () {
-        var result = puma.evalPuma("var a = new Boolean(true)");
-        ok(result.success && a.constructor == Boolean, "Passed!");
     });
 });
