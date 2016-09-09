@@ -22,7 +22,8 @@ var suites = [
         './suites/integration-tests.js',
         './suites/Tests-7-ECMA.js',
         './suites/Tests-8-ECMA.js',
-        './suites/test-9-ecma.js'
+        './suites/test-9-ecma.js',
+        './suites/test-10-ecma.js'
     ];
 
 require(suites, function () {
