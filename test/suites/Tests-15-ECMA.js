@@ -492,6 +492,298 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
     
+    //   Section 15.4: Array Objects   //
+
+    test("The Array Constructor Called as a Function", function () {
+        var result = puma.evalPuma("var a = Array();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+        equal(JSON.stringify(result.value), '[]', "Passed!");
+    });
+    
+    test("Array([ item1 [, item2 [, ... ]]])", function () {
+        var result = puma.evalPuma("var a = Array(16, 'F', true, [7, 'M', false], Object.create(null,{ name: { value: 'Zion' } }));");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+        equal(result.value[0], 16, "Passed!");
+        equal(result.value[1], 'F', "Passed!");
+        equal(result.value[2], true, "Passed!");
+        equal(result.value[3], '7,M,false', "Passed!");
+        equal(result.value[4].name, 'Zion', "Passed!");
+    });
+    
+    QUnit.skip("The Array Constructor", function () {
+        var result = puma.evalPuma("var a = new Array();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+        equal(JSON.stringify(result.value), '[]', "Passed!");
+    });
+    
+    QUnit.skip("new Array([ item0 [, item1 [, ... ]]])", function () {
+        var result = puma.evalPuma("var a = new Array(16, 'F', true, [7, 'M', false], Object.create(null,{ name: { value: 'Zion' } }));");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+        equal(result.value[0], 16, "Passed!");
+        equal(result.value[1], 'F', "Passed!");
+        equal(result.value[2], true, "Passed!");
+        equal(result.value[3], '7,M,false', "Passed!");
+        equal(result.value[4].name, 'Zion', "Passed!");
+    });
+
+    QUnit.skip("new Array(len)", function () {
+        var result = puma.evalPuma("var a = new Array(4);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+        equal(result.value.length, 4, "Passed!");
+    });
+    
+    test("Properties of the Array Constructor", function () {
+        var c = Function.prototype.toString();
+        var result = puma.evalPuma("Array;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.length, 1, "Passed!");
+        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("Array.prototype", function () {
+        var result = puma.evalPuma("Array.prototype;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), '', "Passed!");
+    });
+    
+    test("Array.isArray(arg)", function () {
+        var result = puma.evalPuma("var a = Array('R36','L10','R59','R97'); Array.isArray(a);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, true, "Passed!");
+    });
+
+    test("Properties of the Array Prototype Object", function () {
+        var result = puma.evalPuma("Object.getOwnPropertyDescriptor(Array, 'prototype');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.value, '', "Passed!");
+        equal(result.value.writable, false, "Passed!");
+        equal(result.value.enumerable, false, "Passed!");
+        equal(result.value.configurable, false, "Passed!");
+    });
+    
+    QUnit.skip("Array.prototype.constructor", function () {
+        var c = "function Array() {\n    [native code]\n}"
+        var result = puma.evalPuma("Array.prototype.constructor;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), c, "Passed!");
+    });
+    
+    test("Array.prototype.toString()", function () {
+        var result = puma.evalPuma("var a = Array('R36','L10','R59','R97'); a.toString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 'R36,L10,R59,R97', "Passed!");
+    });
+
+    test("Array.prototype.toLocaleString()", function () {
+        var a = Array(1200.96, 0.223); var c = a.toLocaleString();
+        var result = puma.evalPuma("var a = Array(1200.96, 0.223); a.toLocaleString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, c, "Passed!");
+    });
+
+    test("Array.prototype.concat([ item1 [, item2 [, ... ]]])", function () {
+        var result = puma.evalPuma("var a = Array('OK'); a = a.concat('SWITCH'); a.concat('CANCEL', 'CANCEL');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 'OK,SWITCH,CANCEL,CANCEL', "Passed!");
+    });
+
+    test("Array.prototype.join()", function () {
+        var result = puma.evalPuma("var a = Array('R36','L10','R59','R97'); a.toString();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 'R36,L10,R59,R97', "Passed!");
+    });
+    
+    test("Array.prototype.join(separator)", function () {
+        var result = puma.evalPuma("var a = Array('R36','L10','R59','R97'); a.join('-');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 'R36-L10-R59-R97', "Passed!");
+    });
+
+    test("Array.prototype.pop()", function () {
+        var result = puma.evalPuma("var a = Array(4,8,15,16,23,42); a.pop();");
+        var result2 = puma.evalPuma("var b = Array('R36','L10','R59','R97'); b.pop(); b.valueOf();");
+        result.makeValue();
+        equal(result.success && result2.success, true, "Passed!");
+        equal(result.value, 42, "Passed!");
+        equal(result2.value.toString(), 'R36,L10,R59', "Passed!");
+    });
+
+    test("Array.prototype.push([ item1 [, item2 [, ... ]]])", function () {
+        var result = puma.evalPuma("var a = Array(4,8,15,16,23); a.push(42);");
+        var result2 = puma.evalPuma("var b = Array('R36','L10','R59'); b.push('R97'); b.valueOf();");
+        result.makeValue();
+        equal(result.success && result2.success, true, "Passed!");
+        equal(result.value, 6, "Passed!");
+        equal(result2.value.toString(), 'R36,L10,R59,R97', "Passed!");
+    });
+
+    test("Array.prototype.reverse()", function () {
+        var result = puma.evalPuma("var a = Array(4,8,15,16,23,42); a.reverse();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), '42,23,16,15,8,4', "Passed!");
+    });
+
+    test("Array.prototype.shift()", function () {
+        var result = puma.evalPuma("var a = Array(4,8,15,16,23,42); a.shift();");
+        var result2 = puma.evalPuma("var b = Array('R36','L10','R59','R97'); b.shift(); b.valueOf();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 4, "Passed!");
+        equal(result2.value.toString(), 'L10,R59,R97', "Passed!");
+    });
+
+    test("Array.prototype.slice(start, end)", function () {
+        var result = puma.evalPuma("var a = Array(4,8,15,16,23,42); a.slice(2, '5');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), '15,16,23', "Passed!");
+    });
+
+    test("Array.prototype.sort(comparefn)", function () {
+        var result = puma.evalPuma("var a = Array(15,42,23,4,16,8); a.sort(Function('n0','n1','return n0-n1;'));");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), '4,8,15,16,23,42', "Passed!");
+    });
+
+    test("Array.prototype.splice(start, deleteCount [, item1 [, item2 [, ... ]]])", function () {
+        var result = puma.evalPuma("var a = Array(4,9); a.splice(1,1,2,6);");
+        var result2 = puma.evalPuma("var b = Array('OK','SWITCH','CANCEL','SELECT','CANCEL'); var r = b.splice(3,1); b.valueOf();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), '9', "Passed!");
+        equal(result2.value.toString(), 'OK,SWITCH,CANCEL,CANCEL', "Passed!");
+    });
+
+    test("Array.prototype.unshift([ item1 [, item2 [, ... ]]])", function () {
+        var result = puma.evalPuma("var a = Array(16,23,42); a.unshift(4,8,15);");
+        var result2 = puma.evalPuma("var b = Array('L10','R59','R97'); b.unshift('R36'); b.valueOf();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 6, "Passed!");
+        equal(result2.value.toString(), 'R36,L10,R59,R97', "Passed!");
+    });
+
+    test("Array.prototype.indexOf(searchElement [, fromIndex ])", function () {
+        var result = puma.evalPuma("var a = Array('0123','2121','5475','3716','9637','4145'); a.indexOf('4145');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 5, "Passed!");
+    });
+    
+    test("Array.prototype.indexOf(nonPresentElement [, fromIndex ])", function () {
+        var result = puma.evalPuma("var a = Array('0123','2121','5475','3716','9637','4145'); a.indexOf('7256',2);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, -1, "Passed!");
+    });
+
+    test("Array.prototype.lastIndexOf(searchElement [, fromIndex ])", function () {
+        var result = puma.evalPuma("var a = Array('0123','2121','5475','3716','9637','4145','0250','1364','9642','5475','7256','3167'); a.lastIndexOf('5475');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 9, "Passed!");
+    });
+    
+    test("Array.prototype.lastIndexOf(nonPresentElement [, fromIndex ])", function () {
+        var result = puma.evalPuma("var a = Array('0250','1364','9642','5475','7256','3167'); a.lastIndexOf('2121,2');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, -1, "Passed!");
+    });
+
+    test("Array.prototype.every(callbackfn)", function () {
+        var result = puma.evalPuma("var a = Array(2.5,13.64,9.642,5,4,0.75,2,31); a.every(Function('e','i','a','return e > 0;'));");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, true, "Passed!");
+    });
+    
+    test("Array.prototype.every(callbackfn [, thisArg ])", function () {
+        var result = puma.evalPuma("var reference = {refV: 0.25}; var a = Array(2.5,13.64,9.642,5,4,0.75,2,31); a.every(Function('e','i','a','return e > this.refV;'), reference);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, true, "Passed!");
+    });
+
+    test("Array.prototype.some(callbackfn)", function () {
+        var result = puma.evalPuma("var a = Array(2.5,13.64,9.642,5,4,0.75,2,31); a.some(Function('e','i','a','return e > 12;'));");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, true, "Passed!");
+    });
+    
+    test("Array.prototype.some(callbackfn [, thisArg ])", function () {
+        var result = puma.evalPuma("var reference = {refV: 27}; var a = Array(2.5,13.64,9.642,5,4,0.75,2,31); a.some(Function('e','i','a','return e > this.refV;'), reference);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, true, "Passed!");
+    });
+/*
+    test("Array.prototype.forEach(callbackfn [, thisArg ])", function () {
+        var result = puma.evalPuma("");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, , "Passed!");
+    });
+
+    test("Array.prototype.map(callbackfn [, thisArg ])", function () {
+        var result = puma.evalPuma("");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, , "Passed!");
+    });
+
+    test("Array.prototype.filter(callbackfn [, thisArg ])", function () {
+        var result = puma.evalPuma("");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, , "Passed!");
+    });
+
+    test("Array.prototype.reduce(callbackfn [, initialValue ])", function () {
+        var result = puma.evalPuma("");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, , "Passed!");
+    });
+
+    test("Array.prototype.reduceRight(callbackfn [, initialValue ])", function () {
+        var result = puma.evalPuma("");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, , "Passed!");
+    });
+    
+    test("Properties of Array Instances", function () {
+        var result = puma.evalPuma("var a = ['R36','L10','R59','R97']; a.valueOf();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, , "Passed!");
+    });*/
+    
+    
     //   Section 15.6: Boolean Objects   //
     
     test("The Boolean Constructor Called as a Function", function () {
