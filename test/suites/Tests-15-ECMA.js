@@ -916,206 +916,206 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.toString(), c, "Passed!");
     });
     
-    QUnit.skip("String.prototype.toString()", function () {
-        var result = puma.evalPuma("var s = new String('Puma'); s.toString();");
+    test("String.prototype.toString()", function () {
+        var result = puma.evalPuma("var s = String('Puma'); s.toString();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 'Puma', "Passed!");
     });
     
-    QUnit.skip("String.prototype.valueOf()", function () {
-        var result = puma.evalPuma("var s = new String('Puma'); s.valueOf();");
+    test("String.prototype.valueOf()", function () {
+        var result = puma.evalPuma("var s = String('Puma'); s.valueOf();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 'Puma', "Passed!");
     });
 
-    QUnit.skip("String.prototype.charAt(pos)", function () {
-        var result = puma.evalPuma("var s = new String('Puma'); s.charAt(0);");
+    test("String.prototype.charAt(pos)", function () {
+        var result = puma.evalPuma("var s = String('Puma'); s.charAt(0);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 'P', "Passed!");
     });
 
-    QUnit.skip("String.prototype.charCodeAt(pos)", function () {
-        var result = puma.evalPuma("var s = new String('Puma'); s.charCodeAt(0);");
+    test("String.prototype.charCodeAt(pos)", function () {
+        var result = puma.evalPuma("var s = String('Puma'); s.charCodeAt(0);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 80, "Passed!");
     });
 
-    QUnit.skip("String.prototype.charCodeAt(non_valid_pos)", function () {
-        var result = puma.evalPuma("var s = new String('Puma'); s.charCodeAt(4);");
+    test("String.prototype.charCodeAt(non_valid_pos)", function () {
+        var result = puma.evalPuma("var s = String('Puma'); s.charCodeAt(4);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(isNaN(result.value), true, "Passed!");
     });
 
-    QUnit.skip("String.prototype.concat([ string1 [, string2 [, ... ]]])", function () {
-        var result = puma.evalPuma("var s = new String('Puma'); s.concat('Sc', 'r', 'ip', 't');");
+    test("String.prototype.concat([ string1 [, string2 [, ... ]]])", function () {
+        var result = puma.evalPuma("var s = String('Puma'); s.concat('Sc', 'r', 'ip', 't');");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 'PumaScript', "Passed!");
     });
 
-    QUnit.skip("String.prototype.indexOf(ns)", function () {
-        var result = puma.evalPuma("var s = new String('Undre4m'); s.indexOf(4);");
+    test("String.prototype.indexOf(ns)", function () {
+        var result = puma.evalPuma("var s = String('Undre4m'); s.indexOf(4);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 5, "Passed!");
     });
 
-    QUnit.skip("String.prototype.indexOf(searchChar)", function () {
-        var result = puma.evalPuma("var s = new String(\"Hetalia\'s torpor\"); s.indexOf('a', undefined);");
+    test("String.prototype.indexOf(searchChar)", function () {
+        var result = puma.evalPuma("var s = String(\"Hetalia\'s torpor\"); s.indexOf('a', undefined);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 3, "Passed!");
     });
 
-    QUnit.skip("String.prototype.indexOf(searchString, position)", function () {
-        var result = puma.evalPuma("var s = new String(\"Hetalia\'s torpor\"); s.indexOf('or', 9);");
+    test("String.prototype.indexOf(searchString, position)", function () {
+        var result = puma.evalPuma("var s = String(\"Hetalia\'s torpor\"); s.indexOf('or', 9);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 11, "Passed!");
     });
 
-    QUnit.skip("String.prototype.indexOf(non_present_string, after_position)", function () {
-        var result = puma.evalPuma("var s = new String(\"Hetalia\'s torpor\"); s.indexOf('S', 7);");
+    test("String.prototype.indexOf(non_present_string, after_position)", function () {
+        var result = puma.evalPuma("var s = String(\"Hetalia\'s torpor\"); s.indexOf('S', 7);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, -1, "Passed!");
     });
 
-    QUnit.skip("String.prototype.lastIndexOf(ns)", function () {
-        var result = puma.evalPuma("var s = new String('Undre4m'); s.indexOf(4);");
+    test("String.prototype.lastIndexOf(ns)", function () {
+        var result = puma.evalPuma("var s = String('Undre4m'); s.indexOf(4);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 5, "Passed!");
     });
 
-    QUnit.skip("String.prototype.lastIndexOf(searchChar)", function () {
-        var result = puma.evalPuma("var s = new String(\"Hetalia\'s torpor\"); s.lastIndexOf('a', undefined);");
+    test("String.prototype.lastIndexOf(searchChar)", function () {
+        var result = puma.evalPuma("var s = String(\"Hetalia\'s torpor\"); s.lastIndexOf('a', undefined);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 6, "Passed!");
     });
 
-    QUnit.skip("String.prototype.lastIndexOf(searchString, position)", function () {
-        var result = puma.evalPuma("var s = new String(\"Hetalia\'s torpor\"); s.lastIndexOf('alia\\\'s', 15);");
+    test("String.prototype.lastIndexOf(searchString, position)", function () {
+        var result = puma.evalPuma("var s = String(\"Hetalia\'s torpor\"); s.lastIndexOf('alia\\\'s', 15);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 3, "Passed!");
     });
 
-    QUnit.skip("String.prototype.lastIndexOf(non_present_string, after_position)", function () {
-        var result = puma.evalPuma("var s = new String(\"Hetalia\'s torpor\"); s.lastIndexOf('ETA', 6);");
+    test("String.prototype.lastIndexOf(non_present_string, after_position)", function () {
+        var result = puma.evalPuma("var s = String(\"Hetalia\'s torpor\"); s.lastIndexOf('ETA', 6);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, -1, "Passed!");
     });
 
-    QUnit.skip("String.prototype.localeCompare(that)", function () {
-        var result = puma.evalPuma("var s = new String('Hecate'); s.localeCompare('Hetalia');");
+    test("String.prototype.localeCompare(that)", function () {
+        var result = puma.evalPuma("var s = String('Hecate'); s.localeCompare('Hetalia');");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value < 0, true, "Passed!");
     });
     
-    QUnit.skip("String.prototype.match(expression)", function () {
-        var result = puma.evalPuma("var s = new String('root:$6$Ke02nYgo.9v0SF4p$hjztYvo/M4buqO4oBX8KZTftjCn6fE4cV5o/I95QPekeQpITwFTRbDUBYBLIUx2mhorQoj9bLN8v.w6btE9xy1:16431:0:99999:7:::'); s.match(/:([*!]{0,2}|[a-z0-9.$/]{0,128}):/i);");
+    test("String.prototype.match(expression)", function () {
+        var result = puma.evalPuma("var s = String('root:$6$Ke02nYgo.9v0SF4p$hjztYvo/M4buqO4oBX8KZTftjCn6fE4cV5o/I95QPekeQpITwFTRbDUBYBLIUx2mhorQoj9bLN8v.w6btE9xy1:16431:0:99999:7:::'); s.match(/:([*!]{0,2}|[a-z0-9.$/]{0,128}):/i);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value[1], '$6$Ke02nYgo.9v0SF4p$hjztYvo/M4buqO4oBX8KZTftjCn6fE4cV5o/I95QPekeQpITwFTRbDUBYBLIUx2mhorQoj9bLN8v.w6btE9xy1', "Passed!");
     });
     
-    QUnit.skip("String.prototype.match(regexp)", function () {
-        var result = puma.evalPuma("var rex = RegExp(/:([*!]{0,2}|[a-z0-9.$/]{0,128}):/i); var s = new String('root:$6$Ke02nYgo.9v0SF4p$hjztYvo/M4buqO4oBX8KZTftjCn6fE4cV5o/I95QPekeQpITwFTRbDUBYBLIUx2mhorQoj9bLN8v.w6btE9xy1:16431:0:99999:7:::'); s.match(rex);");
+    test("String.prototype.match(regexp)", function () {
+        var result = puma.evalPuma("var rex = RegExp(/:([*!]{0,2}|[a-z0-9.$/]{0,128}):/i); var s = String('root:$6$Ke02nYgo.9v0SF4p$hjztYvo/M4buqO4oBX8KZTftjCn6fE4cV5o/I95QPekeQpITwFTRbDUBYBLIUx2mhorQoj9bLN8v.w6btE9xy1:16431:0:99999:7:::'); s.match(rex);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value[1], '$6$Ke02nYgo.9v0SF4p$hjztYvo/M4buqO4oBX8KZTftjCn6fE4cV5o/I95QPekeQpITwFTRbDUBYBLIUx2mhorQoj9bLN8v.w6btE9xy1', "Passed!");
     });
 
-    QUnit.skip("String.prototype.replace(searchValue, replaceValue)", function () {
-        var result = puma.evalPuma("var s = new String('Hetalia'); s.replace('Het', 'Gen');");
+    test("String.prototype.replace(searchValue, replaceValue)", function () {
+        var result = puma.evalPuma("var s = String('Hetalia'); s.replace('Het', 'Gen');");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 'Genalia', "Passed!");
     });
 
-    QUnit.skip("String.prototype.replace(regexp, function)", function () {
-        var result = puma.evalPuma("var rex = RegExp(/([a-z]+) ([a-z']+)/i); var s = new String('Lucas Astrada'); s.replace(rex, '$2, $1');");
+    test("String.prototype.replace(regexp, function)", function () {
+        var result = puma.evalPuma("var rex = RegExp(/([a-z]+) ([a-z']+)/i); var s = String('Lucas Astrada'); s.replace(rex, '$2, $1');");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 'Astrada, Lucas', "Passed!");
     });
 
-    QUnit.skip("String.prototype.search(expression)", function () {
-        var result = puma.evalPuma("var s = new String('root:$6$Ke02nYgo.9v0SF4p$hjztYvo/M4buqO4oBX8KZTftjCn6fE4cV5o/I95QPekeQpITwFTRbDUBYBLIUx2mhorQoj9bLN8v.w6btE9xy1:16431:0:99999:7:::'); s.search(/:([*!]{0,2}|[a-z0-9.$/]{0,128}):/i);");
+    test("String.prototype.search(expression)", function () {
+        var result = puma.evalPuma("var s = String('root:$6$Ke02nYgo.9v0SF4p$hjztYvo/M4buqO4oBX8KZTftjCn6fE4cV5o/I95QPekeQpITwFTRbDUBYBLIUx2mhorQoj9bLN8v.w6btE9xy1:16431:0:99999:7:::'); s.search(/:([*!]{0,2}|[a-z0-9.$/]{0,128}):/i);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 4, "Passed!");
     });
 
-    QUnit.skip("String.prototype.search(regexp)", function () {
-        var result = puma.evalPuma("var rex = RegExp(/:([*!]{0,2}|[a-z0-9.$/]{0,128}):/i); var s = new String('root:$6$Ke02nYgo.9v0SF4p$hjztYvo/M4buqO4oBX8KZTftjCn6fE4cV5o/I95QPekeQpITwFTRbDUBYBLIUx2mhorQoj9bLN8v.w6btE9xy1:16431:0:99999:7:::'); s.search(rex);");
+    test("String.prototype.search(regexp)", function () {
+        var result = puma.evalPuma("var rex = RegExp(/:([*!]{0,2}|[a-z0-9.$/]{0,128}):/i); var s = String('root:$6$Ke02nYgo.9v0SF4p$hjztYvo/M4buqO4oBX8KZTftjCn6fE4cV5o/I95QPekeQpITwFTRbDUBYBLIUx2mhorQoj9bLN8v.w6btE9xy1:16431:0:99999:7:::'); s.search(rex);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 4, "Passed!");
     });
     
-    QUnit.skip("String.prototype.search(non_matching_regexp)", function () {
-        var result = puma.evalPuma("var rex = RegExp(/:[*!]{1,2}:/i); var s = new String('mandar:$6$5H0QpwprRiJQR19Y$bXGOh7dIfOWpUb/Tuqr7yQVCqL3UkrJns9.7msfvMg4ZO/PsFC5Tbt32PXAw9qRFEBs1254aLimFeNM8YsYOv.:16431:0:99999:7:::'); s.search(rex);");
+    test("String.prototype.search(non_matching_regexp)", function () {
+        var result = puma.evalPuma("var rex = RegExp(/:[*!]{1,2}:/i); var s = String('mandar:$6$5H0QpwprRiJQR19Y$bXGOh7dIfOWpUb/Tuqr7yQVCqL3UkrJns9.7msfvMg4ZO/PsFC5Tbt32PXAw9qRFEBs1254aLimFeNM8YsYOv.:16431:0:99999:7:::'); s.search(rex);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, -1, "Passed!");
     });
 
-    QUnit.skip("String.prototype.slice(start, end)", function () {
-        var result = puma.evalPuma("var s = new String('Illumination'); s.slice(2, 8);");
+    test("String.prototype.slice(start, end)", function () {
+        var result = puma.evalPuma("var s = String('Illumination'); s.slice(2, 8);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 'lumina', "Passed!");
     });
 
-    QUnit.skip("String.prototype.slice(negative_start, negative_end_string)", function () {
-        var result = puma.evalPuma("var s = new String('Illumination'); s.slice(-9, '-6');");
+    test("String.prototype.slice(negative_start, negative_end_string)", function () {
+        var result = puma.evalPuma("var s = String('Illumination'); s.slice(-9, '-6');");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 'umi', "Passed!");
     });
 
-    QUnit.skip("String.prototype.slice(start_string)", function () {
-        var result = puma.evalPuma("var s = new String('Illumination'); s.slice('6', undefined);");
+    test("String.prototype.slice(start_string)", function () {
+        var result = puma.evalPuma("var s = String('Illumination'); s.slice('6', undefined);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 'nation', "Passed!");
     });
 
-    QUnit.skip("String.prototype.split()", function () {
+    test("String.prototype.split()", function () {
         var a = ["Pina"];
-        var result = puma.evalPuma("var s = new String('Pina'); s.split(undefined, undefined);");
+        var result = puma.evalPuma("var s = String('Pina'); s.split(undefined, undefined);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.toString(), a.toString(), "Passed!");
     });
 
-    QUnit.skip("String.prototype.split(empty_string)", function () {
+    test("String.prototype.split(empty_string)", function () {
         var a = ["P", "i", "n", "a"];
-        var result = puma.evalPuma("var s = new String('Pina'); s.split('', undefined);");
+        var result = puma.evalPuma("var s = String('Pina'); s.split('', undefined);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.toString(), a.toString(), "Passed!");
     });
 
-    QUnit.skip("String.prototype.split(empty_matching_regexp)", function () {
+    test("String.prototype.split(empty_matching_regexp)", function () {
         var a = ["P", "i", "n", "a"];
-        var result = puma.evalPuma("var s = new String('Pina'); s.split(new RegExp(/ {0}/));");
+        var result = puma.evalPuma("var s = String('Pina'); s.split(RegExp(/ {0}/));");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.toString(), a.toString(), "Passed!");
     });
 
-    QUnit.skip("String.prototype.split(separator, limit)", function () {
+    test("String.prototype.split(separator, limit)", function () {
         var a = ["15m", "EA9BO", "AF", "Ceuta & Melilla", "9818.891", "32", "21.076945", "IM75", "JT65"];
         var result = puma.evalPuma("var s = '15m,EA9BO,AF,Ceuta & Melilla,9818.891,32,21.076945,IM75,JT65,FF77,EA9,Y,-18,-09,LW2EIY/H,210000,210000,20160714'; s.split(',', 9);");
         result.makeValue();
@@ -1123,80 +1123,80 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.toString(), a.toString(), "Passed!");
     });
 
-    QUnit.skip("String.prototype.split(expression, limit_string)", function () {
+    test("String.prototype.split(expression, limit_string)", function () {
         var a = ["ssh", "22", "tcp"];
-        var result = puma.evalPuma("var s = 'ssh     22/tcp       #SSH Remote Login Protocol'; s.split(/  +|\//, '3');");
+        var result = puma.evalPuma("var s = 'ssh     22/tcp       #SSH Remote Login Protocol'; s.split(/  +|[/]/, '3');");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.toString(), a.toString(), "Passed!");
     });
 
-    QUnit.skip("String.prototype.split(regexp)", function () {
+    test("String.prototype.split(regexp)", function () {
         var a = ["", "15m", "EA9BO", "AF", "Ceuta & Melilla", "9818.891", "32", "21.076945", "IM75", "JT65", "FF77", "EA9", "Y", "-18", "-09", "LW2EIY/H", "210000", "210000", "20160714", ""];
-        var result = puma.evalPuma("var s = new String('<band:3>15m <call:5>EA9BO <cont:2>AF <country:15>Ceuta & Melilla <distance:8>9818.891 <dxcc:2>32 <freq:9>21.076945 <gridsquare:4>IM75 <mode:4>JT65 <my_gridsquare:4>FF77 <pfx:3>EA9 <qso_complete:1>Y <rst_rcvd:3>-18 <rst_sent:3>-09 <station_callsign:8>LW2EIY/H <time_off:6>210000 <time_on:6>210000 <qso_date:8>20160714 <EOR>'); s.split(RegExp(/ {0,1}<[a-z_0-9]*:{0,1}[a-z0-9]{1,3}>/i));");
+        var result = puma.evalPuma("var s = String('<band:3>15m <call:5>EA9BO <cont:2>AF <country:15>Ceuta & Melilla <distance:8>9818.891 <dxcc:2>32 <freq:9>21.076945 <gridsquare:4>IM75 <mode:4>JT65 <my_gridsquare:4>FF77 <pfx:3>EA9 <qso_complete:1>Y <rst_rcvd:3>-18 <rst_sent:3>-09 <station_callsign:8>LW2EIY/H <time_off:6>210000 <time_on:6>210000 <qso_date:8>20160714 <EOR>'); s.split(RegExp(/ {0,1}<[a-z_0-9]*:{0,1}[a-z0-9]{1,3}>/i));");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.toString(), a.toString(), "Passed!");
     });
 
-    QUnit.skip("String.prototype.substring(start, end)", function () {
-        var result = puma.evalPuma("var s = new String('DuClare'); s.substring(1, 3);");
+    test("String.prototype.substring(start, end)", function () {
+        var result = puma.evalPuma("var s = String('DuClare'); s.substring(1, 3);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 'uC', "Passed!");
     });
 
-    QUnit.skip("String.prototype.substring(start_string, undefined)", function () {
-        var result = puma.evalPuma("var s = new String('DuClare'); s.substring('2', undefined);");
+    test("String.prototype.substring(start_string, undefined)", function () {
+        var result = puma.evalPuma("var s = String('DuClare'); s.substring('2', undefined);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 'Clare', "Passed!");
     });
 
-    QUnit.skip("String.prototype.substring(start, NaN)", function () {
-        var result = puma.evalPuma("var s = new String('DuClare'); s.substring(5, NaN);");
+    test("String.prototype.substring(start, NaN)", function () {
+        var result = puma.evalPuma("var s = String('DuClare'); s.substring(5, NaN);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 'DuCla', "Passed!");
     });
 
-    QUnit.skip("String.prototype.substring(NaN, negative_end)", function () {
-        var result = puma.evalPuma("var s = new String('DuClare'); s.substring(NaN, -4);");
+    test("String.prototype.substring(NaN, negative_end)", function () {
+        var result = puma.evalPuma("var s = String('DuClare'); s.substring(NaN, -4);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, '', "Passed!");
     });
 
-    QUnit.skip("String.prototype.toLowerCase()", function () {
-        var result = puma.evalPuma("var s = new String('DuClare'); s.toLowerCase();");
+    test("String.prototype.toLowerCase()", function () {
+        var result = puma.evalPuma("var s = String('DuClare'); s.toLowerCase();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 'duclare', "Passed!");
     });
 
-    QUnit.skip("String.prototype.toLocaleLowerCase()", function () {
-        var result = puma.evalPuma("var s = new String('DuClare'); s.toLocaleLowerCase();");
+    test("String.prototype.toLocaleLowerCase()", function () {
+        var result = puma.evalPuma("var s = String('DuClare'); s.toLocaleLowerCase();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 'duclare', "Passed!");
     });
 
-    QUnit.skip("String.prototype.toUpperCase()", function () {
-        var result = puma.evalPuma("var s = new String('chateau'); s.toUpperCase();");
+    test("String.prototype.toUpperCase()", function () {
+        var result = puma.evalPuma("var s = String('chateau'); s.toUpperCase();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 'CHATEAU', "Passed!");
     });
 
-    QUnit.skip("String.prototype.toLocaleUpperCase()", function () {
-        var result = puma.evalPuma("var s = new String('chateau'); s.toLocaleUpperCase();");
+    test("String.prototype.toLocaleUpperCase()", function () {
+        var result = puma.evalPuma("var s = String('chateau'); s.toLocaleUpperCase();");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value, 'duclare', "Passed!");
+        equal(result.value, 'CHATEAU', "Passed!");
     });
 
-    QUnit.skip("String.prototype.trim()", function () {
-        var result = puma.evalPuma("var s = new String('   Universidad Tecnológica Nacional  '); s.trim();");
+    test("String.prototype.trim()", function () {
+        var result = puma.evalPuma("var s = String('   Universidad Tecnológica Nacional  '); s.trim();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 'Universidad Tecnológica Nacional', "Passed!");
