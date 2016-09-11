@@ -714,74 +714,115 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Array.prototype.every(callbackfn)", function () {
-        var result = puma.evalPuma("var a = Array(2.5,13.64,9.642,5,4,0.75,2,31); a.every(Function('e','i','a','return e > 0;'));");
+        var result = puma.evalPuma("var a = Array(2.5,13.64,9.642,5,4,0.75,2,31); a.every(Function('e','i','ar','return e > 0;'));");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, true, "Passed!");
     });
     
     test("Array.prototype.every(callbackfn [, thisArg ])", function () {
-        var result = puma.evalPuma("var reference = {refV: 0.25}; var a = Array(2.5,13.64,9.642,5,4,0.75,2,31); a.every(Function('e','i','a','return e > this.refV;'), reference);");
+        var result = puma.evalPuma("var reference = {refV: 0.25}; var a = Array(2.5,13.64,9.642,5,4,0.75,2,31); a.every(Function('e','i','ar','return e > this.refV;'), reference);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, true, "Passed!");
     });
 
     test("Array.prototype.some(callbackfn)", function () {
-        var result = puma.evalPuma("var a = Array(2.5,13.64,9.642,5,4,0.75,2,31); a.some(Function('e','i','a','return e > 12;'));");
+        var result = puma.evalPuma("var a = Array(2.5,13.64,9.642,5,4,0.75,2,31); a.some(Function('e','i','ar','return e > 12;'));");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, true, "Passed!");
     });
     
     test("Array.prototype.some(callbackfn [, thisArg ])", function () {
-        var result = puma.evalPuma("var reference = {refV: 27}; var a = Array(2.5,13.64,9.642,5,4,0.75,2,31); a.some(Function('e','i','a','return e > this.refV;'), reference);");
+        var result = puma.evalPuma("var reference = {refV: 27}; var a = Array(2.5,13.64,9.642,5,4,0.75,2,31); a.some(Function('e','i','ar','return e > this.refV;'), reference);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, true, "Passed!");
     });
-/*
-    test("Array.prototype.forEach(callbackfn [, thisArg ])", function () {
-        var result = puma.evalPuma("");
-        result.makeValue();
-        equal(result.success, true, "Passed!");
-        equal(result.value, , "Passed!");
-    });
 
-    test("Array.prototype.map(callbackfn [, thisArg ])", function () {
-        var result = puma.evalPuma("");
+    test("Array.prototype.forEach(callbackfn)", function () {
+        var result = puma.evalPuma("var a = Array(2.5,13.64,9.642,5,4,0.75,2,31); a.forEach(Function('e','i','ar','ar[i]=e%2;')); a.valueOf();");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value, , "Passed!");
-    });
-
-    test("Array.prototype.filter(callbackfn [, thisArg ])", function () {
-        var result = puma.evalPuma("");
-        result.makeValue();
-        equal(result.success, true, "Passed!");
-        equal(result.value, , "Passed!");
-    });
-
-    test("Array.prototype.reduce(callbackfn [, initialValue ])", function () {
-        var result = puma.evalPuma("");
-        result.makeValue();
-        equal(result.success, true, "Passed!");
-        equal(result.value, , "Passed!");
-    });
-
-    test("Array.prototype.reduceRight(callbackfn [, initialValue ])", function () {
-        var result = puma.evalPuma("");
-        result.makeValue();
-        equal(result.success, true, "Passed!");
-        equal(result.value, , "Passed!");
+        equal(result.value, '0.5,1.6400000000000006,1.6419999999999995,1,0,0.75,0,1', "Passed!");
     });
     
-    test("Properties of Array Instances", function () {
-        var result = puma.evalPuma("var a = ['R36','L10','R59','R97']; a.valueOf();");
+    test("Array.prototype.forEach(callbackfn [, thisArg ])", function () {
+        var result = puma.evalPuma("var that = {a: Array(8)}; var a = Array(2.5,13.64,9.642,5,4,0.75,2,31); a.forEach(Function('e','i','ar','this.a[i]=e%0.25;'), that); that.a.valueOf();");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value, , "Passed!");
-    });*/
+        equal(result.value, '0,0.14000000000000057,0.14199999999999946,0,0,0,0,0', "Passed!");
+    });
+
+    test("Array.prototype.map(callbackfn)", function () {
+        var result = puma.evalPuma("var a = Array(2.5,13.64,9.642,5,4,0.75,2,31); a.map(Function('e','i','ar','return e*i;'));");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, '0,13.64,19.284,15,16,3.75,12,217', "Passed!");
+    });
+    
+    test("Array.prototype.map(callbackfn [, thisArg ])", function () {
+        var result = puma.evalPuma("var reference = {a: 15}; var a = Array(2.5,13.64,9.642,5,4,0.75,2,31); a.map(Function('e','i','ar','return e*i-this.a;'), reference);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, '-15,-1.3599999999999994,4.283999999999999,0,1,-11.25,-3,202', "Passed!");
+    });
+
+    test("Array.prototype.filter(callbackfn)", function () {
+        var result = puma.evalPuma("var a = Array(2.5,13.64,9.642,5,4,0.75,2,31); a.filter(Function('e','i','ar','if (e%2==0) {return true;};'));");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, '4,2', "Passed!");
+    });
+    
+    test("Array.prototype.filter(callbackfn [, thisArg ])", function () {
+        var result = puma.evalPuma("var reference = {a: 2.5}; var a = Array(2.5,13.64,9.642,5,4,0.75,2,31); a.filter(Function('e','i','ar','if (e%this.a==0) {return true;};'), reference);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, '2.5,5', "Passed!");
+    });
+
+    test("Array.prototype.reduce(callbackfn)", function () {
+        var result = puma.evalPuma("var a = Array(2.5,13.64,9.642,5,4,0.75,2,31); a.reduce(Function('pv','cv','i','ar','return cv-pv;'));");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 32.248000000000005, "Passed!");
+    });
+    
+    test("Array.prototype.reduce(callbackfn [, initialValue ])", function () {
+        var result = puma.evalPuma("var a = Array(2.5,13.64,9.642,5,4,0.75,2,31); a.reduce(Function('pv','cv','i','ar','return cv-pv-i;'), -27);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, 1.248000000000001, "Passed!");
+    });
+
+    test("Array.prototype.reduceRight(callbackfn)", function () {
+        var result = puma.evalPuma("var a = Array(2.5,13.64,9.642,5,4,0.75,2,31); a.reduceRight(Function('pv','cv','i','ar','return cv-pv;'));");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, -32.248000000000005, "Passed!");
+    });
+    
+    test("Array.prototype.reduceRight(callbackfn [, initialValue ])", function () {
+        var result = puma.evalPuma("var a = Array(2.5,13.64,9.642,5,4,0.75,2,31); a.reduceRight(Function('pv','cv','i','ar','return cv-pv-i;'), 27);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, -1.248000000000001, "Passed!");
+    });
+
+    test("Properties of Array Instances", function () {
+        var pd = { value: 4, writable: true, enumerable: false, configurable: false };
+        var result = puma.evalPuma("var a = [36,10,59,97]; Object.defineProperty(a, '0', { writable: false, value: 7 }); a[1] = 0; Object.defineProperty(a, '2', { enumerable: false, value: 0 }); Object.defineProperty(a, '3', { enumerable: false }); a.valueOf();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.propertyIsEnumerable('0'), true, "Passed!");
+        equal(result.value.propertyIsEnumerable('1'), true, "Passed!");
+        equal(result.value.propertyIsEnumerable('2'), false, "Passed!");
+        equal(result.value.propertyIsEnumerable('3'), false, "Passed!");
+        equal(JSON.stringify(Object.getOwnPropertyDescriptor(result.value, 'length')), JSON.stringify(pd), "Passed!");
+        equal(result.value.toString(), '7,0,0,97', "Passed!");
+    });
     
     
     //   Section 15.6: Boolean Objects   //
