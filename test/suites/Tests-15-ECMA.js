@@ -576,7 +576,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
     QUnit.skip("Array.prototype.constructor", function () {
-        var c = "function Array() {\n    [native code]\n}"
+        var c = "function Array() {\n    [native code]\n}";
         var result = puma.evalPuma("Array.prototype.constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -909,7 +909,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
     QUnit.skip("String.prototype.constructor", function () {
-        var c = "function String() {\n    [native code]\n}"
+        var c = "function String() {\n    [native code]\n}";
         var result = puma.evalPuma("String.prototype.constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -1268,7 +1268,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
     QUnit.skip("Boolean.prototype.constructor", function () {
-        var c = "function Boolean() {\n    [native code]\n}"
+        var c = "function Boolean() {\n    [native code]\n}";
         var result = puma.evalPuma("Boolean.prototype.constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -1404,7 +1404,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
     QUnit.skip("Number.prototype.constructor", function () {
-        var c = "function Number() {\n    [native code]\n}"
+        var c = "function Number() {\n    [native code]\n}";
         var result = puma.evalPuma("Number.prototype.constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -1741,7 +1741,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
     QUnit.skip("Date.prototype.constructor", function () {
-        var c = "function Date() {\n    [native code]\n}"
+        var c = "function Date() {\n    [native code]\n}";
         var result = puma.evalPuma("Date.prototype.constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -2076,6 +2076,157 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
     
+    //   Section 15.10: RegExp (Regular Expression) Objects   //
+    
+    test("The RegExp Constructor Called as a Function", function () {
+        var result = puma.evalPuma("var x = RegExp();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+        equal(result.value.toString(), '/(?:)/', "Passed!");
+    });
+    
+    test("RegExp(pattern, flags)", function () {
+        var result = puma.evalPuma("var x = RegExp('^(?:4[0-9]{12}(?:[0-9]{3})?|(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11})$','gm');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+        equal(result.value.toString(), '/^(?:4[0-9]{12}(?:[0-9]{3})?|(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35d{3})d{11})$/gm', "Passed!");
+        equal(result.value.global, true, "Passed!");
+        equal(result.value.ignoreCase, false, "Passed!");
+        equal(result.value.multiline, true, "Passed!");
+        equal(result.value.lastIndex, 0, "Passed!");
+    });
+    
+    test("RegExp(expression)", function () {
+        var result = puma.evalPuma("var x = RegExp(/^(?:4[0-9]{12}(?:[0-9]{3})?|(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11})$/);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+        equal(result.value.toString(), '/^(?:4[0-9]{12}(?:[0-9]{3})?|(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35d{3})d{11})$/', "Passed!");
+        equal(result.value.global, false, "Passed!");
+        equal(result.value.ignoreCase, false, "Passed!");
+        equal(result.value.multiline, false, "Passed!");
+        equal(result.value.lastIndex, 0, "Passed!");
+    });
+    
+    QUnit.skip("The RegExp Constructor", function () {
+        var result = puma.evalPuma("var x = new RegExp();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+        equal(result.value.toString(), '/(?:)/', "Passed!");
+    });
+    
+    QUnit.skip("new RegExp(pattern, flags)", function () {
+        var result = puma.evalPuma("var x = new RegExp('^(?:4[0-9]{12}(?:[0-9]{3})?|(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11})$','gm');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+        equal(result.value.toString(), '/^(?:4[0-9]{12}(?:[0-9]{3})?|(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35d{3})d{11})$/gm', "Passed!");
+        equal(result.value.global, true, "Passed!");
+        equal(result.value.ignoreCase, false, "Passed!");
+        equal(result.value.multiline, true, "Passed!");
+        equal(result.value.lastIndex, 0, "Passed!");
+    });
+    
+    QUnit.skip("new RegExp(expression)", function () {
+        var result = puma.evalPuma("var x = new RegExp(/^(?:4[0-9]{12}(?:[0-9]{3})?|(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11})$/);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+        equal(result.value.toString(), '/^(?:4[0-9]{12}(?:[0-9]{3})?|(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35d{3})d{11})$/', "Passed!");
+        equal(result.value.global, false, "Passed!");
+        equal(result.value.ignoreCase, false, "Passed!");
+        equal(result.value.multiline, false, "Passed!");
+        equal(result.value.lastIndex, 0, "Passed!");
+    });
+    
+    test("Properties of the RegExp Constructor", function () {
+        var c = Function.prototype.toString();
+        var result = puma.evalPuma("RegExp;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.length, 2, "Passed!");
+        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+    });
+    
+    QUnit.skip("RegExp.prototype", function () {
+        var result = puma.evalPuma("RegExp.prototype;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(typeof result.value, 'object', "Passed!");
+        equal(result.value.toString(), '/(?:)/', "Passed!");
+    });
+    
+    test("Properties of the RegExp Prototype Object", function () {
+        var result = puma.evalPuma("Object.getOwnPropertyDescriptor(RegExp, 'prototype');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.value.toString(), '/(?:)/', "Passed!");
+        equal(result.value.writable, false, "Passed!");
+        equal(result.value.enumerable, false, "Passed!");
+        equal(result.value.configurable, false, "Passed!");
+    });
+    
+    QUnit.skip("RegExp.prototype.constructor", function () {
+        var c = "function RegExp() {\n    [native code]\n}";
+        var result = puma.evalPuma("RegExp.prototype.constructor;");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), c, "Passed!");
+    });
+    
+    test("RegExp.prototype.exec(string)", function () {
+        var result = puma.evalPuma("var x = RegExp(/^(?:4[0-9]{12}(?:[0-9]{3})?|(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11})$/gm); x.exec('5276234569763003');");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value.toString(), '5276234569763003', "Passed!");
+    });
+    
+    test("RegExp.prototype.test(ns)", function () {
+        var result = puma.evalPuma("var x = RegExp(/^(?:4[0-9]{12}(?:[0-9]{3})?|(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11})$/gm); x.test(378734493671000);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, true, "Passed!");
+    });
+    
+    test("RegExp.prototype.test(string)", function () {
+        var result = puma.evalPuma("var x = RegExp(/[a-z0-9_]{0,30}:([*!]{0,2}|[a-z0-9.$/]{0,128}):[0-9]{0,5}:[0-9]{0,5}:[0-9]{0,5}:[0-9]{0,5}:[0-9]{0,5}:[0-9]{0,5}:/i); var s = 'root:$6$Ke02nYgo.9v0SF4p$hjztYvo/M4buqO4oBX8KZTftjCn6fE4cV5o/I95QPekeQpITwFTRbDUBYBLIUx2mhorQoj9bLN8v.w6btE9xy1:16431:0:99999:7:::'; x.test(s);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, true, "Passed!");
+    });
+    
+    test("RegExp.prototype.toString()", function () {
+        var result = puma.evalPuma("RegExp(/ {0,1}<[a-z_0-9]*:{0,1}[a-z0-9]{1,3}>/i);");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(result.value, '/ {0,1}<[a-z_0-9]*:{0,1}[a-z0-9]{1,3}>/i', "Passed!");
+    });
+    
+    test("Properties of RegExp Instances", function () {
+        var pd = { value: 0, writable: true, enumerable: false, configurable: false };
+        var result = puma.evalPuma("var x = / {0,1}<[a-z_0-9]*:{0,1}[a-z0-9]{1,3}>/i; x.valueOf();");
+        result.makeValue();
+        equal(result.success, true, "Passed!");
+        equal(JSON.stringify(Object.getOwnPropertyDescriptor(result.value, 'lastIndex')), JSON.stringify(pd), "Passed!");
+        equal(result.value.source(), ' {0,1}<[a-z_0-9]*:{0,1}[a-z0-9]{1,3}>', "Passed!");
+        equal(result.value.global, false, "Passed!");
+        equal(result.value.ignoreCase, true, "Passed!");
+        equal(result.value.multiline, false, "Passed!");
+    });
+    
+    /*
+        NOTE
+                Prior to ECMAScript 2015, RegExp instances were specified as having the own data properties 
+                source, global, ignoreCase, and multiline. Those properties are now specified as accessor 
+                properties of RegExp.prototype.
+        
+        END OF NOTE
+    */
+    
+    
     //   Section 15.11: Error Objects   //
     
     test("The Error Constructor Called as a Function", function () {
@@ -2132,7 +2283,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
     QUnit.skip("Error.prototype.constructor", function () {
-        var c = "function Error() {\n    [native code]\n}"
+        var c = "function Error() {\n    [native code]\n}";
         var result = puma.evalPuma("Error.prototype.constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -2380,7 +2531,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
     QUnit.skip("RangeError.prototype.constructor", function () {
-        var c = "function RangeError() {\n    [native code]\n}"
+        var c = "function RangeError() {\n    [native code]\n}";
         var result = puma.evalPuma("RangeError.prototype.constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -2464,7 +2615,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
     QUnit.skip("ReferenceError.prototype.constructor", function () {
-        var c = "function ReferenceError() {\n    [native code]\n}"
+        var c = "function ReferenceError() {\n    [native code]\n}";
         var result = puma.evalPuma("ReferenceError.prototype.constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -2548,7 +2699,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
     QUnit.skip("SyntaxError.prototype.constructor", function () {
-        var c = "function SyntaxError() {\n    [native code]\n}"
+        var c = "function SyntaxError() {\n    [native code]\n}";
         var result = puma.evalPuma("SyntaxError.prototype.constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -2632,7 +2783,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
     QUnit.skip("TypeError.prototype.constructor", function () {
-        var c = "function TypeError() {\n    [native code]\n}"
+        var c = "function TypeError() {\n    [native code]\n}";
         var result = puma.evalPuma("TypeError.prototype.constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -2716,7 +2867,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
     QUnit.skip("URIError.prototype.constructor", function () {
-        var c = "function URIError() {\n    [native code]\n}"
+        var c = "function URIError() {\n    [native code]\n}";
         var result = puma.evalPuma("URIError.prototype.constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
