@@ -1,10 +1,10 @@
 {
-  "name": "puma",
+  "name": "pumascript",
   "version": "0.0.1",
   "description": "Easy Metaprograming for JS",
   "repository": "http://github.com/emravera/puma",
   "author": {
-    "name": "UTN-LIS",
+    "name": "Puma Team",
     "email": "alexis.ferreyra@gmail.com",
     "url": "http://github.com/emravera/puma"
   },
@@ -15,7 +15,7 @@
   "engines": {
     "node": ">= 0.8.0"
   },
-  "license": "UTN-LIS",
+  "license": "MIT",
   "devDependencies": {
     "grunt": "~0.4.5",
     "grunt-contrib-clean": "~0.7.0",
