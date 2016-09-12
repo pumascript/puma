@@ -2211,7 +2211,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(JSON.stringify(Object.getOwnPropertyDescriptor(result.value, 'lastIndex')), JSON.stringify(pd), "Passed!");
-        equal(result.value.source(), ' {0,1}<[a-z_0-9]*:{0,1}[a-z0-9]{1,3}>', "Passed!");
+        equal(result.value.source, ' {0,1}<[a-z_0-9]*:{0,1}[a-z0-9]{1,3}>', "Passed!");
         equal(result.value.global, false, "Passed!");
         equal(result.value.ignoreCase, true, "Passed!");
         equal(result.value.multiline, false, "Passed!");
