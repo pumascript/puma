@@ -2,28 +2,21 @@ module.exports = function (grunt) {
 
     'use strict';
 
-    var regex = {
-        DEFINE_START: /define\([^{]*?{/,
-        DEFINE_END: /\}\);[^}\w]*$/,
-        EXCLUSIONS: /[^\n]*\/\*\s*exclude-build\s*\*\/[^\n]*/,
-        EMPTY_DEFINITION: /define\(\[[^\]]+\]\)[\W\n]+$/
-    };
-
     require('load-grunt-tasks')(grunt);
 
     // Project configuration.
     grunt.initConfig({
-        buildName: 'pumascript',
-        outputDir: 'dist',
-        output: '<%= outputDir %>/<%= buildName %>',
+        buildConfig: {
+            name: 'pumascript',
+            output: 'dist/<%= buildConfig.name %>'
+        },
 
         jshint: {
             all: [
                 'gruntfile.js',
                 'src/**/*.js',
                 'tasks/*.js',
-                'test/*.js',
-                '!src/libs/**/*.js'
+                'test/*.js'
             ],
             options: {
                 jshintrc: '.jshintrc',
@@ -42,7 +35,10 @@ module.exports = function (grunt) {
             default_options: {
                 options: {},
                 files: {
-                    'test/grunt-test/tmp/result.js': ['test/grunt-test/puma-test.js','test/grunt-test/puma-test2.js']
+                    'test/grunt-test/tmp/result.js': [
+                        'test/grunt-test/puma-test.js',
+                        'test/grunt-test/puma-test2.js'
+                    ]
                 },
             }
         },
@@ -53,8 +49,8 @@ module.exports = function (grunt) {
                 options: {
                     baseUrl: 'src',
                     mainConfigFile: 'build/config.js',
-                    out: '<%= output %>.js',
-                    name: '<%= buildName %>',
+                    out: '<%= buildConfig.output %>.js',
+                    name: '<%= buildConfig.name %>',
                     optimize: 'none',
                     skipSemiColonInsertion: true,
                     paths: {
@@ -69,10 +65,10 @@ module.exports = function (grunt) {
                         // remove define wrappers and closure ends,
                         // lines to exclude: /* exclude-build */
                         contents = contents
-                            .replace(regex.DEFINE_START, '')
-                            .replace(regex.DEFINE_END, '')
-                            .replace(regex.EXCLUSIONS, '')
-                            .replace(regex.EMPTY_DEFINITION, '');
+                            .replace(/define\([^{]*?{/, '') // define start
+                            .replace(/\}\);[^}\w]*$/, '') // define end
+                            .replace(/[^\n]*\/\*\s*exclude-build\s*\*\/[^\n]*/, '') // exclusions
+                            .replace(/define\(\[[^\]]+\]\)[\W\n]+$/, ''); // empty definition
 
                         return contents;
                     }
@@ -90,19 +86,18 @@ module.exports = function (grunt) {
 
     grunt.registerTask('travis', ['jshint', 'test']);
 
-    grunt.registerTask('init','Prepare to start working with Puma',function(){
+    grunt.registerTask('init', 'Prepare to start working with Puma', function () {
         var exec = require('child_process').exec;
         var done = this.async();
-        
-        exec('bower install', {cwd: './editor'}, function(err, stdout, stderr){
+
+        exec('bower install', { cwd: './editor' }, function (err, stdout, stderr) {
             grunt.log.ok(stdout);
-            if(err !== null){
-                grunt.log.errorlns('error: ',stderr);
-            }             
-            done();
+            if (err !== null) {
+                grunt.log.errorlns('error: ', stderr);
+            }
+            done(err);
         });
-        grunt.task.run('test');
     });
-    
-    grunt.registerTask('default', ['init']);    
+
+    grunt.registerTask('default', ['init']);
 };
