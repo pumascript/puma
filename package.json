@@ -9,6 +9,11 @@
     "url": "http://github.com/emravera/puma"
   },
   "keywords": [
+    "meta-programming",
+    "metaprogramming",
+    "ecma",
+    "ecmascript",
+    "javascript",
     "puma"
   ],
   "main": "dist/pumascript.js",
