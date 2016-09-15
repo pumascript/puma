@@ -141,3 +141,7 @@ The PumaScript project is being developed at the Department of Information Syste
 
 ![alt text][utn]
 [utn]: http://upload.wikimedia.org/wikipedia/commons/thumb/6/67/UTN_logo.jpg/200px-UTN_logo.jpg "UTN logo"
+
+## License
+
+MIT. Details on LICENSE file.
