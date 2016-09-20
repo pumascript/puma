@@ -2,7 +2,7 @@
 
 require.config({
     paths: {
-        jquery: 'bower_components/jquery/jquery.min',
+        jquery: 'bower_components/jquery/dist/jquery.min',
         bootstrap: 'bower_components/bootstrap/dist/js/bootstrap',
         cm: 'bower_components/codemirror/',
         pumascript: '../src/pumascript'
@@ -41,15 +41,18 @@ require([
 
     PumaEditor.prototype.instantiateCodeMirrorEditor = function (section) {
         return CodeMirror(document.getElementById(section), {
-            mode: "text/javascript",
+            mode: "javascript",
             extraKeys: {
                 "Ctrl-Space": "autocomplete",
-                "Ctrl-J": "autocomplete"
+                "Ctrl-J": "autocomplete",
+                "Ctrl-Q": function (cm) {
+                    cm.foldCode(cm.getCursor());
+                }
             },
-            value: "",
             lineNumbers: true,
-            height: 'auto',
-            tabSize: 2,
+            lineWrapping: true,
+            indentUnit: 4,
+            tabSize: 4,
             foldGutter: true,
             gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
         });
@@ -63,11 +66,11 @@ require([
         return editor.setValue(value);
     };
 
-    PumaEditor.prototype.load = function (editor) {
+    PumaEditor.prototype.load = function () {
         this.setEditorValue(this._pumaScriptEditor, localStorage.getItem("puma"));
     };
 
-    PumaEditor.prototype.loadBackup = function (editor) {
+    PumaEditor.prototype.loadBackup = function () {
         this.setEditorValue(this._pumaScriptEditor, localStorage.getItem("puma-backup"));
     };
 
