@@ -102,7 +102,7 @@ module.exports = function (grunt) {
 
         cmd.on('exit', function (code) {
             if(code > 0){
-                grunt.fail.fatal('Process Finished Code: ' + code.toString())
+                grunt.fail.fatal('Process Finished Code: ' + code.toString());
             } else {
                 grunt.log.ok('Process Finished Code: ' + code.toString());
             }
