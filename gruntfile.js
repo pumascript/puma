@@ -87,15 +87,22 @@ module.exports = function (grunt) {
     grunt.registerTask('travis', ['jshint', 'test']);
 
     grunt.registerTask('init', 'Prepare to start working with Puma', function () {
-        var exec = require('child_process').exec;
+        // Use spawn to report progress of the task
+        var spawn = require('child_process').spawn;
+        var cmd    = spawn('bower', ['install'], { cwd: './editor'});
         var done = this.async();
 
-        exec('bower install', { cwd: './editor' }, function (err, stdout, stderr) {
-            grunt.log.ok(stdout);
-            if (err !== null) {
-                grunt.log.errorlns('error: ', stderr);
-            }
-            done(err);
+        cmd.stdout.on('data', function (data) {
+            console.log(data.toString());
+        });
+
+        cmd.stderr.on('data', function (data) {
+            console.log('Error: ' + data.toString());
+        });
+
+        cmd.on('exit', function (code) {
+            console.log('Process Finished Code: ' + code.toString());
+            done();
         });
     });
 
