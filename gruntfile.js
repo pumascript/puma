@@ -93,15 +93,20 @@ module.exports = function (grunt) {
         var done = this.async();
 
         cmd.stdout.on('data', function (data) {
-            console.log(data.toString());
+            grunt.log.write(data.toString());
         });
 
         cmd.stderr.on('data', function (data) {
-            console.log('Error: ' + data.toString());
+            grunt.log.error('Error: ' + data.toString());
         });
 
         cmd.on('exit', function (code) {
-            console.log('Process Finished Code: ' + code.toString());
+            if(code > 0){
+                grunt.fail.fatal('Process Finished Code: ' + code.toString())
+            } else {
+                grunt.log.ok('Process Finished Code: ' + code.toString());
+            }
+
             done();
         });
     });
