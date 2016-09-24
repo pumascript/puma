@@ -149,7 +149,7 @@
          ok(result.success && 1 === result.value, "Passed!");
      });
      
-     modules("7.6.1 Reserved Words");
+     module("7.6.1 Reserved Words");
      
      test("break", function(){
         try {
