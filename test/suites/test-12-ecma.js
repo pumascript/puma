@@ -19,9 +19,9 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     QUnit.skip("block statement 2", function () {
         var result = puma.evalPuma("1;{}");
         result.makeValue();
-        console.log(result);
         equal(result.value, 1, "Passed!");
     });
+    
     //Revisar
     QUnit.skip("block statement 3", function () {
         var result = puma.evalPuma("1;var a;");

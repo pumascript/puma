@@ -239,73 +239,73 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
     module("11.13 Assignment Operators");
 
     test("Simple Assigment",function () {
-        var result = puma.evalPuma("x = 5; y = 10; x = y; x;");
+        var result = puma.evalPuma("var x = 5; var y = 10; x = y; x;");
         result.makeValue();
         equal(result.value,10,"Passed!");
     });
 
     test("*= Operator",function () {
-        var result = puma.evalPuma("x = 5; y = 10; x *= y; x;");
+        var result = puma.evalPuma("var x = 5; var y = 10; x *= y; x;");
         result.makeValue();
         equal(result.value,50,"Passed!");
     });
 
     QUnit.skip("/= Operator",function () {
-        var result = puma.evalPuma("x = 10; y = 5; x /= y; x;");
+        var result = puma.evalPuma("var x = 10; var y = 5; x /= y; x;");
         result.makeValue();
         equal(result.value,2,"Passed!");
     });
 
     test("%= Operator",function () {
-        var result = puma.evalPuma("x = 10; y = 5; x %= y; x;");
+        var result = puma.evalPuma("var x = 10; var y = 5; x %= y; x;");
         result.makeValue();
         equal(result.value,0,"Passed!");
     });
 
     test("+= Operator",function () {
-        var result = puma.evalPuma("x = 5; y = 10; x += y; x;");
+        var result = puma.evalPuma("var x = 5; var y = 10; x += y; x;");
         result.makeValue();
         equal(result.value,15,"Passed!");
     });
 
     test("-= Operator",function () {
-        var result = puma.evalPuma("x = 10; y = 5; x -= y; x;");
+        var result = puma.evalPuma("var x = 10; var y = 5; x -= y; x;");
         result.makeValue();
         equal(result.value,5,"Passed!");
     });
 
     test("<<= Operator",function () {
-        var result = puma.evalPuma("x = 8; y = 2; x <<= y; x;");
+        var result = puma.evalPuma("var x = 8; var y = 2; x <<= y; x;");
         result.makeValue();
         equal(result.value,32,"Passed!");
     });
 
     test(">>= Operator",function () {
-        var result = puma.evalPuma("x = 9; y = 2; x >>= y; x;");
+        var result = puma.evalPuma("var x = 9; var y = 2; x >>= y; x;");
         result.makeValue();
         equal(result.value,2,"Passed!");
     });
 
     test(">>>= Operator",function () {
-        var result = puma.evalPuma("x = 19; y = 2; x >>>= y; x;");
+        var result = puma.evalPuma("var x = 19; var y = 2; x >>>= y; x;");
         result.makeValue();
         equal(result.value,4,"Passed!");
     });
 
     test("&= Operator",function () {
-        var result = puma.evalPuma("x = 14; y = 9; x &= y; x;");
+        var result = puma.evalPuma("var x = 14; var y = 9; x &= y; x;");
         result.makeValue();
         equal(result.value,8,"Passed!");
     });
 
     test("^= Operator",function () {
-        var result = puma.evalPuma("x = 14; y = 9; x ^= y; x;");
+        var result = puma.evalPuma("var x = 14; var y = 9; x ^= y; x;");
         result.makeValue();
         equal(result.value,7,"Passed!");
     });
 
     test("|= Operator",function () {
-        var result = puma.evalPuma("x = 14; y = 9; x |= y; x;");
+        var result = puma.evalPuma("var x = 14; var y = 9; x |= y; x;");
         result.makeValue();
         equal(result.value,15,"Passed!");
     });
