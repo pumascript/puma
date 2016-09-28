@@ -1101,3 +1101,12 @@ test("TEST 1", function(){
 ~~~
 
 faltan test de reserverd words Y de 8
+
+13.2
+---
+
+~~~
+function g() {return f();}
+function f() {var a = f.caller; return a;}
+console.log(g());
+~~~

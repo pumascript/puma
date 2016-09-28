@@ -106,7 +106,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
     });
 
     test("for statement update test", function(){
-        var result = puma.evalPuma("var first = true; var firstValue = -1; var j; for(var i=5;i<7;i=i+1) { console.log(i); if(first){ firstValue = i; first = false; }  j+=1; } console.log(firstValue); firstValue;");
+        var result = puma.evalPuma("var first = true; var firstValue = -1; var j; for(var i=5;i<7;i=i+1) { if(first){ firstValue = i; first = false; }  j+=1; } firstValue;");
         result.makeValue();
         equal(result.value, 5, "Passed!");
     });
@@ -157,7 +157,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
         equal(meta.parameters[1].number, 1, "Passed!");
         equal(meta.returns.number, 1, "Passed!");
         equal(meta.returns.string, 1, "Passed!");
-    });  
+    });
 
     test("Unary expressions", function(){
         var result = puma.evalPuma("var a = '3'; var b = 1; b++; if(!false){~(+a + (-b));}");
@@ -201,7 +201,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
         var result = puma.evalPuma("var o1 = { a: { c: 1 }, b: { d: 'hola'} }; o1.b.d;");
         equal(result.value.value, 'hola', "Passed!");
     });
-    
+
     test("Function expression", function(){
         var result = puma.evalPuma("var a = function() { return 3; }; a();");
         equal(result.value, 3, "Passed!");
@@ -290,7 +290,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
         result.makeValue();
         equal(result.value, 4, "Passed!");
     });
-    
+
      /* This test is when the support for new expression added */
     QUnit.skip("test for native string and property acess against object type", function(){
         var result = puma.evalPuma("'hola'.substr(1) === new String('ola')");
