@@ -5,7 +5,7 @@
 define(['pumascript', 'esprima'], function (puma, esprima) {
     
     
-    //   Section 15.1: The Global Object   //
+    module("15.1: The Global Object");
     
     test("Value Properties of the Global Object: NaN", function () {
         var result = puma.evalPuma("NaN");
@@ -139,7 +139,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
     
-    //   Section 15.2: Object Objects   //
+    module("15.2: Object Objects");
     
     test("Object(undefined)", function () {
         var result = puma.evalPuma("Object(undefined)");
@@ -344,7 +344,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
     
-    //   Section 15.3: Function Objects   //
+    module("15.3: Function Objects");
     
     test("The Function Constructor Called as a Function", function () {
         var a = new Function();
@@ -492,7 +492,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
     
-    //   Section 15.4: Array Objects   //
+    module("15.4: Array Objects");
 
     test("The Array Constructor Called as a Function", function () {
         var result = puma.evalPuma("var a = Array();");
@@ -825,7 +825,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
     
-    //   Section 15.5: String Objects   //
+    module("15.5: String Objects");
     
     test("The String Constructor Called as a Function", function () {
         var result = puma.evalPuma("var s = String();");
@@ -1211,7 +1211,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
     
-    //   Section 15.6: Boolean Objects   //
+    module("15.6: Boolean Objects");
     
     test("The Boolean Constructor Called as a Function", function () {
         var result = puma.evalPuma("var b = Boolean();");
@@ -1297,7 +1297,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
     
-    //   Section 15.7: Number Objects   //
+    module("15.7: Number Objects");
     
     test("The Number Constructor Called as a Function", function () {
         var result = puma.evalPuma("var n = Number();");
@@ -1462,7 +1462,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
         
-    //   Section 15.8: The Math Object   //
+    module("15.8: The Math Object");
     
     test("Value Properties of the Math Object: E", function () {
         var result = puma.evalPuma("Math.E;");
@@ -1649,7 +1649,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
     
-    //   Section 15.9: Date Objects   //
+    module("15.9: Date Objects");
     
     test("The Date Constructor Called as a Function", function () {
         var result = puma.evalPuma("Date();");
@@ -2076,7 +2076,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
     
-    //   Section 15.10: RegExp (Regular Expression) Objects   //
+    module("15.10: RegExp (Regular Expression) Objects");
     
     test("The RegExp Constructor Called as a Function", function () {
         var result = puma.evalPuma("var x = RegExp();");
@@ -2227,7 +2227,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     */
     
     
-    //   Section 15.11: Error Objects   //
+    module("15.11: Error Objects");
     
     test("The Error Constructor Called as a Function", function () {
         var result = puma.evalPuma("var e = Error(); e;");
@@ -2472,6 +2472,8 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         }
     });
     */
+    
+    module("15.11 Errors");
     
     // Native Error Tests: URIError
     
@@ -2896,7 +2898,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     
     
-    //   Section 15.12: The JSON Object   //
+    module("15.12: The JSON Object");
     
     test("JSON.parse(text)", function () {
         var result = puma.evalPuma("JSON.parse('{\"Name\":\"LEO\",\"Terminal\":25000}');");
