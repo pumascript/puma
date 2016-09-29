@@ -1,3 +1,5 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 (function (root, factory) {
     var esprimaLib = '../thirdparty/esprima/esprima.js';
 

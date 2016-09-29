@@ -1,3 +1,5 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 /*
  *              PUMASCRIPT ECMA-11 TEST SUITE
  *  @file: Base expressions test suite for the language

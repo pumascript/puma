@@ -1,16 +1,18 @@
-/** 
+// Copyright (c) 2013 - present UTN-LIS
+
+/**
  * @meta
  * Looks for any occurrence of "for...in" statement and rewrite it to simpler for statement.
  */
 function rewriteForIn() {
     var forIns = pumaFindByType(pumaProgram, "ForInStatement");
     console.log("For In statements found: " + forIns.length);
-    
+
     for(var index = 0; index < forIns.length; index++)
     {
         rewriteSingleForIn(forIns[index]);
     }
-    return null;	
+    return null;
 }
 
 /**
@@ -21,7 +23,7 @@ function rewriteSingleForIn(forInAst){
     var right = forInAst.right;
     var itemName;
     var tempId;
-    
+
     // detect if it's a case that we can convert
     if(left.type === 'Identifier')
     {
@@ -45,7 +47,7 @@ function rewriteSingleForIn(forInAst){
     optimizedFor.init = left;
     optimizedFor.test = pumaAst( $itemName < $right.length );
     optimizedFor.update = pumaAst( $itemName = $itemName + 1 );
-    
+
     // create if with test and fallback version
     var temp = pumaAst(function(){
         if( $right instanceof Array ) $optimizedFor; else $cloneForIn;

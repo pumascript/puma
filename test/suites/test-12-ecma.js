@@ -1,3 +1,5 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 /*global define, test, ok, equal */
 
 /*
@@ -8,7 +10,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
 
     // Tests de la seccion 12 de ECMA: Statements
     module("12.1 Blocks")
-    
+
     //Revisar, deberia devolver 1 supuestamente
     QUnit.skip("block statement 1", function () {
         var result = puma.evalPuma("1;;;;;");
@@ -21,7 +23,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         result.makeValue();
         equal(result.value, 1, "Passed!");
     });
-    
+
     //Revisar
     QUnit.skip("block statement 3", function () {
         var result = puma.evalPuma("1;var a;");
@@ -30,7 +32,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     module("12.2 Variables");
-    
+
     test("variable declaration: variables are initialised to undefined when created", function () {
         var result = puma.evalPuma("var a1; a1;");
         result.makeValue();
@@ -64,7 +66,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     module("12.3 Empty Statement");
-    
+
     test("empty statement", function () {
         var result = puma.evalPuma(";");
         result.makeValue();
@@ -77,7 +79,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     // (como hago para que JS o PumaScript se de cuenta que estoy queriendo escribir un ExpressionStatement y no un Block o FunctionDeclaration?)
 
     module("12.5 If Statement");
-    
+
     test("if statement: true", function () {
         var result = puma.evalPuma("if (true) 1; else 2;");
         result.makeValue();
@@ -100,9 +102,9 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         result.makeValue();
         equal(result.value, 2, "Passed!");
     });
-    
+
     module("12.6 Iteration Statements");
-    
+
     //Revisar... deberia tirar 10
     QUnit.skip("do Statement while (Expression)", function () {
         var result = puma.evalPuma("var a = 0;  do {a++; }while (a<10); a;");
@@ -157,9 +159,9 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         result.makeValue();
         equal(result.value, 6, "Passed!");
     });
-    
+
     module("12.7 The Continue Statement");
-    
+
     //revisar
     QUnit.skip("continue ; (no Identifier)", function () {
         var result = puma.evalPuma("var res = 0; for(var i = 0; i < 5 ; i++) { if (i < 3) continue; res += i; } res;");
@@ -198,9 +200,9 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         }
         equal(errorMessage, "Line 1: Undefined label 'anIdentifier'", "Passed!");
     });
-    
+
     module("12.8 The Break Statement");
-    
+
     //revisar
     QUnit.skip("Break ; (no Identifier)", function () {
         var result = puma.evalPuma("var res = 0; for(var i = 0; i < 5 ; i++) { if (i >= 3) break; res += i; } res;");
@@ -235,7 +237,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     module("12.9 The Return Statement");
-    
+
     test("Return ; (no Expression)", function () {
         var result = puma.evalPuma("function a() { return; } a()");
         result.makeValue();
@@ -267,9 +269,9 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         }
         equal(errorMessage, "Line 1: Illegal return statement", "Passed!");
     });
-    
+
     module("12.10 The With Statement");
-    
+
     //revisar
     QUnit.skip("With (Expression) read property inside Expression", function () {
         var result = puma.evalPuma("var a = 5; var obj = { a : 10 }; with (obj) { a }");
@@ -292,7 +294,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         }
         equal(errorMessage, "Line 1: Strict mode code may not include a with statement", "Passed!");
     });
-    
+
     module("12.11 The Switch Statement");
 
     test("Switch (Expression) no CaseBlock", function () {
@@ -318,7 +320,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         result.makeValue();
         equal(result.value, 2, "Passed!");
     });
-    
+
     module("12.12 Labeled Statements");
 
     QUnit.skip("LabelledStatement : Identifier : Statement", function () {
@@ -342,7 +344,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         }
         equal(errorMessage, "Line 1: Label 'anIdentifier' has already been declared", "Passed!");
     });
-    
+
     module("12.13 The Throw Statement");
 
     QUnit.skip("throw string", function () {

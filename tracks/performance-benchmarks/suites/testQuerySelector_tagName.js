@@ -1,3 +1,5 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 /*
 * Benchmark Number: 8
 * Description: querySelector vs. getElementsByTagName

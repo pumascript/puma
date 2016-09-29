@@ -1,3 +1,5 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 /*global define, require */
 
 require.config({
@@ -13,6 +15,6 @@ require.config({
 define('pumascript', ['../src/runtime'], function (PumaScript) {
 
     'use strict';
-    
+
     return PumaScript;
 });
