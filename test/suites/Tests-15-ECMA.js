@@ -163,7 +163,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(JSON.stringify(result.value), JSON.stringify(obj), "Passed!");
     });
     
-    QUnit.skip("Object.prototype", function () {
+    test("Object.prototype", function () {
         var result = puma.evalPuma("Object.prototype.isPrototypeOf(Object());");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -276,42 +276,42 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(JSON.stringify(result.value), JSON.stringify(a), "Passed!");
     });
     
-    QUnit.skip("Object.prototype.constructor", function () {
+    test("Object.prototype.constructor", function () {
         var result = puma.evalPuma("Object.prototype.constructor === Object().constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, true, "Passed!");
     });
     
-    QUnit.skip("Object.prototype.toString()", function () {
+    test("Object.prototype.toString()", function () {
         var result = puma.evalPuma("var toStringP = Object.prototype.toString; toStringP.call(Math);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, '[object Math]', "Passed!");
     });
     
-    QUnit.skip("Object.prototype.toString(): undefined", function () {
+    test("Object.prototype.toString(): undefined", function () {
         var result = puma.evalPuma("var toStringU = Object.prototype.toString; toStringU.call(undefined);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, '[object Undefined]', "Passed!");
     });
     
-    QUnit.skip("Object.prototype.toString(): null", function () {
+    test("Object.prototype.toString(): null", function () {
         var result = puma.evalPuma("var toStringN = Object.prototype.toString; toStringN.call(null);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, '[object Null]', "Passed!");
     });
     
-    QUnit.skip("Object.prototype.toLocaleString()", function () {
+    test("Object.prototype.toLocaleString()", function () {
         var result = puma.evalPuma("var toLocaleStringP = Object.prototype.toLocaleString; toLocaleStringP.call(Math);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, '[object Math]', "Passed!");
     });
     
-    QUnit.skip("Object.prototype.valueOf()", function () {
+    test("Object.prototype.valueOf()", function () {
         var oni = Object.create(null, { height: { value: 1 }, width: { value: 6 }, color: { value: 'red' } });
         var result = puma.evalPuma("var ono = Object.create(null, { height: { value: 1 }, width: { value: 6 }, color: { value: 'red' } }); var valueOfO = Object.prototype.valueOf; valueOfO.call(ono);");
         result.makeValue();
@@ -322,21 +322,21 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.color, 'red', "Passed!");
     });
     
-    QUnit.skip("Object.prototype.hasOwnProperty(V)", function () {
+    test("Object.prototype.hasOwnProperty(V)", function () {
         var result = puma.evalPuma("var ono = Object.create(null, { height: { value: 1 }, width: { value: 6 }, color: { value: 'red' } }); Object.prototype.hasOwnProperty.call(ono, 'color');");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, true, "Passed!");
     });
     
-    QUnit.skip("Object.prototype.isPrototypeOf(V)", function () {
+    test("Object.prototype.isPrototypeOf(V)", function () {
         var result = puma.evalPuma("var oni = Object.create(null); oni.prototype = Object.prototype; oni.prototype.isPrototypeOf(Object);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, true, "Passed!");
     });
     
-    QUnit.skip("Object.prototype.propertyIsEnumerable(V)", function () {
+    test("Object.prototype.propertyIsEnumerable(V)", function () {
         var result = puma.evalPuma("var ono = Object.create(null, { color: { enumerable: true, value: 'red' }, range: { enumerable: false, value: 'red' } }); var pIE = Object.prototype.propertyIsEnumerable; pIE.call(ono, 'color') && !pIE.call(ono, 'range');");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -380,7 +380,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         var result = puma.evalPuma("Function.prototype;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value, 'function () {}', "Passed!");
+        equal(result.value.toString(), 'function () {}', "Passed!");
     });
     
     test("Function.length", function () {
@@ -390,14 +390,14 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 1, "Passed!");
     });
     
-    QUnit.skip("Properties of the Function Prototype Object", function () {
+    test("Properties of the Function Prototype Object", function () {
         var result = puma.evalPuma("Function.prototype.length;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 0, "Passed!");
     });
     
-    QUnit.skip("Function.prototype.constructor", function () {
+    test("Function.prototype.constructor", function () {
         var c = Function('character', 'dialog', "return character+': \"'+dialog+'\"'").prototype.constructor.toString();
         var result = puma.evalPuma("var transcript = Function('character', 'dialog', \"return character+': \\\"'+dialog+'\\\"'\"); transcript.prototype.constructor;");
         result.makeValue();
@@ -405,7 +405,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.toString(), c, "Passed!");
     });
     
-    QUnit.skip("Function.prototype.constructor.toString()", function () {
+    test("Function.prototype.constructor.toString()", function () {
         var c = Function('character', 'dialog', "return character+': \"'+dialog+'\"'").prototype.constructor.toString();
         var result = puma.evalPuma("var transcript = Function('character', 'dialog', \"return character+': \\\"'+dialog+'\\\"'\"); transcript.prototype.constructor.toString();");
         result.makeValue();
@@ -413,7 +413,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, c, "Passed!");
     });
     
-    QUnit.skip("Function.prototype.toString()", function () {
+    test("Function.prototype.toString()", function () {
         var result = puma.evalPuma("var transcript = Function('character', 'dialog', \"return character+': \\\"'+dialog+'\\\"'\"); transcript.prototype.toString();");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -434,14 +434,14 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, "Alphonse: \"Good-bye, Eleanor.\"", "Passed!");
     });
     
-    QUnit.skip("Function.prototype.bind(thisArg [, arg1 [, arg2, … ]])", function () {
+    test("Function.prototype.bind(thisArg [, arg1 [, arg2, … ]])", function () {
         var result = puma.evalPuma("var scope = 'global'; var order = { action: 'move', scope: 'flank', subject: 'ridge', getScope: Function('return this.scope;') }; var unbound_scope = order.getScope; var order_scope = unbound_scope.bind(order); order_scope();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 'flank', "Passed!");
     });
     
-    QUnit.skip("[[Call]] internal method", function () {
+    test("[[Call]] internal method", function () {
         var result = puma.evalPuma("var scope = 'global'; var order = { action: 'move', scope: 'flank', subject: 'ridge', getScope: Function('return this.scope;') }; var unbound_scope = order.getScope; var order_scope = unbound_scope.bind(order); order_scope.call(this);");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -551,7 +551,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.constructor.prototype.toString(), c, "Passed!");
     });
     
-    QUnit.skip("Array.prototype", function () {
+    test("Array.prototype", function () {
         var result = puma.evalPuma("Array.prototype;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -575,7 +575,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.configurable, false, "Passed!");
     });
     
-    QUnit.skip("Array.prototype.constructor", function () {
+    test("Array.prototype.constructor", function () {
         var c = "function Array() {\n    [native code]\n}";
         var result = puma.evalPuma("Array.prototype.constructor;");
         result.makeValue();
@@ -883,7 +883,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.constructor.prototype.toString(), c, "Passed!");
     });
     
-    QUnit.skip("String.prototype", function () {
+    test("String.prototype", function () {
         var result = puma.evalPuma("String.prototype;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -908,7 +908,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.configurable, false, "Passed!");
     });
     
-    QUnit.skip("String.prototype.constructor", function () {
+    test("String.prototype.constructor", function () {
         var c = "function String() {\n    [native code]\n}";
         var result = puma.evalPuma("String.prototype.constructor;");
         result.makeValue();
@@ -1252,7 +1252,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.constructor.prototype.toString(), c, "Passed!");
     });
     
-    QUnit.skip("Boolean.prototype", function () {
+    test("Boolean.prototype", function () {
         var result = puma.evalPuma("Boolean.prototype;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -1267,7 +1267,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(JSON.stringify(result.value), JSON.stringify(pd), "Passed!");
     });
     
-    QUnit.skip("Boolean.prototype.constructor", function () {
+    test("Boolean.prototype.constructor", function () {
         var c = "function Boolean() {\n    [native code]\n}";
         var result = puma.evalPuma("Boolean.prototype.constructor;");
         result.makeValue();
@@ -1353,7 +1353,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.constructor.prototype.toString(), c, "Passed!");
     });
     
-    QUnit.skip("Number.prototype", function () {
+    test("Number.prototype", function () {
         var result = puma.evalPuma("Number.prototype;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -1403,7 +1403,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(JSON.stringify(result.value), JSON.stringify(pd), "Passed!");
     });
     
-    QUnit.skip("Number.prototype.constructor", function () {
+    test("Number.prototype.constructor", function () {
         var c = "function Number() {\n    [native code]\n}";
         var result = puma.evalPuma("Number.prototype.constructor;");
         result.makeValue();
@@ -1703,7 +1703,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.constructor.prototype.toString(), c, "Passed!");
     });
     
-    QUnit.skip("Date.prototype", function () {
+    test("Date.prototype", function () {
         var result = puma.evalPuma("Date.prototype;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -1740,7 +1740,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.configurable, false, "Passed!");
     });
     
-    QUnit.skip("Date.prototype.constructor", function () {
+    test("Date.prototype.constructor", function () {
         var c = "function Date() {\n    [native code]\n}";
         var result = puma.evalPuma("Date.prototype.constructor;");
         result.makeValue();
@@ -2151,7 +2151,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.constructor.prototype.toString(), c, "Passed!");
     });
     
-    QUnit.skip("RegExp.prototype", function () {
+    test("RegExp.prototype", function () {
         var result = puma.evalPuma("RegExp.prototype;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -2169,7 +2169,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.configurable, false, "Passed!");
     });
     
-    QUnit.skip("RegExp.prototype.constructor", function () {
+    test("RegExp.prototype.constructor", function () {
         var c = "function RegExp() {\n    [native code]\n}";
         var result = puma.evalPuma("RegExp.prototype.constructor;");
         result.makeValue();
@@ -2266,7 +2266,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.constructor.prototype.toString(), c, "Passed!");
     });
     
-    QUnit.skip("Error.prototype", function () {
+    test("Error.prototype", function () {
         var result = puma.evalPuma("Error.prototype;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -2282,7 +2282,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.configurable, false, "Passed!");
     });
     
-    QUnit.skip("Error.prototype.constructor", function () {
+    test("Error.prototype.constructor", function () {
         var c = "function Error() {\n    [native code]\n}";
         var result = puma.evalPuma("Error.prototype.constructor;");
         result.makeValue();
@@ -2290,7 +2290,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.toString(), c, "Passed!");
     });
     
-    QUnit.skip("Error.prototype.name", function () {
+    test("Error.prototype.name", function () {
         var result = puma.evalPuma("Error.prototype.name;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -2514,7 +2514,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.constructor.prototype.toString(), c, "Passed!");
     });
     
-    QUnit.skip("RangeError.prototype", function () {
+    test("RangeError.prototype", function () {
         var result = puma.evalPuma("RangeError.prototype;");
         result.makeValue();
         equal(result.success, true, "Passed!");console.log();
@@ -2530,7 +2530,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.configurable, false, "Passed!");
     });
     
-    QUnit.skip("RangeError.prototype.constructor", function () {
+    test("RangeError.prototype.constructor", function () {
         var c = "function RangeError() {\n    [native code]\n}";
         var result = puma.evalPuma("RangeError.prototype.constructor;");
         result.makeValue();
@@ -2538,7 +2538,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.toString(), c, "Passed!");
     });
     
-    QUnit.skip("RangeError.prototype.name", function () {
+    test("RangeError.prototype.name", function () {
         var result = puma.evalPuma("RangeError.prototype.name;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -2598,7 +2598,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.constructor.prototype.toString(), c, "Passed!");
     });
     
-    QUnit.skip("ReferenceError.prototype", function () {
+    test("ReferenceError.prototype", function () {
         var result = puma.evalPuma("ReferenceError.prototype;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -2614,7 +2614,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.configurable, false, "Passed!");
     });
     
-    QUnit.skip("ReferenceError.prototype.constructor", function () {
+    test("ReferenceError.prototype.constructor", function () {
         var c = "function ReferenceError() {\n    [native code]\n}";
         var result = puma.evalPuma("ReferenceError.prototype.constructor;");
         result.makeValue();
@@ -2622,7 +2622,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.toString(), c, "Passed!");
     });
     
-    QUnit.skip("ReferenceError.prototype.name", function () {
+    test("ReferenceError.prototype.name", function () {
         var result = puma.evalPuma("ReferenceError.prototype.name;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -2682,7 +2682,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.constructor.prototype.toString(), c, "Passed!");
     });
     
-    QUnit.skip("SyntaxError.prototype", function () {
+    test("SyntaxError.prototype", function () {
         var result = puma.evalPuma("SyntaxError.prototype;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -2698,7 +2698,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.configurable, false, "Passed!");
     });
     
-    QUnit.skip("SyntaxError.prototype.constructor", function () {
+    test("SyntaxError.prototype.constructor", function () {
         var c = "function SyntaxError() {\n    [native code]\n}";
         var result = puma.evalPuma("SyntaxError.prototype.constructor;");
         result.makeValue();
@@ -2706,7 +2706,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.toString(), c, "Passed!");
     });
     
-    QUnit.skip("SyntaxError.prototype.name", function () {
+    test("SyntaxError.prototype.name", function () {
         var result = puma.evalPuma("SyntaxError.prototype.name;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -2766,7 +2766,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.constructor.prototype.toString(), c, "Passed!");
     });
     
-    QUnit.skip("TypeError.prototype", function () {
+    test("TypeError.prototype", function () {
         var result = puma.evalPuma("TypeError.prototype;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -2782,7 +2782,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.configurable, false, "Passed!");
     });
     
-    QUnit.skip("TypeError.prototype.constructor", function () {
+    test("TypeError.prototype.constructor", function () {
         var c = "function TypeError() {\n    [native code]\n}";
         var result = puma.evalPuma("TypeError.prototype.constructor;");
         result.makeValue();
@@ -2790,7 +2790,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.toString(), c, "Passed!");
     });
     
-    QUnit.skip("TypeError.prototype.name", function () {
+    test("TypeError.prototype.name", function () {
         var result = puma.evalPuma("TypeError.prototype.name;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -2850,7 +2850,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.constructor.prototype.toString(), c, "Passed!");
     });
     
-    QUnit.skip("URIError.prototype", function () {
+    test("URIError.prototype", function () {
         var result = puma.evalPuma("URIError.prototype;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -2866,7 +2866,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.configurable, false, "Passed!");
     });
     
-    QUnit.skip("URIError.prototype.constructor", function () {
+    test("URIError.prototype.constructor", function () {
         var c = "function URIError() {\n    [native code]\n}";
         var result = puma.evalPuma("URIError.prototype.constructor;");
         result.makeValue();
@@ -2874,7 +2874,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.toString(), c, "Passed!");
     });
     
-    QUnit.skip("URIError.prototype.name", function () {
+    test("URIError.prototype.name", function () {
         var result = puma.evalPuma("URIError.prototype.name;");
         result.makeValue();
         equal(result.success, true, "Passed!");

@@ -236,6 +236,8 @@ define([
             }
         }
 
+        if (propertyName == "prototypeProperty")
+            propertyName = "prototype";
         if (!(propertyName in obj)) {
             obj[propertyName] = undefined;
         }
@@ -297,7 +299,7 @@ define([
 
     FirstPass.prototype.addFunctionDeclaration = function (name, params, body, state, isMeta) {
         var functionSymbol = new FunctionSymbol(name, params, body, isMeta);
-        functionSymbol.prototypeProperty = {};
+        functionSymbol.prototype = {};
         return new Result(true, state.addSymbol(name, functionSymbol));
     };
 
@@ -793,7 +795,7 @@ define([
         var typeValue = calleeResult.value;
 
         // create a new object from the prototype
-        var newObject = Object.create(typeValue.prototypeProperty);
+        var newObject = Object.create(typeValue.prototype);
         // set "this" to the new object
         state.setNewFrameThisBinding(newObject);
         // call the constructor
