@@ -216,6 +216,7 @@ define([
         //Particular cases for native data type
         if (typeof (obj) === 'string') obj = new String(obj);
         if (typeof (obj) === 'number') obj = new Number(obj);
+        if (typeof (obj) === 'boolean') obj = new Boolean(obj);
 
         // if the property name is "prototype" then rename it to avoid conflicts
         var astPropertyName = ast.property.name;

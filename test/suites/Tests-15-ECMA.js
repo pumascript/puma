@@ -376,11 +376,12 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 20, "Passed!");
     });
     
-    QUnit.skip("Function.prototype", function () {
+    test("Function.prototype", function () {
+        var c = "function () {\n    [native code]\n}";
         var result = puma.evalPuma("Function.prototype;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value.toString(), 'function () {}', "Passed!");
+        equal(result.value.toString().replace(/\r?\n/g, ''), 'function () {}', "Passed!");
     });
     
     test("Function.length", function () {
@@ -469,12 +470,12 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 3, "Passed!");
     });
     
-    QUnit.skip("Properties of Function Instances: prototype", function () {
-        var s = "function store(item, quantity, location) { console.log('NOT IMPLEMENTED...'); }"
+    test("Properties of Function Instances: prototype", function () {
+        var s = "function anonymous(item, quantity, location) {console.log('NOT IMPLEMENTED...');}"
         var result = puma.evalPuma("var str = Function('item', 'quantity', 'location', \"console.log('NOT IMPLEMENTED...');\"); str.prototype;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value.constructor.toString(), s, "Passed!");
+        equal(result.value.constructor.toString().replace(/\r?\n/g, ''), s, "Passed!");
     });
     
     QUnit.skip("[[HasInstance]] (V)", function () {
@@ -1275,21 +1276,21 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.toString(), c, "Passed!");
     });
     
-    QUnit.skip("Boolean.prototype.toString()", function () {
+    test("Boolean.prototype.toString()", function () {
         var result = puma.evalPuma("var b = Boolean(true); b.toString();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, "true", "Passed!");
     });
     
-    QUnit.skip("Boolean.prototype.valueOf()", function () {
+    test("Boolean.prototype.valueOf()", function () {
         var result = puma.evalPuma("var b = Boolean(true); b.valueOf();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, true, "Passed!");
     });
     
-    QUnit.skip("Properties of Boolean Instances", function () {
+    test("Properties of Boolean Instances", function () {
         var result = puma.evalPuma("var b = true; b.valueOf();");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -2270,7 +2271,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         var result = puma.evalPuma("Error.prototype;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value.toString(), 'Error', "Passed!");
+        equal(result.value.valueOf().name, 'Error', "Passed!");
     });
     
     test("Properties of the Error Prototype Object", function () {
@@ -2294,18 +2295,18 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         var result = puma.evalPuma("Error.prototype.name;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(Error.prototype.toString(), 'Error', "Passed!");
+        equal(result.value, 'Error', "Passed!");
     });
     
-    QUnit.skip("Error.prototype.message", function () {
-        var result = puma.evalPuma("Error.prototype.name;");
+    test("Error.prototype.message", function () {
+        var result = puma.evalPuma("Error.prototype.message;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(Error.prototype.toString(), '', "Passed!");
+        equal(result.value, '', "Passed!");
     });
     
-    QUnit.skip("Error.prototype.toString()", function () {
-        var result = puma.evalPuma("var e = new Error('Does not compute.'); e.toString();");
+    test("Error.prototype.toString()", function () {
+        var result = puma.evalPuma("var e = Error('Does not compute.'); e.toString();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 'Error: Does not compute.', "Passed!");
@@ -2518,7 +2519,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         var result = puma.evalPuma("RangeError.prototype;");
         result.makeValue();
         equal(result.success, true, "Passed!");console.log();
-        equal(result.value.toString(), 'RangeError', "Passed!");
+        equal(result.value.valueOf().name, 'RangeError', "Passed!");
     });
     
     test("Properties of the RangeError Prototype Object", function () {
@@ -2542,14 +2543,14 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         var result = puma.evalPuma("RangeError.prototype.name;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(RangeError.prototype.toString(), 'RangeError', "Passed!");
+        equal(result.value, 'RangeError', "Passed!");
     });
     
-    QUnit.skip("RangeError.prototype.message", function () {
-        var result = puma.evalPuma("RangeError.prototype.name;");
+    test("RangeError.prototype.message", function () {
+        var result = puma.evalPuma("RangeError.prototype.message;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(RangeError.prototype.toString(), '', "Passed!");
+        equal(result.value, '', "Passed!");
     });
     
     test("Properties of RangeError Instances", function () {
@@ -2602,7 +2603,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         var result = puma.evalPuma("ReferenceError.prototype;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value.toString(), 'ReferenceError', "Passed!");
+        equal(result.value.valueOf().name, 'ReferenceError', "Passed!");
     });
     
     test("Properties of the ReferenceError Prototype Object", function () {
@@ -2626,14 +2627,14 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         var result = puma.evalPuma("ReferenceError.prototype.name;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(ReferenceError.prototype.toString(), 'ReferenceError', "Passed!");
+        equal(result.value, 'ReferenceError', "Passed!");
     });
     
-    QUnit.skip("ReferenceError.prototype.message", function () {
-        var result = puma.evalPuma("ReferenceError.prototype.name;");
+    test("ReferenceError.prototype.message", function () {
+        var result = puma.evalPuma("ReferenceError.prototype.message;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(ReferenceError.prototype.toString(), '', "Passed!");
+        equal(result.value, '', "Passed!");
     });
     
     test("Properties of ReferenceError Instances", function () {
@@ -2686,7 +2687,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         var result = puma.evalPuma("SyntaxError.prototype;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value.toString(), 'SyntaxError', "Passed!");
+        equal(result.value.valueOf().name, 'SyntaxError', "Passed!");
     });
     
     test("Properties of the SyntaxError Prototype Object", function () {
@@ -2710,14 +2711,14 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         var result = puma.evalPuma("SyntaxError.prototype.name;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(SyntaxError.prototype.toString(), 'SyntaxError', "Passed!");
+        equal(result.value, 'SyntaxError', "Passed!");
     });
     
-    QUnit.skip("SyntaxError.prototype.message", function () {
-        var result = puma.evalPuma("SyntaxError.prototype.name;");
+    test("SyntaxError.prototype.message", function () {
+        var result = puma.evalPuma("SyntaxError.prototype.message;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(SyntaxError.prototype.toString(), '', "Passed!");
+        equal(result.value, '', "Passed!");
     });
     
     test("Properties of SyntaxError Instances", function () {
@@ -2770,7 +2771,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         var result = puma.evalPuma("TypeError.prototype;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value.toString(), 'TypeError', "Passed!");
+        equal(result.value.valueOf().name, 'TypeError', "Passed!");
     });
     
     test("Properties of the TypeError Prototype Object", function () {
@@ -2794,14 +2795,14 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         var result = puma.evalPuma("TypeError.prototype.name;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(TypeError.prototype.toString(), 'TypeError', "Passed!");
+        equal(result.value, 'TypeError', "Passed!");
     });
     
-    QUnit.skip("TypeError.prototype.message", function () {
-        var result = puma.evalPuma("TypeError.prototype.name;");
+    test("TypeError.prototype.message", function () {
+        var result = puma.evalPuma("TypeError.prototype.message;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(TypeError.prototype.toString(), '', "Passed!");
+        equal(result.value, '', "Passed!");
     });
     
     test("Properties of TypeError Instances", function () {
@@ -2854,7 +2855,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         var result = puma.evalPuma("URIError.prototype;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value.toString(), 'URIError', "Passed!");
+        equal(result.value.valueOf().name, 'URIError', "Passed!");
     });
     
     test("Properties of the URIError Prototype Object", function () {
@@ -2878,14 +2879,14 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         var result = puma.evalPuma("URIError.prototype.name;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(URIError.prototype.toString(), 'URIError', "Passed!");
+        equal(result.value, 'URIError', "Passed!");
     });
     
-    QUnit.skip("URIError.prototype.message", function () {
-        var result = puma.evalPuma("URIError.prototype.name;");
+    test("URIError.prototype.message", function () {
+        var result = puma.evalPuma("URIError.prototype.message;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(URIError.prototype.toString(), '', "Passed!");
+        equal(result.value, '', "Passed!");
     });
     
     test("Properties of URIError Instances", function () {
