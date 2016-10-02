@@ -1,3 +1,5 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 /*global define, test, ok, equal */
 
 /*

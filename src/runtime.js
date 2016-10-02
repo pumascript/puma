@@ -1,3 +1,5 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 /*global define, console */
 /*
     PumaScript main source code
@@ -697,7 +699,7 @@ define([
         var initResult = ast.init !== null ? this.accept(ast.init, state) : null;
         var testResult = this.accept(ast.test, state);
         var bodyResult;
-        
+
         testResult.makeValue();
 
         if (initResult !== null && initResult.failed() || testResult.failed()) return defaultResult;
@@ -747,7 +749,7 @@ define([
     FirstPass.prototype.visitWhileStatement = function (ast, state) {
         var testResult = this.accept(ast.test, state),
             bodyResult;
-        
+
         testResult.makeValue();
 
         if (testResult.failed()) return defaultResult;

@@ -1,15 +1,17 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 /*
 * Benchmark Number: 1
 * Description : Test loop For
 */
 
-// Benchmark 1 
+// Benchmark 1
 var test1 = new Benchmark("For in elements", "Check for in an array of elements");
 
 var array;
 
-test1.prepare = function() {    
- array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];  
+test1.prepare = function() {
+ array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
 };
 test1.test = function() {
   var i;
@@ -21,7 +23,7 @@ test1.clean = function() {
   array = [];
 };
 
-// Benchmark 2 
+// Benchmark 2
 var test2 = new Benchmark("For initialized with elements.lenght", "Common for function initalized with elements");
 test2.prepare = test1.prepare;
 

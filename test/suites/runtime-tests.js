@@ -1,3 +1,5 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 /*global define, test, ok, equal */
 
 /*
@@ -88,8 +90,8 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
 
     test("Puma Find by Properties with custom comparator", function(){
         var ast = esprima.parse("a = 2; b = 3; cc = 1;");
-        var result = puma.pumaFindByProperty(ast, "left.name", 1, function (value1, value2) { 
-            return value1.length === value2; 
+        var result = puma.pumaFindByProperty(ast, "left.name", 1, function (value1, value2) {
+            return value1.length === value2;
         });
 
         equal( result.length, 2, "Passed!");
@@ -101,7 +103,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
         equal( result.success, true, "Passed!");
         equal( result.value, 11, "Passed!");
     });
- 
+
     test("Meta function merge evaluation", function(){
         var result = puma.evalPuma("/*@meta*/ function parseInt (valueExp) {var ast = pumaAst($valueExp | 0);return ast;}var n1 = parseInt('97');n1 + 2;");
         equal( result.value, 99, "Passed!");

@@ -1,3 +1,5 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 //byChelo
 function agregar(){
 	var divVacio = document.getElementById("divVacio");

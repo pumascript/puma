@@ -1,3 +1,5 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 module.exports = function (grunt) {
 
     'use strict';
