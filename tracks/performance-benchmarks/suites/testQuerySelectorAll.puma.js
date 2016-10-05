@@ -1,10 +1,12 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 /*@meta*/
 function querySelectorAllReplacement (valueExp){
-	
+
 	var left = context.callee.object;
 	var value = evalPumaAst(valueExp).value;
 	var subsExp = pumaAst( $valueExp );
-  
+
 	if(valueExp.type !== 'Literal') {
     console.log("a");
 		subsExp = pumaAst($valueExp.substring(1));
@@ -23,14 +25,14 @@ function querySelectorAllReplacement (valueExp){
 		return null;
 	}
 	if(selectors[0].indexOf(".") === 0) {
-		return pumaAst($left.getElementsByClassName($subsExp));	    	
+		return pumaAst($left.getElementsByClassName($subsExp));
 	}
 	else if(selectors[0].indexOf("#") === 0) {
 		console.log("querySelectorAll was replaced by getElementById. getElementById will return just the first element that match with the id");
-		return pumaAst($left.getElementById($subsExp));	 	
+		return pumaAst($left.getElementById($subsExp));
 	}
 	else {
-		return pumaAst($left.getElementsByTagName($valueExp));	 	
+		return pumaAst($left.getElementsByTagName($valueExp));
 	}
 }
 

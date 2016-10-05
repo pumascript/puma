@@ -1,62 +1,59 @@
+<!-- Copyright (c) 2013 - present UTN-LIS -->
 <!doctype html>
-
 <head>
-  <title>PumaScript</title>
-  <meta charset="utf-8"/>
+    <title>PumaScript</title>
+    <meta charset="utf-8" />
 
-  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
 
-  <link rel="stylesheet" href="bower_components/codemirror/lib/codemirror.css">
-  <link rel="stylesheet" href="bower_components/codemirror/addon/hint/show-hint.css">
-  <link rel="stylesheet" href="bower_components/codemirror/addon/fold/foldgutter.css">
+    <link rel="stylesheet" href="bower_components/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="bower_components/codemirror/addon/hint/show-hint.css">
+    <link rel="stylesheet" href="bower_components/codemirror/addon/fold/foldgutter.css">
 
-  <script data-main="editor.js" src="../thirdparty/requirejs/require.js"></script>
+    <script data-main="editor.js" src="../thirdparty/requirejs/require.js"></script>
 
-  <style type="text/css">
-    .CodeMirror {
-      border-top: 1px solid #888;
-      border-bottom: 1px solid #888;
-      height: auto;
-    }
-    div {
-      /*height: 100%;*/
-    }
-  </style>
+    <style type="text/css">
+        .CodeMirror {
+            border-top: 1px solid #888;
+            border-bottom: 1px solid #888;
+            height: auto;
+        }
+    </style>
 </head>
 
 <body>
 
-<!-- Options Bar -->
-<nav style="margin-bottom: 0px;" class="navbar navbar-default" role="navigation">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#">PumaScript</a>
-    </div>
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li class="active" id="translatePuma"><a href="#">Execute</a></li>
-        <li class="active" id="loadPuma"><a href="#">Load</a></li>
-        <li class="active" id="loadBackupPuma"><a href="#">Upps! :)</a></li>
-      </ul>
-	  </div>
-  </div>
-</nav>
+    <!-- Options Bar -->
+    <nav style="margin-bottom: 0px;" class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">PumaScript</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active" id="translatePuma"><a href="#">Execute</a></li>
+                    <li class="active" id="loadPuma"><a href="#">Load</a></li>
+                    <li class="active" id="loadBackupPuma"><a href="#">Upps! :)</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-<div class="row">
-  <div  class="col-md-6">
-    <h2>PumaScript</h2>
-    <div id="puma"></div>
-  </div>
-  <div class="col-md-6">
-     <h2>Javascript</h2>
-     <div id="javascript"> </div>
-  </div>
-</div>
+    <div class="row">
+        <div class="col-md-6">
+            <h2>PumaScript</h2>
+            <div id="puma"></div>
+        </div>
+        <div class="col-md-6">
+            <h2>Javascript</h2>
+            <div id="javascript"></div>
+        </div>
+    </div>
 </body>

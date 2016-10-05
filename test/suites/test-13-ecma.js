@@ -1,3 +1,5 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 /*global define, test, ok, equal */
 
 /*
@@ -5,7 +7,9 @@
  *  @file: Base expressions test suite for the language
  */
 define(['pumascript', 'esprima'], function (puma, esprima) {
-    //ECMA 13 Function Definition
+
+
+    module("13 Function Definition");
 
     test("function definiton 1", function () {
         var result = puma.evalPuma("function testA (a) {return a}; var test = testA('a1'); test");
@@ -18,7 +22,9 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, "z", "Passed!");
     });
 
-    test("Strict Mode Restrictions 1", function () {
+    module("13.1 Strict Mode Restrictions");
+
+    test("Strict Mode Restriction 1", function () {
         var errorMessage;
         try {
             var result = puma.evalPuma("\"use strict\"; var o = { p: 1, p: 2 };");
@@ -28,7 +34,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(errorMessage, "Line 1: Duplicate data property in object literal not allowed in strict mode", "Passed!");
     });
 
-    test("Strict Mode Restrictions 2", function () {
+    test("Strict Mode Restriction 2", function () {
         var errorMessage;
         try {
             var result = puma.evalPuma("\"use strict\";(function (eval){})");
@@ -38,7 +44,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(errorMessage, "Line 1: Parameter name eval or arguments is not allowed in strict mode", "Passed!");
     });
 
-    test("Strict Mode Restrictions 3", function () {
+    test("Strict Mode Restriction 3", function () {
         var errorMessage;
         try {
             var result = puma.evalPuma("(function eval(){'use strict';})");
@@ -48,7 +54,8 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(errorMessage, "Line 1: Function name may not be eval or arguments in strict mode", "Passed!");
     });
 
-    //13.2 Creating Function Objects
+    module("13.2 Creating Function Objects");
+
     test("Creating Function Objects", function () {
         var result = puma.evalPuma("var F = function Add(x,y){return x+y}; F(2,3)");
         result.makeValue();

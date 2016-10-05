@@ -1,3 +1,5 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 /*
 * Benchmark Number: 2
 * Description : parseInt vs Math.floor vs bitwise
@@ -5,7 +7,7 @@
 
 
 var testParseInt = new Benchmark("parseInt vs Math.floor", "ParseInt for 4000 numbers");
-var numbers = new Array(); 
+var numbers = new Array();
 testParseInt.prepare = function() {
   var i = 0;
   for(i; i<1000; i++) {
@@ -33,7 +35,7 @@ testParseInt.clean = function() {
 var testMathFloor = new Benchmark("parseInt vs Math.floor vs Bitwise", "Math.floor for 4000 numbers");
 //testMathFloor.prepare = testParseInt.prepare;
 testMathFloor.prepare = function() {
-	
+
 }
 testMathFloor.test = function() {
   for(var i=0; i< numbers.length; i++) {
@@ -45,7 +47,7 @@ testMathFloor.clean = testParseInt.clean;
 var testBitwise = new Benchmark("parseInt vs Math.floor vs Bitwise", "Bitwise for 4000 numbers");
 //testBitwise.prepare = testParseInt.prepare;
 testBitwise.prepare = function() {
-	
+
 }
 testBitwise.test = function() {
   for(var i=0; i< numbers.length; i++) {

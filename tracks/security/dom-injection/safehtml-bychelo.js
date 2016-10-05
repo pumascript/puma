@@ -1,3 +1,5 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 //htmlSeguroByChelo
 
 function crearBlackList(BLUsuario1, BLUsuario2, BLUsuario3){
@@ -91,7 +93,7 @@ function crearBlackList(BLUsuario1, BLUsuario2, BLUsuario3){
     for(var i = 0; i < BLUsuario2.length; i++){
         blackList.atributos[BLUsuario2[i]] = true;
     }
-    
+
     //ultima blacklist (por tagAtributo)
     for (var i = 0; i < BLUsuario3.length; i++){
         blackList.tagAtributos[BLUsuario3[i].nombre] = new Object();
@@ -99,11 +101,11 @@ function crearBlackList(BLUsuario1, BLUsuario2, BLUsuario3){
             blackList.tagAtributos[BLUsuario3[i].nombre][BLTagAtributos[i].atributos[s]] = true;
         }
     }
-    //Ejemplo.. de blacklist por TAG-Atributos 
+    //Ejemplo.. de blacklist por TAG-Atributos
     //blackList.tagAtributos['DIV'] = new Object();
-    //blackList.tagAtributos['DIV']['class'] = true; 
+    //blackList.tagAtributos['DIV']['class'] = true;
     //blackList.tagAtributos['DIV']['id'] = true; //para el tag Div, bloqueo atributo class e id.
-    
+
     return blackList;
 }
 
@@ -127,7 +129,7 @@ function crearHijos(padre, htmlUsuario, blackList) {
                 for (var f=0; f < htmlUsuario.childNodes[i].attributes.length; f++){
                     var nombre = htmlUsuario.childNodes[i].attributes[f].name;
                     var valor = htmlUsuario.childNodes[i].attributes[f].value;
-                    //reviso blackList de atributos 
+                    //reviso blackList de atributos
                     if(blackList.atributos[nombre] !== true){
                         //ahora debo revisar la blacklist tagAtributos
                         //Primero verifico que existe el objeto para el elementoACrear
@@ -140,8 +142,8 @@ function crearHijos(padre, htmlUsuario, blackList) {
                             //si no esta definido el tag, entonces no existe en la blacklist tagAtributo
                             eHtml.setAttribute(nombre, valor);
                         }
-                    }  
-                } 
+                    }
+                }
                 ehtml = crearHijos(eHtml, htmlUsuario.childNodes[i], blackList);
                 }
         }

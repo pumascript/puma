@@ -1,6 +1,8 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 /*
 * Benchmark Number: 7
-* Description: querySelectorAll vs. getElementsById 
+* Description: querySelectorAll vs. getElementsById
 */
 var benchmark_getElementById = new Benchmark("Benchmark 7", "getElementsById for 1000 nodes");
 benchmark_getElementById.prepare = function() {

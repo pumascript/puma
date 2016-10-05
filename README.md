@@ -5,7 +5,7 @@
 
 ## Intro
 
-PumaScript is a research programming language that adds meta-pregramming capabilities to JavaScript and is develop at the Universidad Tecnologica Nacional (UTN-FRC) in Cordoba, Argentina.
+PumaScript is a research programming language that adds meta-programming capabilities to JavaScript and is develop at the Universidad Tecnologica Nacional (UTN-FRC) in Cordoba, Argentina.
 
 It has exactly the same syntax and semantic than regular JavaScript plus meta-programming capabilities such as introspection and re-writing features.
 
@@ -47,7 +47,7 @@ Any JavaScript program is a PumaScript program. Write the following snippet in t
 
 The sample declares the meta-function "sum" that takes two arguments. These arguments are not values but AST (Abstract Syntax Tree) of the actual arguments.
 
-The return expression use the special function "pumaAst" to build a new AST and replace the identifiers "$a" and "$b" with the AST of the actual arguments. In the sample, "sum" is called with literals "5" and "6". 
+The return expression use the special function "pumaAst" to build a new AST and replace the identifiers "$a" and "$b" with the AST of the actual arguments. In the sample, "sum" is called with literals "5" and "6".
 
 So, the expression "sum(5, 6)" will be re-written in the JavaScript panel as:
 
@@ -141,3 +141,7 @@ The PumaScript project is being developed at the Department of Information Syste
 
 ![alt text][utn]
 [utn]: http://upload.wikimedia.org/wikipedia/commons/thumb/6/67/UTN_logo.jpg/200px-UTN_logo.jpg "UTN logo"
+
+## License
+
+MIT. Details on LICENSE file.

@@ -1,29 +1,24 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 module.exports = function (grunt) {
 
     'use strict';
-
-    var regex = {
-        DEFINE_START: /define\([^{]*?{/,
-        DEFINE_END: /\}\);[^}\w]*$/,
-        EXCLUSIONS: /[^\n]*\/\*\s*exclude-build\s*\*\/[^\n]*/,
-        EMPTY_DEFINITION: /define\(\[[^\]]+\]\)[\W\n]+$/
-    };
 
     require('load-grunt-tasks')(grunt);
 
     // Project configuration.
     grunt.initConfig({
-        buildName: 'pumascript',
-        outputDir: 'dist',
-        output: '<%= outputDir %>/<%= buildName %>',
+        buildConfig: {
+            name: 'pumascript',
+            output: 'dist/<%= buildConfig.name %>'
+        },
 
         jshint: {
             all: [
                 'gruntfile.js',
                 'src/**/*.js',
                 'tasks/*.js',
-                'test/*.js',
-                '!src/libs/**/*.js'
+                'test/*.js'
             ],
             options: {
                 jshintrc: '.jshintrc',
@@ -42,7 +37,10 @@ module.exports = function (grunt) {
             default_options: {
                 options: {},
                 files: {
-                    'test/grunt-test/tmp/result.js': ['test/grunt-test/puma-test.js','test/grunt-test/puma-test2.js']
+                    'test/grunt-test/tmp/result.js': [
+                        'test/grunt-test/puma-test.js',
+                        'test/grunt-test/puma-test2.js'
+                    ]
                 },
             }
         },
@@ -53,8 +51,8 @@ module.exports = function (grunt) {
                 options: {
                     baseUrl: 'src',
                     mainConfigFile: 'build/config.js',
-                    out: '<%= output %>.js',
-                    name: '<%= buildName %>',
+                    out: '<%= buildConfig.output %>.js',
+                    name: '<%= buildConfig.name %>',
                     optimize: 'none',
                     skipSemiColonInsertion: true,
                     paths: {
@@ -69,10 +67,10 @@ module.exports = function (grunt) {
                         // remove define wrappers and closure ends,
                         // lines to exclude: /* exclude-build */
                         contents = contents
-                            .replace(regex.DEFINE_START, '')
-                            .replace(regex.DEFINE_END, '')
-                            .replace(regex.EXCLUSIONS, '')
-                            .replace(regex.EMPTY_DEFINITION, '');
+                            .replace(/define\([^{]*?{/, '') // define start
+                            .replace(/\}\);[^}\w]*$/, '') // define end
+                            .replace(/[^\n]*\/\*\s*exclude-build\s*\*\/[^\n]*/, '') // exclusions
+                            .replace(/define\(\[[^\]]+\]\)[\W\n]+$/, ''); // empty definition
 
                         return contents;
                     }
@@ -90,19 +88,30 @@ module.exports = function (grunt) {
 
     grunt.registerTask('travis', ['jshint', 'test']);
 
-    grunt.registerTask('init','Prepare to start working with Puma',function(){
-        var exec = require('child_process').exec;
+    grunt.registerTask('init', 'Prepare to start working with Puma', function () {
+        // Use spawn to report progress of the task
+        var spawn = require('child_process').spawn;
+        var cmd    = spawn('bower', ['install'], { cwd: './editor'});
         var done = this.async();
-        
-        exec('bower install', {cwd: './editor'}, function(err, stdout, stderr){
-            grunt.log.ok(stdout);
-            if(err !== null){
-                grunt.log.errorlns('error: ',stderr);
-            }             
+
+        cmd.stdout.on('data', function (data) {
+            grunt.log.write(data.toString());
+        });
+
+        cmd.stderr.on('data', function (data) {
+            grunt.log.error('Error: ' + data.toString());
+        });
+
+        cmd.on('exit', function (code) {
+            if(code > 0){
+                grunt.fail.fatal('Process Finished Code: ' + code.toString());
+            } else {
+                grunt.log.ok('Process Finished Code: ' + code.toString());
+            }
+
             done();
         });
-        grunt.task.run('test');
     });
-    
-    grunt.registerTask('default', ['init']);    
+
+    grunt.registerTask('default', ['init']);
 };

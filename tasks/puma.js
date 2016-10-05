@@ -1,3 +1,5 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 /*
  * pumascript-grunt
  *
@@ -8,7 +10,7 @@ module.exports = function (grunt) {
     'use strict';
 
     grunt.registerMultiTask('puma', 'Meta-programming features for Javascript', function () {
-  
+
         var puma = require('../dist/pumascript.js');
         // Iterate over all specified files in gruntfile.
         this.files.forEach(function (file) {

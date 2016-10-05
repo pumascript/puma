@@ -1,3 +1,5 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 /*global define */
 
 define([
@@ -10,7 +12,7 @@ define([
     function PropertyWrapper(obj, propertyName) {
         this._obj = obj;
         this._propertyName = propertyName;
-        
+
         Object.defineProperty(this, 'value', {
             get: function () {
                 return this._obj[this._propertyName];

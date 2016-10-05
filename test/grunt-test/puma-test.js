@@ -1,3 +1,5 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 var PUMA_FORCE_REWRITE = true;
 
 /* @meta */

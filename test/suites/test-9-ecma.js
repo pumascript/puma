@@ -1,5 +1,8 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 define(['pumascript', 'esprima'], function(puma, esprima) {
 
+    module("9.2 ToBoolean");
   test("toBoolean undefined conversion test", function () {
     	var result = puma.evalPuma("Boolean(undefined)");
     	ok(result.success && false === result.value, "Pass!");
@@ -34,6 +37,8 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
     var result = puma.evalPuma("Boolean(Object())");
     ok(result.success && true === result.value, "Pass!");
   });
+
+    module("9.3 ToNumber");
 
   test("toNumber(undefined) conversion test", function () {
     var result = puma.evalPuma("Number(undefined)");
@@ -70,6 +75,8 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
     ok(result.success && typeof NaN === typeof result.value, "Pass!");
   });
 
+    module("9.4 ToInteger");
+
   test("parseInt(0) conversion test", function () {
     var result = puma.evalPuma("parseInt(0)");
     ok(result.success && 0 === result.value, "Pass!");
@@ -79,6 +86,8 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
     var result = puma.evalPuma("parseInt(NaN)");
     ok(result.success && typeof NaN === typeof result.value, "Pass!");
   });
+
+    module("9.8 ToString");
 
   QUnit.skip("toString(undefined) conversion test", function () {// ver con Ema
     var result = puma.evalPuma("toString(undefined)");

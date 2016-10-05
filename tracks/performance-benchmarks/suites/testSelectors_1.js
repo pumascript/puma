@@ -1,3 +1,5 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 /*
 * Benchmark Number: 1
 * Description : Jquery vs Native Selectors
