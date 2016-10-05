@@ -76,19 +76,72 @@ define([
         var nodeType = ast.type;
         var result = defaultResult;
 
-        // TODO order alphabetically
         switch (nodeType) {
-        case "Program":
-            result = this.visitProgram(ast, state);
+        case "ArrayExpression":
+            result = this.visitArrayExpression(ast, state);
             break;
-        case "ExpressionStatement":
-            result = this.accept(ast.expression, state);
+        case "AssignmentExpression":
+            result = this.visitAssignmentExpression(ast, state);
             break;
         case "BinaryExpression":
             result = this.visitBinaryExpression(ast, state);
             break;
-        case "AssignmentExpression":
-            result = this.visitAssignmentExpression(ast, state);
+        case "Block":
+            result = this.visitComment(ast, state);
+            break;
+        case "BlockStatement":
+            result = this.visitBlockStatement(ast, state);
+            break;
+        case "CallExpression":
+            result = this.visitCallExpression(ast, state);
+            break;
+        case "ExpressionStatement":
+            result = this.accept(ast.expression, state);
+            break;
+        case "ForStatement":
+            result = this.visitForStatement(ast, state);
+            break;
+        case "FunctionDeclaration":
+            result = this.visitFunctionDeclaration(ast, state);
+            break;
+        case "FunctionExpression":
+            result = this.visitFunctionExpression(ast, state);
+            break;    
+        case "Identifier":
+            result = this.visitIdentifier(ast, state);
+            break;
+        case "IfStatement":
+            result = this.visitIfStatement(ast, state);
+            break;
+        case "Literal":
+            result = this.visitLiteral(ast, state);
+            break;
+        case "LogicalExpression":
+            result = this.visitLogicalExpression(ast, state);
+            break;
+        case "MemberExpression":
+            result = this.visitMemberExpression(ast, state);
+            break;
+        case "NewExpression":
+            result = this.visitNewExpression(ast, state);
+            break;
+        case "ObjectExpression":
+            result = this.visitObjectExpression(ast, state);
+            break; 
+        case "Program":
+            result = this.visitProgram(ast, state);
+            break;
+        case "ReturnStatement":
+            result = this.visitReturnStatement(ast, state);
+            break;
+        case "ThisExpression":
+            result = this.visitThisExpression(ast, state);
+            break;
+        case "UnaryExpression":
+            result = this.visitUnaryExpression(ast, state);
+            break;
+        case "UpdateExpression":
+            result = this.visitUpdateExpression(ast, state);
             break;
         case "VariableDeclaration":
             result = this.visitVariableDeclaration(ast, state);
@@ -96,63 +149,103 @@ define([
         case "VariableDeclarator":
             result = this.visitVariableDeclarator(ast, state);
             break;
-        case "CallExpression":
-            result = this.visitCallExpression(ast, state);
+        case "WhileStatement":
+            result = this.visitWhileStatement(ast, state);
             break;
-        case "MemberExpression":
-            result = this.visitMemberExpression(ast, state);
+        case Default:
+            console.log("nos supported type by Puma visitor")
             break;
-        case "FunctionExpression":
-            result = this.visitFunctionExpression(ast, state);
+        /*20
+        case "EmptyStatement":
+            result = this.visitEmptyStatement(ast, state);
             break;
-        case "FunctionDeclaration":
-            result = this.visitFunctionDeclaration(ast, state);
+        case "LabeledStatement":
+            result = this.visitLabeledStatement(ast, state);
             break;
-        case "BlockStatement":
-            result = this.visitBlockStatement(ast, state);
+        case "BreakStatement":
+            result = this.visitBreakStatement(ast, state);
             break;
-        case "Identifier":
-            result = this.visitIdentifier(ast, state);
+        case "ContinueStatement":
+            result = this.visitContinueStatement(ast, state);
             break;
-        case "Literal":
-            result = this.visitLiteral(ast, state);
+        case "WithStatement":
+            result = this.visitWithStatement(ast, state);
             break;
-        case "UnaryExpression":
-            result = this.visitUnaryExpression(ast, state);
+        case "SwitchStatement":
+            result = this.visitSwitchStatement(ast, state);
             break;
-        case "IfStatement":
-            result = this.visitIfStatement(ast, state);
+        case "SwitchCase":
+            result = this.visitSwitchCase(ast, state);
             break;
-        case "ForStatement":
-            result = this.visitForStatement(ast, state);
+        case "ThrowStatement":
+            result = this.visitThrowStatement(ast, state);
             break;
-        case "ReturnStatement":
-            result = this.visitReturnStatement(ast, state);
+        case "TryStatement":
+            result = this.visitTryStatement(ast, state);
             break;
-        case "Block":
-            result = this.visitComment(ast, state);
+        case "CatchClause":
+            result = this.visitCatchClause(ast, state);
+            break;
+        case "ForInStatement":
+            result = this.visitForInStatement(ast, state);
+            break;
+        case "Property":
+            result = this.visitProperty(ast, state);
+            break;
+        case "UnaryOperator":
+            result = this.visitUnaryOperator(ast, state);
             break;
         case "UpdateExpression":
             result = this.visitUpdateExpression(ast, state);
             break;
-        case "WhileStatement":
-            result = this.visitWhileStatement(ast, state);
+        case "UpdateOperator":
+            result = this.visitUpdateOperator(ast, state);
             break;
-        case "ObjectExpression":
-            result = this.visitObjectExpression(ast, state);
+        case "BinaryOperator":
+            result = this.visitBinaryOperator(ast, state);
             break;
-        case "ArrayExpression":
-            result = this.visitArrayExpression(ast, state);
+        case "AssignmentOperator":
+            result = this.visitAssignmentOperator(ast, state);
             break;
-        case "LogicalExpression":
-            result = this.visitLogicalExpression(ast, state);
+        case "LogicalOperator":
+            result = this.visitLogicalOperator(ast, state);
             break;
-        case "ThisExpression":
-            result = this.visitThisExpression(ast, state);
+        case "ConditionalExpression":
+            result = this.visitConditionalExpression(ast, state);
             break;
-        case "NewExpression":
-            result = this.visitNewExpression(ast, state);
+        case "SequenceExpression":
+            result = this.visitSequenceExpression(ast, state);
             break;
+        case "LetStatement":
+            result = this.visitLetStatement(ast, state);
+            break;
+        case "DebuggerStatement":
+            result = this.visitDebuggerStatement(ast, state);
+            break;
+        case "ArrowExpression":
+            result = this.visitArrowExpression(ast, state);
+            break;
+        case "SequenceExpression":
+            result = this.visitSequenceExpression(ast, state);
+            break;
+        case "YieldExpression":
+            result = this.visitYieldExpression(ast, state);
+            break;
+        case "ComprehensionExpression":
+            result = this.visitComprehensionExpression(ast, state);
+            break;
+        case "GeneratorExpression":
+            result = this.visitGeneratorExpression(ast, state);
+            break;
+        case "GraphExpression":
+            result = this.visitGraphExpression(ast, state);
+            break;
+        case "GraphIndexExpression":
+            result = this.visitGraphIndexExpression(ast, state);
+            break;
+            
+        Some operators are missing but most of them aren't needed
+        */
         }
 
         this._lastStatementLoc = ast.loc.end;
