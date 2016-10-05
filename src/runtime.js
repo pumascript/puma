@@ -368,6 +368,9 @@ define([
         case "*=":
             symbol.value *= rightResult.value;
             break;
+        case "/=":
+            symbol.value /= rightResult.value;
+            break;
         case "%=":
             symbol.value %= rightResult.value;
             break;
@@ -467,6 +470,9 @@ define([
         case "||":
             value = leftResult.value || rightResult.value;
             break;
+        case "in":
+            value = leftResult.value in rightResult.value;
+            break;
         case "instanceof":
             value = leftResult.value instanceof rightResult.value;
             break;
@@ -514,12 +520,12 @@ define([
         var argumentResult = this.accept(ast.argument, state);
         if (argumentResult.failed()) return defaultResult;
 
-        argumentResult.makeValue();
+        if (ast.operator !== "delete") argumentResult.makeValue();
 
         var value;
         switch (ast.operator) {
         case "delete":
-            value = delete argumentResult.value;
+            value = delete argumentResult.value.obj[ast.argument.property.name];
             break;
         case "void":
             value = void argumentResult.value;
