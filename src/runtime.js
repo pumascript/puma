@@ -218,6 +218,7 @@ define([
         //Particular cases for native data type
         if (typeof (obj) === 'string') obj = new String(obj);
         if (typeof (obj) === 'number') obj = new Number(obj);
+        if (typeof (obj) === 'boolean') obj = new Boolean(obj);
 
         // if the property name is "prototype" then rename it to avoid conflicts
         var astPropertyName = ast.property.name;
@@ -238,6 +239,8 @@ define([
             }
         }
 
+        if (propertyName == "prototypeProperty")
+            propertyName = "prototype";
         if (!(propertyName in obj)) {
             obj[propertyName] = undefined;
         }
@@ -299,7 +302,7 @@ define([
 
     FirstPass.prototype.addFunctionDeclaration = function (name, params, body, state, isMeta) {
         var functionSymbol = new FunctionSymbol(name, params, body, isMeta);
-        functionSymbol.prototypeProperty = {};
+        functionSymbol.prototype = {};
         return new Result(true, state.addSymbol(name, functionSymbol));
     };
 
@@ -366,6 +369,9 @@ define([
             break;
         case "*=":
             symbol.value *= rightResult.value;
+            break;
+        case "/=":
+            symbol.value /= rightResult.value;
             break;
         case "%=":
             symbol.value %= rightResult.value;
@@ -466,6 +472,9 @@ define([
         case "||":
             value = leftResult.value || rightResult.value;
             break;
+        case "in":
+            value = leftResult.value in rightResult.value;
+            break;
         case "instanceof":
             value = leftResult.value instanceof rightResult.value;
             break;
@@ -513,12 +522,12 @@ define([
         var argumentResult = this.accept(ast.argument, state);
         if (argumentResult.failed()) return defaultResult;
 
-        argumentResult.makeValue();
+        if (ast.operator !== "delete") argumentResult.makeValue();
 
         var value;
         switch (ast.operator) {
         case "delete":
-            value = delete argumentResult.value;
+            value = delete argumentResult.value.obj[ast.argument.property.name];
             break;
         case "void":
             value = void argumentResult.value;
@@ -795,7 +804,7 @@ define([
         var typeValue = calleeResult.value;
 
         // create a new object from the prototype
-        var newObject = Object.create(typeValue.prototypeProperty);
+        var newObject = Object.create(typeValue.prototype);
         // set "this" to the new object
         state.setNewFrameThisBinding(newObject);
         // call the constructor

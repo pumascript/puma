@@ -76,10 +76,10 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
 
     module("11.4 Unary Operators");
 
-    QUnit.skip("Delete Operator",function () {
-        var result = puma.evalPuma("var x = {}; x.property = 'propertyThatShouldNotBe'; delete x.property; x.property;");
+    test("Delete Operator",function () {
+        var result = puma.evalPuma("var s1 = Object({Name:'LEO', Terminal:25000, Destination:'Panchaea'}); delete s1.Destination; Object.getOwnPropertyNames(s1);");
         result.makeValue();
-        equal(result.value,undefined,"Passed!");
+        equal(result.value.toString(), "Name,Terminal", "Passed!");
     });
 
     test("Void Operator",function () {
@@ -129,15 +129,15 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
 
     module("11.5 Multiplicative Operators and 11.6 Additive Operators");
 
-     test("Multiplicative and Additive Operators",function () {
+    test("Multiplicative and Additive Operators",function () {
          var result = puma.evalPuma("2 * 3 / 4 + 5 - 6 % 2;");
          result.makeValue();
          equal(result.value,6.5,"Passed!");
-     });
+    });
 
     module("11.7 Bitwise Shift Operators");
 
-     test("The Left Shift Operator ( << )",function () {
+    test("The Left Shift Operator ( << )",function () {
         var result = puma.evalPuma("8 << 2;");
         equal(result.value,32,"Passed!");
     });
@@ -180,7 +180,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
         equal(result.value,true,"Passed!");
     });
 
-    QUnit.skip("In Operator",function () {
+    test("in Operator",function () {
         var result = puma.evalPuma("1 in [0,1];");
         ok(result.value,"Passed!");
     });
@@ -237,6 +237,11 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
     });
 
     module("11.12 Conditional Operators");
+    
+    QUnit.skip("Conditional Operator ( ? : )",function () {
+        var result = puma.evalPuma("false ? 'manzana' : 'naranja'");
+        strictEqual(result.value, 'naranja', "Passed!");
+    });
 
     module("11.13 Assignment Operators");
 
@@ -252,7 +257,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
         equal(result.value,50,"Passed!");
     });
 
-    QUnit.skip("/= Operator",function () {
+    test("/= Operator",function () {
         var result = puma.evalPuma("var x = 10; var y = 5; x /= y; x;");
         result.makeValue();
         equal(result.value,2,"Passed!");
