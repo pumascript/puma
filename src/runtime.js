@@ -262,12 +262,10 @@ define([
             console.log("YieldExpression visitor not implemented yet");
             //result = this.visitYieldExpression(ast, state);
             break;
+                
         case "Default":
             console.log("PumaScript visitor not implemented yet");
             break;
-        /*
-        Some operators are missing but most of them aren't needed, only used directly in expressions
-        */
         }
 
         this._lastStatementLoc = ast.loc.end;
