@@ -82,11 +82,23 @@ define([
         case "ArrayExpression":
             result = this.visitArrayExpression(ast, state);
             break;
+        case "ArrowExpression":
+            console.log("ArrowExpression visitor not implemented yet");
+            //result = this.visitArrowExpression(ast, state);
+            break;
         case "AssignmentExpression":
             result = this.visitAssignmentExpression(ast, state);
             break;
+        case "AssignmentOperator":
+            console.log("AssignmentOperator visitor not implemented yet");
+            //result = this.visitAssignmentOperator(ast, state);
+            break;
         case "BinaryExpression":
             result = this.visitBinaryExpression(ast, state);
+            break;
+        case "BinaryOperator":
+            console.log("BinaryOperator visitor not implemented yet");
+            //result = this.visitBinaryOperator(ast, state);
             break;
         case "Block":
             result = this.visitComment(ast, state);
@@ -94,11 +106,43 @@ define([
         case "BlockStatement":
             result = this.visitBlockStatement(ast, state);
             break;
+        case "BreakStatement":
+            console.log("BreakStatement visitor not implemented yet");
+            //result = this.visitBreakStatement(ast, state);
+            break;
         case "CallExpression":
             result = this.visitCallExpression(ast, state);
             break;
+        case "CatchClause":
+            console.log("CatchClause visitor not implemented yet");
+            //result = this.visitCatchClause(ast, state);
+            break;
+        case "ComprehensionExpression":
+            console.log("ComprehensionExpression visitor not implemented yet");
+            //result = this.visitComprehensionExpression(ast, state);
+            break;
+        case "ConditionalExpression":
+            console.log("ConditionalExpression visitor not implemented yet");
+            //result = this.visitConditionalExpression(ast, state);
+            break;
+        case "ContinueStatement":
+            console.log("ContinueStatement visitor not implemented yet");
+            //result = this.visitContinueStatement(ast, state);
+            break;
+        case "DebuggerStatement":
+            console.log("DebuggerStatement visitor not implemented yet");
+            //result = this.visitDebuggerStatement(ast, state);
+            break;
+        case "EmptyStatement":
+            console.log("EmptyStatement visitor not implemented yet");
+            //result = this.visitEmptyStatement(ast, state);
+            break;
         case "ExpressionStatement":
             result = this.accept(ast.expression, state);
+            break;
+        case "ForInStatement":
+            console.log("ForInStatement visitor not implemented yet");
+            //result = this.visitForInStatement(ast, state);
             break;
         case "ForStatement":
             result = this.visitForStatement(ast, state);
@@ -108,18 +152,42 @@ define([
             break;
         case "FunctionExpression":
             result = this.visitFunctionExpression(ast, state);
-            break;    
+            break;
+        case "GraphExpression":
+            console.log("GraphExpression visitor not implemented yet");
+            //result = this.visitGraphExpression(ast, state);
+            break;
+        case "GraphIndexExpression":
+            console.log("GraphIndexExpression visitor not implemented yet");
+            //result = this.visitGraphIndexExpression(ast, state);
+            break;
+        case "GeneratorExpression":
+            console.log("GeneratorExpression visitor not implemented yet");
+            //result = this.visitGeneratorExpression(ast, state);
+            break;
         case "Identifier":
             result = this.visitIdentifier(ast, state);
             break;
         case "IfStatement":
             result = this.visitIfStatement(ast, state);
             break;
+        case "LabeledStatement":
+            console.log("LabeledStatement visitor not implemented yet");
+            //result = this.visitLabeledStatement(ast, state);
+            break;
+        case "LetStatement":
+            console.log("LetStatement visitor not implemented yet");
+            //result = this.visitLetStatement(ast, state);
+            break;
         case "Literal":
             result = this.visitLiteral(ast, state);
             break;
         case "LogicalExpression":
             result = this.visitLogicalExpression(ast, state);
+            break;
+        case "LogicalOperator":
+            console.log("LogicalOperator visitor not implemented yet");
+            //result = this.visitLogicalOperator(ast, state);
             break;
         case "MemberExpression":
             result = this.visitMemberExpression(ast, state);
@@ -133,17 +201,49 @@ define([
         case "Program":
             result = this.visitProgram(ast, state);
             break;
+        case "Property":
+            console.log("Property visitor not implemented yet");
+            //result = this.visitProperty(ast, state);
+            break;
         case "ReturnStatement":
             result = this.visitReturnStatement(ast, state);
+            break;
+        case "SequenceExpression":
+            console.log("SequenceExpression visitor not implemented yet");
+            //result = this.visitSequenceExpression(ast, state);
+            break;
+        case "SwitchCase":
+            console.log("SwitchCase visitor not implemented yet");
+            //result = this.visitSwitchCase(ast, state);
+            break;
+        case "SwitchStatement":
+            console.log("SwitchStatement visitor not implemented yet");
+            //result = this.visitSwitchStatement(ast, state);
             break;
         case "ThisExpression":
             result = this.visitThisExpression(ast, state);
             break;
+        case "ThrowStatement":
+            console.log("ThrowStatement visitor not implemented yet");
+            //result = this.visitThrowStatement(ast, state);
+            break;
+        case "TryStatement":
+            console.log("TryStatement visitor not implemented yet");
+            //result = this.visitTryStatement(ast, state);
+            break;
         case "UnaryExpression":
             result = this.visitUnaryExpression(ast, state);
             break;
+        case "UnaryOperator":
+            console.log("PumaScript visitor not implemented yet");
+            //result = this.visitUnaryOperator(ast, state);
+            break;
         case "UpdateExpression":
             result = this.visitUpdateExpression(ast, state);
+            break;
+        case "UpdateOperator":
+            console.log("UpdateOperator visitor not implemented yet");
+            //result = this.visitUpdateOperator(ast, state);
             break;
         case "VariableDeclaration":
             result = this.visitVariableDeclaration(ast, state);
@@ -154,100 +254,19 @@ define([
         case "WhileStatement":
             result = this.visitWhileStatement(ast, state);
             break;
-        case "Default":
-            console.log("nos supported type by Puma visitor");
-            break;
-        /*20
-        case "EmptyStatement":
-            result = this.visitEmptyStatement(ast, state);
-            break;
-        case "LabeledStatement":
-            result = this.visitLabeledStatement(ast, state);
-            break;
-        case "BreakStatement":
-            result = this.visitBreakStatement(ast, state);
-            break;
-        case "ContinueStatement":
-            result = this.visitContinueStatement(ast, state);
-            break;
         case "WithStatement":
-            result = this.visitWithStatement(ast, state);
-            break;
-        case "SwitchStatement":
-            result = this.visitSwitchStatement(ast, state);
-            break;
-        case "SwitchCase":
-            result = this.visitSwitchCase(ast, state);
-            break;
-        case "ThrowStatement":
-            result = this.visitThrowStatement(ast, state);
-            break;
-        case "TryStatement":
-            result = this.visitTryStatement(ast, state);
-            break;
-        case "CatchClause":
-            result = this.visitCatchClause(ast, state);
-            break;
-        case "ForInStatement":
-            result = this.visitForInStatement(ast, state);
-            break;
-        case "Property":
-            result = this.visitProperty(ast, state);
-            break;
-        case "UnaryOperator":
-            result = this.visitUnaryOperator(ast, state);
-            break;
-        case "UpdateExpression":
-            result = this.visitUpdateExpression(ast, state);
-            break;
-        case "UpdateOperator":
-            result = this.visitUpdateOperator(ast, state);
-            break;
-        case "BinaryOperator":
-            result = this.visitBinaryOperator(ast, state);
-            break;
-        case "AssignmentOperator":
-            result = this.visitAssignmentOperator(ast, state);
-            break;
-        case "LogicalOperator":
-            result = this.visitLogicalOperator(ast, state);
-            break;
-        case "ConditionalExpression":
-            result = this.visitConditionalExpression(ast, state);
-            break;
-        case "SequenceExpression":
-            result = this.visitSequenceExpression(ast, state);
-            break;
-        case "LetStatement":
-            result = this.visitLetStatement(ast, state);
-            break;
-        case "DebuggerStatement":
-            result = this.visitDebuggerStatement(ast, state);
-            break;
-        case "ArrowExpression":
-            result = this.visitArrowExpression(ast, state);
-            break;
-        case "SequenceExpression":
-            result = this.visitSequenceExpression(ast, state);
+            console.log("WithStatement visitor not implemented yet");
+            //result = this.visitWithStatement(ast, state);
             break;
         case "YieldExpression":
-            result = this.visitYieldExpression(ast, state);
+            console.log("YieldExpression visitor not implemented yet");
+            //result = this.visitYieldExpression(ast, state);
             break;
-        case "ComprehensionExpression":
-            result = this.visitComprehensionExpression(ast, state);
+        case "Default":
+            console.log("PumaScript visitor not implemented yet");
             break;
-        case "GeneratorExpression":
-            result = this.visitGeneratorExpression(ast, state);
-            break;
-        case "GraphExpression":
-            result = this.visitGraphExpression(ast, state);
-            break;
-        case "GraphIndexExpression":
-            result = this.visitGraphIndexExpression(ast, state);
-            break;
-            
-        Some operators are missing but most of them aren't needed
-        
+        /*
+        Some operators are missing but most of them aren't needed, only used directly in expressions
         */
         }
 
