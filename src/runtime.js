@@ -152,8 +152,8 @@ define([
         case "WhileStatement":
             result = this.visitWhileStatement(ast, state);
             break;
-        case Default:
-            console.log("nos supported type by Puma visitor")
+        case "Default":
+            console.log("nos supported type by Puma visitor");
             break;
         /*20
         case "EmptyStatement":
