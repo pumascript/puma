@@ -1,3 +1,5 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 // TestSuite
 var Suite = function Suite(name){
   this._suiteName = name;
@@ -14,12 +16,12 @@ Suite.prototype.addTest = function(test) {
   this._tests.push(test);
 };
 
-Suite.prototype.run = function(test) {   
+Suite.prototype.run = function(test) {
     var start = Date.now();
     for(var j=0; j<test.runs;j++) {
       test.test();
     }
-    var end = Date.now(); 
+    var end = Date.now();
     var result = end - start;
     var ops = Math.round(test.runs / (result/1000));
     if(PRINT_TABLE) {
@@ -72,19 +74,19 @@ Suite.prototype.printTable = function (str) {
 Suite.prototype.printInDOM = function () {
   var container = $('body');
   var subcontainer = container;
-  
+
   if(PRINT_TABLE) subcontainer = $('<table style="border:1px solid black;"></table>');
-  
+
   for(var i=0; i<this._result.length; i++) {
     subcontainer.append(this._result[i]);
   }
-  
+
   if(PRINT_TABLE) container.append(subcontainer);
 };
 
 Suite.prototype.execute = function() {
   var test = {};
-  this._secuenceNumber +=1;  
+  this._secuenceNumber +=1;
   for(var i=0; i<this._tests.length; i++){
     test = this._tests[i];
     test.prepare();
@@ -99,7 +101,7 @@ Suite.prototype.execute = function() {
 var Benchmark = function Benchmark(name, description, runs) {
   this.name = name;
   this.description = description;
-  
+
   // If nothing is defined runs 100.000 times
   if(runs === undefined) this.runs = 100000;
   else this.runs = runs;

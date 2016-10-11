@@ -1,6 +1,8 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 /*
 * Benchmark Engine Rules for Developers
-*   1-Define the tests Suites to run using the filename of the javascript 
+*   1-Define the tests Suites to run using the filename of the javascript
 *   in the suites array in runAllEnabledTestSuites() method in the form {"name" : testSelectors_1, "enabled": true|false }.
 *   2-The name of the suite inside the file must be the same as the name of the file.
 *   3-Include the JavaScript file in the benchmark.html head.
@@ -11,30 +13,31 @@ var TIMES_REPEAT_SUITE = 30;
 
 /* FLAG TO ENABLE (true)|DISABLE (false) PRINT AS TABLE */
 var PRINT_TABLE = true;
-  
+
 var suites = [];
-function runSuitesMultipleTimes(){  
-	
+function runSuitesMultipleTimes(){
+
 	// Define the test suites using the names as defined in the files
-	suites = [ 
-					{"name" : testSelectors_1, "enabled": false }, 
-					{"name" : testSelectors_2, "enabled": false },
-					{"name" : testSelectors_3, "enabled": false},
-					{"name" : testChecked, "enabled": false},
-					{"name" : testParseNumber, "enabled": false},
-					{"name" : testLoopFor, "enabled": false},
-					{"name" : testGetElementsById, "enabled": false},				
-					{"name" : testGetElementById, "enabled": false},				
-					{"name" : testGetElementsByClassName, "enabled": true},
-					{"name" : testGetElementsByTagName, "enabled": false}
-				   ];
+	suites = [
+        {"name" : testSelectors_1, "enabled": false },
+        {"name" : testSelectors_2, "enabled": false },
+        {"name" : testSelectors_3, "enabled": false},
+        {"name" : testChecked, "enabled": false},
+        {"name" : testParseNumber, "enabled": false},
+        {"name" : testLoopFor, "enabled": false},
+        {"name" : testGetElementsById, "enabled": false},
+        {"name" : testGetElementById, "enabled": false},
+        {"name" : testGetElementsByClassName, "enabled": true},
+        {"name" : testGetElementsByTagName, "enabled": false}
+    ];
 	interval = setInterval(runEnabledSuites, 1000);
 };
+
 function runEnabledSuites() {
 	if(TIMES_REPEAT_SUITE !== 0) {
 		TIMES_REPEAT_SUITE--;
 		for(var i=0; i<suites.length; i++) {
-		  if(suites[i].enabled === true && suites[i].enabled !== undefined) {     
+		  if(suites[i].enabled === true && suites[i].enabled !== undefined) {
 			suites[i].name.execute();
 		  }
 		}

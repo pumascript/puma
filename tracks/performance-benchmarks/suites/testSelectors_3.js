@@ -1,3 +1,5 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 /*
 * Benchmark Number: 3
 * Description : Jquery vs Native Selectors .class and querySelectorAll

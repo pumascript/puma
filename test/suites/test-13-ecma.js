@@ -1,3 +1,5 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 /*global define, test, ok, equal */
 
 /*
@@ -5,10 +7,10 @@
  *  @file: Base expressions test suite for the language
  */
 define(['pumascript', 'esprima'], function (puma, esprima) {
-    
+
 
     module("13 Function Definition");
-    
+
     test("function definiton 1", function () {
         var result = puma.evalPuma("function testA (a) {return a}; var test = testA('a1'); test");
         result.makeValue();
@@ -19,7 +21,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         result.makeValue();
         equal(result.value, "z", "Passed!");
     });
-    
+
     module("13.1 Strict Mode Restrictions");
 
     test("Strict Mode Restriction 1", function () {
@@ -53,7 +55,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     module("13.2 Creating Function Objects");
-    
+
     test("Creating Function Objects", function () {
         var result = puma.evalPuma("var F = function Add(x,y){return x+y}; F(2,3)");
         result.makeValue();

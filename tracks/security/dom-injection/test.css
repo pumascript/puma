@@ -1,4 +1,6 @@
-﻿body {
+/* Copyright (c) 2013 - present UTN-LIS */
+
+body {
     width:960px; /* para controlar el tamaño total de la pagina*/
 	margin: 0 auto; /* para que se centre en el navegador y no se tire a la izquierda*/
 	font-family:verdana;

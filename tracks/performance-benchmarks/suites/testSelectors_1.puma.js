@@ -1,13 +1,15 @@
+// Copyright (c) 2013 - present UTN-LIS
+
 //Test for JQuery VS Native
 
 /* @meta */
 function $(valueExp){
   //Regular Expression for ID
   var regex = /^#\b[a-zA-Z0-9_]+\b$/;
-  
+
   if(regex.test(valueExp.value)){
     valueExp.value = valueExp.value.substring(1);
-    return pumaAst($(document.getElementById($valueExp)));   
+    return pumaAst($(document.getElementById($valueExp)));
   }
   return null;
 };
@@ -20,7 +22,7 @@ $("body"); //tag selector
 
 //Context evaluation
 var name = "puma";
-$("#" + name); 
+$("#" + name);
 
 //Final result example
 $(document.getElementById('puma'));
@@ -28,7 +30,7 @@ $(document.getElementById('puma'));
 
 //Test for JQuery VS Native with force rewrite
 
-//Define global variable to re-write code     
+//Define global variable to re-write code
 var PUMA_FORCE_REWRITE = true;
 
 /* @meta */
@@ -37,19 +39,19 @@ function $(valueExp){
   var regex = /^#\b[a-zA-Z0-9_]+\b$/;
   var copy = {};
   var ast = {};
-  
+
   //Evaluation if not a literal
   if(valueExp !== "Literal"){
-    copy = evalPumaAst(valueExp).value;   
+    copy = evalPumaAst(valueExp).value;
   }
-  
+
   if(regex.test(copy) && PUMA_FORCE_REWRITE){
     return pumaAst($(document.getElementById($valueExp)));
   }
   else if(regex.test(valueExp.value)){
     valueExp.value = valueExp.value.substring(1);
-    return pumaAst($(document.getElementById($valueExp)));   
-  } 
+    return pumaAst($(document.getElementById($valueExp)));
+  }
   return null;
 };
 
@@ -61,7 +63,7 @@ var t = " .pepe";
 //Context evaluation
 var a = function() {
   var name = "puma";
-  $("#" + name + t); 
+  $("#" + name + t);
 }();
 
 //Re-write because it returns a string
@@ -70,5 +72,5 @@ var j = "ma";
 //Context evaluation
 var b = function() {
   var name = "pu";
-  $("#" + name + j); 
+  $("#" + name + j);
 }();
