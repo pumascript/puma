@@ -245,6 +245,7 @@ define([
             break;
             
         Some operators are missing but most of them aren't needed
+        
         */
         }
 
