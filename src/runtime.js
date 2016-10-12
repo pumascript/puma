@@ -89,16 +89,8 @@ define([
         case "AssignmentExpression":
             result = this.visitAssignmentExpression(ast, state);
             break;
-        case "AssignmentOperator":
-            console.log("AssignmentOperator visitor not implemented yet");
-            //result = this.visitAssignmentOperator(ast, state);
-            break;
         case "BinaryExpression":
             result = this.visitBinaryExpression(ast, state);
-            break;
-        case "BinaryOperator":
-            console.log("BinaryOperator visitor not implemented yet");
-            //result = this.visitBinaryOperator(ast, state);
             break;
         case "Block":
             result = this.visitComment(ast, state);
@@ -185,10 +177,6 @@ define([
         case "LogicalExpression":
             result = this.visitLogicalExpression(ast, state);
             break;
-        case "LogicalOperator":
-            console.log("LogicalOperator visitor not implemented yet");
-            //result = this.visitLogicalOperator(ast, state);
-            break;
         case "MemberExpression":
             result = this.visitMemberExpression(ast, state);
             break;
@@ -234,16 +222,8 @@ define([
         case "UnaryExpression":
             result = this.visitUnaryExpression(ast, state);
             break;
-        case "UnaryOperator":
-            console.log("PumaScript visitor not implemented yet");
-            //result = this.visitUnaryOperator(ast, state);
-            break;
         case "UpdateExpression":
             result = this.visitUpdateExpression(ast, state);
-            break;
-        case "UpdateOperator":
-            console.log("UpdateOperator visitor not implemented yet");
-            //result = this.visitUpdateOperator(ast, state);
             break;
         case "VariableDeclaration":
             result = this.visitVariableDeclaration(ast, state);
@@ -264,7 +244,7 @@ define([
             break;
                 
         case "Default":
-            console.log("PumaScript visitor not implemented yet");
+            console.log("PumaScript visitor: " + nodeType + "not implemented yet");
             break;
         }
 
