@@ -803,12 +803,44 @@ define([
         calleeResult.makeValue();
         var typeValue = calleeResult.value;
 
-        // create a new object from the prototype
-        var newObject = Object.create(typeValue.prototype);
-        // set "this" to the new object
-        state.setNewFrameThisBinding(newObject);
-        // call the constructor
-        this.callFunctionSymbol(typeValue, undefined, ast.arguments, state);
+        var STD_BIO = [
+        'Object',
+        'Function',
+        'Boolean',
+        'Number',
+        'String',
+        'RegExp',
+        'Array',
+        'Date',
+        'Error',
+        'EvalError',
+        'InternalError',
+        'RangeError',
+        'ReferenceError',
+        'SyntaxError',
+        'TypeError',
+        'URIError']
+
+        if (STD_BIO.includes(typeValue.name)) {
+            var argumentValues = [];
+            var result;
+            // eval arguments
+            for (var n = 0; n < ast.arguments.length; n++) {
+                result = this.accept(ast.arguments[n], state);
+                result.makeValue();
+                argumentValues[n] = result.value;
+            }
+
+            // create a new object from the prototype with arguments
+            var newObject = new typeValue.prototype.constructor(...argumentValues);       
+        } else {            
+            // create a new object from the prototype
+            var newObject = Object.create(typeValue.prototype);
+            // set "this" to the new object
+            state.setNewFrameThisBinding(newObject);
+            // call the constructor
+            this.callFunctionSymbol(typeValue, undefined, ast.arguments, state);
+        }
 
         return new Result(true, newObject);
     };
