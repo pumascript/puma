@@ -1944,68 +1944,68 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         var result = puma.evalPuma("var d = new Date(); d.setMilliseconds(250); d;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(d.getMilliseconds(), 250, "Passed!");
+        equal(result.value.getMilliseconds(), 250, "Passed!");
     });
 
     test("Date.prototype.setUTCMilliseconds(ms)", function () {
         var result = puma.evalPuma("var d = new Date(); d.setUTCMilliseconds(750); d;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(d.getUTCMilliseconds(), 750, "Passed!");
+        equal(result.value.getUTCMilliseconds(), 750, "Passed!");
     });
 
     test("Date.prototype.setSeconds(sec [, ms ])", function () {
         var result = puma.evalPuma("var d = new Date(); d.setSeconds(4, 465); d;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.valued.getSeconds(), 4, "Passed!");
-        equal(result.valued.getMilliseconds(), 465, "Passed!");
+        equal(result.value.getSeconds(), 4, "Passed!");
+        equal(result.value.getMilliseconds(), 465, "Passed!");
     });
 
     test("Date.prototype.setUTCSeconds(sec [, ms ])", function () {
         var result = puma.evalPuma("var d = new Date(); d.setUTCSeconds(4, 465); d;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.valued.getUTCSeconds(), 4, "Passed!");
-        equal(result.valued.getUTCMilliseconds(), 465, "Passed!");
+        equal(result.value.getUTCSeconds(), 4, "Passed!");
+        equal(result.value.getUTCMilliseconds(), 465, "Passed!");
     });
 
     test("Date.prototype.setMinutes(min [, sec [, ms ]])", function () {
         var result = puma.evalPuma("var d = new Date(); d.setMinutes(16, 4, 465); d;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.valued.getMinutes(), 16, "Passed!");
-        equal(result.valued.getSeconds(), 4, "Passed!");
-        equal(result.valued.getMilliseconds(), 465, "Passed!");
+        equal(result.value.getMinutes(), 16, "Passed!");
+        equal(result.value.getSeconds(), 4, "Passed!");
+        equal(result.value.getMilliseconds(), 465, "Passed!");
     });
 
     test("Date.prototype.setUTCMinutes(min [, sec [, ms ]])", function () {
         var result = puma.evalPuma("var d = new Date(); d.setUTCMinutes(16, 4, 465); d;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.valued.getUTCMinutes(), 16, "Passed!");
-        equal(result.valued.getUTCSeconds(), 4, "Passed!");
-        equal(result.valued.getUTCMilliseconds(), 465, "Passed!");
+        equal(result.value.getUTCMinutes(), 16, "Passed!");
+        equal(result.value.getUTCSeconds(), 4, "Passed!");
+        equal(result.value.getUTCMilliseconds(), 465, "Passed!");
     });
 
     test("Date.prototype.setHours(hour [, min [, sec [, ms ]]])", function () {
         var result = puma.evalPuma("var d = new Date(); d.setHours(5, 16, 4, 465); d;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.valued.getHours(), 5, "Passed!");
-        equal(result.valued.getMinutes(), 16, "Passed!");
-        equal(result.valued.getSeconds(), 4, "Passed!");
-        equal(result.valued.getMilliseconds(), 465, "Passed!");
+        equal(result.value.getHours(), 5, "Passed!");
+        equal(result.value.getMinutes(), 16, "Passed!");
+        equal(result.value.getSeconds(), 4, "Passed!");
+        equal(result.value.getMilliseconds(), 465, "Passed!");
     });
 
     test("Date.prototype.setUTCHours(hour [, min [, sec [, ms ]]])", function () {
         var result = puma.evalPuma("var d = new Date(); d.setUTCHours(5, 16, 4, 465); d;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.valued.getUTCHours(), 5, "Passed!");
-        equal(result.valued.getUTCMinutes(), 16, "Passed!");
-        equal(result.valued.getUTCSeconds(), 4, "Passed!");
-        equal(result.valued.getUTCMilliseconds(), 465, "Passed!");
+        equal(result.value.getUTCHours(), 5, "Passed!");
+        equal(result.value.getUTCMinutes(), 16, "Passed!");
+        equal(result.value.getUTCSeconds(), 4, "Passed!");
+        equal(result.value.getUTCMilliseconds(), 465, "Passed!");
     });
 
     test("Date.prototype.setDate(date)", function () {
@@ -2252,7 +2252,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("new Error(message)", function () {
-        var result = puma.evalPuma("var e = new Error(); e;");
+        var result = puma.evalPuma("var e = new Error('lp0 on fire'); e;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.message, 'lp0 on fire', "Passed!");
@@ -2502,7 +2502,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("new RangeError(message)", function () {
-        var result = puma.evalPuma("var e = new RangeError(); e;");
+        var result = puma.evalPuma("var e = new RangeError('lp0 on fire'); e;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.message, 'lp0 on fire', "Passed!");
@@ -2586,7 +2586,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("new ReferenceError(message)", function () {
-        var result = puma.evalPuma("var e = new ReferenceError(); e;");
+        var result = puma.evalPuma("var e = new ReferenceError('lp0 on fire'); e;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.message, 'lp0 on fire', "Passed!");
@@ -2670,7 +2670,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("new SyntaxError(message)", function () {
-        var result = puma.evalPuma("var e = new SyntaxError(); e;");
+        var result = puma.evalPuma("var e = new SyntaxError('lp0 on fire'); e;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.message, 'lp0 on fire', "Passed!");
@@ -2754,7 +2754,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("new TypeError(message)", function () {
-        var result = puma.evalPuma("var e = new TypeError(); e;");
+        var result = puma.evalPuma("var e = new TypeError('lp0 on fire'); e;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.message, 'lp0 on fire', "Passed!");
@@ -2838,7 +2838,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("new URIError(message)", function () {
-        var result = puma.evalPuma("var e = new URIError(); e;");
+        var result = puma.evalPuma("var e = new URIError('lp0 on fire'); e;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.message, 'lp0 on fire', "Passed!");
