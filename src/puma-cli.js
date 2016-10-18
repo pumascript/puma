@@ -15,11 +15,14 @@ if(!program.args.length){
       pumaFile = '';
 
   for (value of pathToFile){
-    fs.readFile(value,'utf8',function(err,data){
-      if(err) throw err;
-      pumaFile += data;
-    });
-  }
-  
+    pumaFile += fs.readFileSync(value,'utf8');
+  };
+
+  var parsedFile = puma.evalPuma(pumaFile);
+  console.log('PumaScript run Successfuly');
+
+  fs.writeFile('./test/grunt-test/tmp/puma-result.js',parsedFile.output,'utf8',function(err){
+    if(err) throw err;
+    console.log('file saved!');
   });
 }
