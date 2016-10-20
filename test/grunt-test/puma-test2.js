@@ -27,7 +27,7 @@ function $(valueExp){
 // Tests
 
 //Add a class in runtime so it does not need to re-write
-var t = " .pepe";
+var t = " .paco";
 
 //Context evaluation
 var a = function() {
