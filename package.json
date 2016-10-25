@@ -21,7 +21,7 @@
   ],
   "main": "dist/pumascript.js",
   "bin": {
-    "pumascript": "src/puma-cli.js"
+    "pumascript": "build/pumascript.js"
   },
   "engines": {
     "node": ">= 0.8.0"

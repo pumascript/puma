@@ -32,4 +32,4 @@ else{
   else {
     console.log("Specify a destination output");
   }
-};
+}
