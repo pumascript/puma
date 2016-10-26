@@ -9,7 +9,6 @@ program
 .option('-o, --output <output>','Name and path of the output file')
 .parse(process.argv);
 
-//can be major than two coz the first args are the path for the output
 if (!program.args.length) {
     program.help();
 }
@@ -18,11 +17,11 @@ else{
     var pumaFile = '';
 
     program.args.forEach(function(file){
+      console.info('Processing: ',file,' file.');
       pumaFile += fs.readFileSync(file,'utf8');
     });
 
     var parsedFile = puma.evalPuma(pumaFile);
-    console.log('PumaScript run Successfuly');
 
     fs.writeFile(program.output, parsedFile.output, 'utf8', function(err){
       if(err) throw err;
@@ -30,6 +29,6 @@ else{
     });
   }
   else {
-    console.log("Specify a destination output");
+    console.log("Specify a destination output") ;
   }
 }
