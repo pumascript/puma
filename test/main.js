@@ -24,11 +24,11 @@ var suites = [
   './suites/integration-tests.js',
   './suites/Tests-7-ECMA.js',
   './suites/Tests-8-ECMA.js',
-  './suites/test-9-ecma.js',
-  './suites/test-10-ecma.js',
+  './suites/Tests-9-ECMA.js',
+  './suites/Tests-10-ECMA.js',
   './suites/Tests-11-ECMA.js',
-  './suites/test-12-ecma.js',
-  './suites/test-13-ecma.js',
+  './suites/Tests-12-ECMA.js',
+  './suites/Tests-13-ECMA.js',
   './suites/Tests-15-ECMA.js'
 ];
 
