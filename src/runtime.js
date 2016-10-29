@@ -824,15 +824,28 @@ define([
         if (STD_BIO.includes(typeValue.name)) {
             var argumentValues = [];
             var result;
-            // eval arguments
+            // Get the argument values
             for (var n = 0; n < ast.arguments.length; n++) {
                 result = this.accept(ast.arguments[n], state);
                 result.makeValue();
                 argumentValues[n] = result.value;
             }
-
+        /*
+        *   USE FOLLOWING WHEN SPREAD OPERATOR IS SUPPORTED BY PHANTOMJS
+        *
             // create a new object from the prototype with arguments
-            var newObject = new typeValue.prototype.constructor(...argumentValues);       
+            var newObject = new typeValue.prototype.constructor(...argumentValues);
+        *
+        *   WORKAROUND TILL THEN IS TO PASS THE ARRAY VALUES IN A STATIC MANNER UP TO A MAXIMUM
+        *   OF 20 ARGUMENTS. IF LESS THAN THE ARGUMENTS ACCOUNTED FOR ARE PROVIDED THEN IT'S VALUES
+        *   WILL BE COERCED TO NULL AND THEREFORE WON'T AFFECT THE CREATION OF THE OBJECT.
+        */
+            var a = new Array(20);
+            for (var i = 0; i < 20; i++) {
+                a[i] = (i < argumentValues.length) ? argumentValues[i] : null;
+            }
+
+            var newObject = new typeValue.prototype.constructor(a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9],a[10],a[11],a[12],a[13],a[14],a[16],a[17],a[18],a[19],a[20]);
         } else {            
             // create a new object from the prototype
             var newObject = Object.create(typeValue.prototype);
