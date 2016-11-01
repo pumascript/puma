@@ -243,9 +243,9 @@ define([
             //result = this.visitYieldExpression(ast, state);
             break;
                 
-        case "Default":
+        /*case "Default":
             console.warn("PumaScript visitor: " + nodeType + "not implemented yet");
-            break;
+            break;*/
         }
 
         this._lastStatementLoc = ast.loc.end;

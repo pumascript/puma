@@ -578,7 +578,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         var result = puma.evalPuma("Array.prototype.constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value.toString().replace(/\r?\n/g, ' '), c, "Passed!");
+        equal(result.value.toString(), c, "Passed!");
     });
 
     test("Array.prototype.toString()", function () {
