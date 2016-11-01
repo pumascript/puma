@@ -65,11 +65,12 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
          ok(result.success && 1 === result.value, "Passed!");
      });
 
-     QUnit.skip("configurable", function(){
+     test("configurable", function(){
          try{
-         puma.evalPuma("var obj = {}; obj.key = 1; Object.defineProperty(obj, 'key', { configurable: true, writable: false, }); Object.defineProperty(obj, 'key', { configurable: false, }); Object.defineProperty(obj, 'key', { writable: true, });");}
-         catch(e) {var result = e.message;}
-         ok("Cannot redefine property: key" === result, "Passed!");
+         puma.evalPuma("var obj = {}; obj.key = 1; Object.defineProperty(obj, 'key', { configurable: true, writable: false }); Object.defineProperty(obj, 'key', { configurable: false, }); Object.defineProperty(obj, 'key', { writable: true, });");}
+         catch(e) { var result = e.message; console.log(e.message);}
+         
+         ok("Cannot redefine property: key" === result || "Attempting to change writable attribute of unconfigurable property." === result);
      });
 
 });
