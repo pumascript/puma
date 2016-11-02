@@ -162,7 +162,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.success, true, "Passed!");
         equal(JSON.stringify(result.value), JSON.stringify(obj), "Passed!");
     });
-    
+
     test("Object.prototype", function () {
         var result = puma.evalPuma("Object.prototype.isPrototypeOf(Object());");
         result.makeValue();
@@ -275,14 +275,14 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.success, true, "Passed!");
         equal(JSON.stringify(result.value), JSON.stringify(a), "Passed!");
     });
-    
+
     test("Object.prototype.constructor", function () {
         var result = puma.evalPuma("Object.prototype.constructor === Object().constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, true, "Passed!");
     });
-    
+
     test("Object.prototype.toString()", function () {
         var result = puma.evalPuma("var toStringP = Object.prototype.toString; toStringP.call(Math);");
         result.makeValue();
