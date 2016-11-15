@@ -113,5 +113,7 @@ module.exports = function (grunt) {
         });
     });
 
+    grunt.registerTask('build',['requirejs']);
+
     grunt.registerTask('default', ['init']);
 };

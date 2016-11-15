@@ -162,7 +162,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.success, true, "Passed!");
         equal(JSON.stringify(result.value), JSON.stringify(obj), "Passed!");
     });
-    
+
     test("Object.prototype", function () {
         var result = puma.evalPuma("Object.prototype.isPrototypeOf(Object());");
         result.makeValue();
@@ -275,14 +275,14 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.success, true, "Passed!");
         equal(JSON.stringify(result.value), JSON.stringify(a), "Passed!");
     });
-    
+
     test("Object.prototype.constructor", function () {
         var result = puma.evalPuma("Object.prototype.constructor === Object().constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, true, "Passed!");
     });
-    
+
     test("Object.prototype.toString()", function () {
         var result = puma.evalPuma("var toStringP = Object.prototype.toString; toStringP.call(Math);");
         result.makeValue();
@@ -397,19 +397,19 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Function.prototype.constructor", function () {
-        var c = Function('character', 'dialog', "return character+': \"'+dialog+'\"'").prototype.constructor.toString();
+        var c = Function('character', 'dialog', "return character+': \"'+dialog+'\"'").prototype.constructor.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("var transcript = Function('character', 'dialog', \"return character+': \\\"'+dialog+'\\\"'\"); transcript.prototype.constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value.toString(), c, "Passed!");
+        equal(result.value.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     test("Function.prototype.constructor.toString()", function () {
-        var c = Function('character', 'dialog', "return character+': \"'+dialog+'\"'").prototype.constructor.toString();
+        var c = Function('character', 'dialog', "return character+': \"'+dialog+'\"'").prototype.constructor.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("var transcript = Function('character', 'dialog', \"return character+': \\\"'+dialog+'\\\"'\"); transcript.prototype.constructor.toString();");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value, c, "Passed!");
+        equal(result.value.replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     test("Function.prototype.toString()", function () {
@@ -469,11 +469,12 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Properties of Function Instances: prototype", function () {
-        var s = "function anonymous(item, quantity, location) { console.log('NOT IMPLEMENTED...'); }"
+        var str = Function('item', 'quantity', 'location', "console.log('NOT IMPLEMENTED...');");
+        var c = str.prototype.constructor.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("var str = Function('item', 'quantity', 'location', \"console.log('NOT IMPLEMENTED...');\"); str.prototype;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value.constructor.toString().replace(/\r?\n/g, ' '), s, "Passed!");
+        equal(result.value.constructor.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     QUnit.skip("[[HasInstance]] (V)", function () {
@@ -541,12 +542,12 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Properties of the Array Constructor", function () {
-        var c = Function.prototype.toString();
+        var c = Function.prototype.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("Array;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.length, 1, "Passed!");
-        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+        equal(result.value.constructor.prototype.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     test("Array.prototype", function () {
@@ -574,11 +575,11 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Array.prototype.constructor", function () {
-        var c = "function Array() {\n    [native code]\n}";
+        var c = Array.prototype.constructor.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("Array.prototype.constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value.toString(), c, "Passed!");
+        equal(result.value.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     test("Array.prototype.toString()", function () {
@@ -872,12 +873,12 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Properties of the String Constructor", function () {
-        var c = Function.prototype.toString();
+        var c = Function.prototype.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("String;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.length, 1, "Passed!");
-        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+        equal(result.value.constructor.prototype.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     test("String.prototype", function () {
@@ -906,11 +907,11 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("String.prototype.constructor", function () {
-        var c = "function String() {\n    [native code]\n}";
+        var c = String.prototype.constructor.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("String.prototype.constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value.toString(), c, "Passed!");
+        equal(result.value.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     test("String.prototype.toString()", function () {
@@ -1240,12 +1241,12 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Properties of the Boolean Constructor", function () {
-        var c = Function.prototype.toString();
+        var c = Function.prototype.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("Boolean;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.length, 1, "Passed!");
-        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+        equal(result.value.constructor.prototype.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     test("Boolean.prototype", function () {
@@ -1264,11 +1265,11 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Boolean.prototype.constructor", function () {
-        var c = "function Boolean() {\n    [native code]\n}";
+        var c = Boolean.prototype.constructor.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("Boolean.prototype.constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value.toString(), c, "Passed!");
+        equal(result.value.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     test("Boolean.prototype.toString()", function () {
@@ -1340,12 +1341,12 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Properties of the Number Constructor", function () {
-        var c = Function.prototype.toString();
+        var c = Function.prototype.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("Number;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.length, 1, "Passed!");
-        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+        equal(result.value.constructor.prototype.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     test("Number.prototype", function () {
@@ -1399,11 +1400,11 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Number.prototype.constructor", function () {
-        var c = "function Number() {\n    [native code]\n}";
+        var c = Number.prototype.constructor.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("Number.prototype.constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value.toString(), c, "Passed!");
+        equal(result.value.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     test("Number.prototype.toString([radix])", function () {
@@ -1698,12 +1699,12 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Properties of the Date Constructor", function () {
-        var c = Function.prototype.toString();
+        var c = Function.prototype.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("Date;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.length, 7, "Passed!");
-        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+        equal(result.value.constructor.prototype.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     test("Date.prototype", function () {
@@ -1744,11 +1745,11 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Date.prototype.constructor", function () {
-        var c = "function Date() {\n    [native code]\n}";
+        var c = Date.prototype.constructor.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("Date.prototype.constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value.toString(), c, "Passed!");
+        equal(result.value.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     test("Date.prototype.toString()", function () {
@@ -2145,12 +2146,12 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Properties of the RegExp Constructor", function () {
-        var c = Function.prototype.toString();
+        var c = Function.prototype.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("RegExp;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.length, 2, "Passed!");
-        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+        equal(result.value.constructor.prototype.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     test("RegExp.prototype", function () {
@@ -2172,11 +2173,11 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("RegExp.prototype.constructor", function () {
-        var c = "function RegExp() {\n    [native code]\n}";
+        var c = RegExp.prototype.constructor.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("RegExp.prototype.constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value.toString(), c, "Passed!");
+        equal(result.value.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     test("RegExp.prototype.exec(string)", function () {
@@ -2259,12 +2260,12 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Properties of the Error Constructor", function () {
-        var c = Function.prototype.toString();
+        var c = Function.prototype.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("Error;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.length, 1, "Passed!");
-        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+        equal(result.value.constructor.prototype.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     test("Error.prototype", function () {
@@ -2284,11 +2285,11 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Error.prototype.constructor", function () {
-        var c = "function Error() {\n    [native code]\n}";
+        var c = Error.prototype.constructor.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("Error.prototype.constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value.toString(), c, "Passed!");
+        equal(result.value.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     test("Error.prototype.name", function () {
@@ -2509,12 +2510,12 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Properties of the RangeError Constructor", function () {
-        var c = Function.prototype.toString();
+        var c = Function.prototype.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("RangeError;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.length, 1, "Passed!");
-        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+        equal(result.value.constructor.prototype.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     test("RangeError.prototype", function () {
@@ -2534,11 +2535,11 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("RangeError.prototype.constructor", function () {
-        var c = "function RangeError() {\n    [native code]\n}";
+        var c = RangeError.prototype.constructor.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("RangeError.prototype.constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value.toString(), c, "Passed!");
+        equal(result.value.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     test("RangeError.prototype.name", function () {
@@ -2593,12 +2594,12 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Properties of the ReferenceError Constructor", function () {
-        var c = Function.prototype.toString();
+        var c = Function.prototype.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("ReferenceError;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.length, 1, "Passed!");
-        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+        equal(result.value.constructor.prototype.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     test("ReferenceError.prototype", function () {
@@ -2618,11 +2619,11 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("ReferenceError.prototype.constructor", function () {
-        var c = "function ReferenceError() {\n    [native code]\n}";
+        var c = ReferenceError.prototype.constructor.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("ReferenceError.prototype.constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value.toString(), c, "Passed!");
+        equal(result.value.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     test("ReferenceError.prototype.name", function () {
@@ -2677,12 +2678,12 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Properties of the SyntaxError Constructor", function () {
-        var c = Function.prototype.toString();
+        var c = Function.prototype.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("SyntaxError;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.length, 1, "Passed!");
-        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+        equal(result.value.constructor.prototype.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     test("SyntaxError.prototype", function () {
@@ -2702,11 +2703,11 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("SyntaxError.prototype.constructor", function () {
-        var c = "function SyntaxError() {\n    [native code]\n}";
+        var c = SyntaxError.prototype.constructor.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("SyntaxError.prototype.constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value.toString(), c, "Passed!");
+        equal(result.value.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     test("SyntaxError.prototype.name", function () {
@@ -2761,12 +2762,12 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Properties of the TypeError Constructor", function () {
-        var c = Function.prototype.toString();
+        var c = Function.prototype.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("TypeError;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.length, 1, "Passed!");
-        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+        equal(result.value.constructor.prototype.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     test("TypeError.prototype", function () {
@@ -2786,11 +2787,11 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("TypeError.prototype.constructor", function () {
-        var c = "function TypeError() {\n    [native code]\n}";
+        var c = TypeError.prototype.constructor.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("TypeError.prototype.constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value.toString(), c, "Passed!");
+        equal(result.value.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     test("TypeError.prototype.name", function () {
@@ -2845,12 +2846,12 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Properties of the URIError Constructor", function () {
-        var c = Function.prototype.toString();
+        var c = Function.prototype.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("URIError;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.length, 1, "Passed!");
-        equal(result.value.constructor.prototype.toString(), c, "Passed!");
+        equal(result.value.constructor.prototype.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     test("URIError.prototype", function () {
@@ -2870,11 +2871,11 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("URIError.prototype.constructor", function () {
-        var c = "function URIError() {\n    [native code]\n}";
+        var c = URIError.prototype.constructor.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, '');
         var result = puma.evalPuma("URIError.prototype.constructor;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value.toString(), c, "Passed!");
+        equal(result.value.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
     test("URIError.prototype.name", function () {
