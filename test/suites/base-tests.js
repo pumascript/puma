@@ -13,6 +13,11 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
         ok(result.success && 1 === result.value, "Passed!" );
     });
 
+    test("declaration", function() {
+        var result = puma.evalPuma("var u; u === undefined");
+        ok(result.success && true === result.value, "Passed!" );
+    });
+
     test("string constant test", function() {
         var result = puma.evalPuma("\"Hello\"");
         ok(result.success && "Hello" === result.value, "Passed!" );
@@ -93,7 +98,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
     });
 
     test("for statement 1", function(){
-        var result = puma.evalPuma("var j; for(var i=0;i<2;i=i+1) { j+=1; }");
+        var result = puma.evalPuma("var j=0; for(var i=0;i<2;i=i+1) { j+=1; }");
         equal(result.value, 2, "Passed!");
     });
 
@@ -103,8 +108,8 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
     });
 
     test("for statement 3", function(){
-        var result = puma.evalPuma("var b=true; var j; for(var i=0;b;i=i+1) { if(i>5)b=false; j+=1;}");
-        equal(result.value, 7, "Passed!");
+        var result = puma.evalPuma("var b=true; var j=1; for(var i=0;b;i=i+1) { if(i>5)b=false; j+=1;}");
+        equal(result.value, 8, "Passed!");
     });
 
     test("for statement update test", function(){

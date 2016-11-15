@@ -11,7 +11,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
      });
 
      //It shows that the type of "a" is Object instead of undefined, because "a" is null instead of undefined
-     QUnit.skip("undefined 2", function(){
+     test("undefined 2", function(){
          var result = puma.evalPuma("var a; typeof a");
          result.makeValue();
          ok(result.success && "undefined" === result.value, "Passed!");
