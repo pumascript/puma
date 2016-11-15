@@ -155,7 +155,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(JSON.stringify(result.value), JSON.stringify(new Object(4)), "Passed!");
     });
 
-    QUnit.skip("Object Constructor", function () {
+    test("Object Constructor", function () {
         obj = new Object({Name:'LEO', Terminal:25000});
         var result = puma.evalPuma("new Object({Name:'LEO', Terminal:25000});");
         result.makeValue();
@@ -353,7 +353,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, a.toString(), "Passed!");
     });
 
-    QUnit.skip("The Function Constructor Called as a new Function", function () {
+    test("The Function Constructor Called as a new Function", function () {
         var a = new Function();
         var result = puma.evalPuma("var e = new Function(); e.toString();");
         result.makeValue();
@@ -368,7 +368,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 21, "Passed!");
     });
 
-    QUnit.skip("The Function Constructor", function () {
+    test("The Function Constructor", function () {
         var result = puma.evalPuma("var r = new Function('Sapph', 'ire', 'AMD', 'R', 'return Sapph+ire+AMD+R'); r.call(this,9,3,8,0);");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -513,7 +513,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value[4].name, 'Zion', "Passed!");
     });
 
-    QUnit.skip("The Array Constructor", function () {
+    test("The Array Constructor", function () {
         var result = puma.evalPuma("var a = new Array();");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -521,7 +521,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(JSON.stringify(result.value), '[]', "Passed!");
     });
 
-    QUnit.skip("new Array([ item0 [, item1 [, ... ]]])", function () {
+    test("new Array([ item0 [, item1 [, ... ]]])", function () {
         var result = puma.evalPuma("var a = new Array(16, 'F', true, [7, 'M', false], Object.create(null,{ name: { value: 'Zion' } }));");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -533,7 +533,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value[4].name, 'Zion', "Passed!");
     });
 
-    QUnit.skip("new Array(len)", function () {
+    test("new Array(len)", function () {
         var result = puma.evalPuma("var a = new Array(4);");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -846,7 +846,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 'Puma', "Passed!");
     });
 
-    QUnit.skip("The String Constructor", function () {
+    test("The String Constructor", function () {
         var result = puma.evalPuma("var s = new String();");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -854,7 +854,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.valueOf(), '', "Passed!");
     });
 
-    QUnit.skip("new String([ns])", function () {
+    test("new String([ns])", function () {
         var result = puma.evalPuma("var s = new String(0004);");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -863,7 +863,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.valueOf(), '4', "Passed!");
     });
 
-    QUnit.skip("new String([value])", function () {
+    test("new String([value])", function () {
         var result = puma.evalPuma("var s = new String('Puma');");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -1224,7 +1224,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, true, "Passed!");
     });
 
-    QUnit.skip("The Boolean Constructor", function () {
+    test("The Boolean Constructor", function () {
         var result = puma.evalPuma("var b = new Boolean();");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -1232,7 +1232,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.valueOf(), false, "Passed!");
     });
 
-    QUnit.skip("new Boolean(value)", function () {
+    test("new Boolean(value)", function () {
         var result = puma.evalPuma("var b = new Boolean(1);");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -1316,7 +1316,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 3, "Passed!");
     });
 
-    QUnit.skip("The Number Constructor", function () {
+    test("The Number Constructor", function () {
         var result = puma.evalPuma("var n = new Number();");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -1324,7 +1324,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.valueOf(), 0, "Passed!");
     });
 
-    QUnit.skip("new Number([value])", function () {
+    test("new Number([value])", function () {
         var result = puma.evalPuma("var n = new Number(2);");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -1332,7 +1332,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.valueOf(), 2, "Passed!");
     });
 
-    QUnit.skip("new Number([string])", function () {
+    test("new Number([string])", function () {
         var result = puma.evalPuma("var n = new Number('3');");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -1669,28 +1669,28 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(typeof result.value, 'string', "Passed!");
     });
 
-    QUnit.skip("The Date Constructor", function () {
+    test("The Date Constructor", function () {
         var result = puma.evalPuma("new Date();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'object', "Passed!");
     });
 
-    QUnit.skip("new Date(year, month [, date [, hours [, minutes [, seconds [, ms ]]]]])", function () {
+    test("new Date(year, month [, date [, hours [, minutes [, seconds [, ms ]]]]])", function () {
         var result = puma.evalPuma("new Date(1993, 8, 24, 23, 58, 32, 12);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'object', "Passed!");
     });
 
-    QUnit.skip("new Date(value)", function () {
+    test("new Date(value)", function () {
         var result = puma.evalPuma("new Date(2595461133867);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'object', "Passed!");
     });
 
-    QUnit.skip("new Date()", function () {
+    test("new Date()", function () {
         var result = puma.evalPuma("new Date();");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -1752,320 +1752,320 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
-    QUnit.skip("Date.prototype.toString()", function () {
+    test("Date.prototype.toString()", function () {
         var result = puma.evalPuma("var d = new Date(); d.toString();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'string', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.toDateString()", function () {
+    test("Date.prototype.toDateString()", function () {
         var result = puma.evalPuma("var d = new Date(); d.toDateString();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'string', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.toTimeString()", function () {
+    test("Date.prototype.toTimeString()", function () {
         var result = puma.evalPuma("var d = new Date(); d.toTimeString();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'string', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.toLocaleString()", function () {
+    test("Date.prototype.toLocaleString()", function () {
         var result = puma.evalPuma("var d = new Date(); d.toLocaleString();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'string', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.toLocaleDateString()", function () {
+    test("Date.prototype.toLocaleDateString()", function () {
         var result = puma.evalPuma("var d = new Date(); d.toLocaleDateString();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'string', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.toLocaleTimeString()", function () {
+    test("Date.prototype.toLocaleTimeString()", function () {
         var result = puma.evalPuma("var d = new Date(); d.toLocaleTimeString();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'string', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.valueOf()", function () {
+    test("Date.prototype.valueOf()", function () {
         var result = puma.evalPuma("var d = new Date(); d.valueOf();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'number', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.getTime()", function () {
+    test("Date.prototype.getTime()", function () {
         var result = puma.evalPuma("var d = new Date(); d.getTime();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'number', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.getFullYear()", function () {
+    test("Date.prototype.getFullYear()", function () {
         var result = puma.evalPuma("var d = new Date(); d.getFullYear();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'number', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.getUTCFullYear()", function () {
+    test("Date.prototype.getUTCFullYear()", function () {
         var result = puma.evalPuma("var d = new Date(); d.getUTCFullYear();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'number', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.getMonth()", function () {
+    test("Date.prototype.getMonth()", function () {
         var result = puma.evalPuma("var d = new Date(); d.getMonth();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'number', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.getUTCMonth()", function () {
+    test("Date.prototype.getUTCMonth()", function () {
         var result = puma.evalPuma("var d = new Date(); d.getUTCMonth();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'number', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.getDate()", function () {
+    test("Date.prototype.getDate()", function () {
         var result = puma.evalPuma("var d = new Date(); d.getDate();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'number', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.getUTCDate()", function () {
+    test("Date.prototype.getUTCDate()", function () {
         var result = puma.evalPuma("var d = new Date(); d.getUTCDate();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'number', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.getDay()", function () {
+    test("Date.prototype.getDay()", function () {
         var result = puma.evalPuma("var d = new Date(); d.getDay();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'number', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.getUTCDay()", function () {
+    test("Date.prototype.getUTCDay()", function () {
         var result = puma.evalPuma("var d = new Date(); d.getUTCDay();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'number', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.getHours()", function () {
+    test("Date.prototype.getHours()", function () {
         var result = puma.evalPuma("var d = new Date(); d.getHours();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'number', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.getUTCHours()", function () {
+    test("Date.prototype.getUTCHours()", function () {
         var result = puma.evalPuma("var d = new Date(); d.getUTCHours();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'number', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.getMinutes()", function () {
+    test("Date.prototype.getMinutes()", function () {
         var result = puma.evalPuma("var d = new Date(); d.getMinutes();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'number', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.getUTCMinutes()", function () {
+    test("Date.prototype.getUTCMinutes()", function () {
         var result = puma.evalPuma("var d = new Date(); d.getUTCMinutes();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'number', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.getSeconds()", function () {
+    test("Date.prototype.getSeconds()", function () {
         var result = puma.evalPuma("var d = new Date(); d.getSeconds();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'number', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.getUTCSeconds()", function () {
+    test("Date.prototype.getUTCSeconds()", function () {
         var result = puma.evalPuma("var d = new Date(); d.getUTCSeconds();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'number', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.getMilliseconds()", function () {
+    test("Date.prototype.getMilliseconds()", function () {
         var result = puma.evalPuma("var d = new Date(); d.getMilliseconds();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'number', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.getUTCMilliseconds()", function () {
+    test("Date.prototype.getUTCMilliseconds()", function () {
         var result = puma.evalPuma("var d = new Date(); d.getUTCMilliseconds();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'number', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.getTimezoneOffset()", function () {
+    test("Date.prototype.getTimezoneOffset()", function () {
         var result = puma.evalPuma("var d = new Date(); d.getTimezoneOffset();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'number', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.setTime(time)", function () {
+    test("Date.prototype.setTime(time)", function () {
         var result = puma.evalPuma("var d = new Date(); d.setTime(6983020800000);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'number', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.setTime(time)", function () {
+    test("Date.prototype.setTime(time)", function () {
         var result = puma.evalPuma("var d = new Date(); d.setTime(6983020800000); d;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.getTime(), 6983020800000, "Passed!");
     });
 
-    QUnit.skip("Date.prototype.setMilliseconds(ms)", function () {
+    test("Date.prototype.setMilliseconds(ms)", function () {
         var result = puma.evalPuma("var d = new Date(); d.setMilliseconds(250); d;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(d.getMilliseconds(), 250, "Passed!");
+        equal(result.value.getMilliseconds(), 250, "Passed!");
     });
 
-    QUnit.skip("Date.prototype.setUTCMilliseconds(ms)", function () {
+    test("Date.prototype.setUTCMilliseconds(ms)", function () {
         var result = puma.evalPuma("var d = new Date(); d.setUTCMilliseconds(750); d;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(d.getUTCMilliseconds(), 750, "Passed!");
+        equal(result.value.getUTCMilliseconds(), 750, "Passed!");
     });
 
-    QUnit.skip("Date.prototype.setSeconds(sec [, ms ])", function () {
+    test("Date.prototype.setSeconds(sec [, ms ])", function () {
         var result = puma.evalPuma("var d = new Date(); d.setSeconds(4, 465); d;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.valued.getSeconds(), 4, "Passed!");
-        equal(result.valued.getMilliseconds(), 465, "Passed!");
+        equal(result.value.getSeconds(), 4, "Passed!");
+        equal(result.value.getMilliseconds(), 465, "Passed!");
     });
 
-    QUnit.skip("Date.prototype.setUTCSeconds(sec [, ms ])", function () {
+    test("Date.prototype.setUTCSeconds(sec [, ms ])", function () {
         var result = puma.evalPuma("var d = new Date(); d.setUTCSeconds(4, 465); d;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.valued.getUTCSeconds(), 4, "Passed!");
-        equal(result.valued.getUTCMilliseconds(), 465, "Passed!");
+        equal(result.value.getUTCSeconds(), 4, "Passed!");
+        equal(result.value.getUTCMilliseconds(), 465, "Passed!");
     });
 
-    QUnit.skip("Date.prototype.setMinutes(min [, sec [, ms ]])", function () {
+    test("Date.prototype.setMinutes(min [, sec [, ms ]])", function () {
         var result = puma.evalPuma("var d = new Date(); d.setMinutes(16, 4, 465); d;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.valued.getMinutes(), 16, "Passed!");
-        equal(result.valued.getSeconds(), 4, "Passed!");
-        equal(result.valued.getMilliseconds(), 465, "Passed!");
+        equal(result.value.getMinutes(), 16, "Passed!");
+        equal(result.value.getSeconds(), 4, "Passed!");
+        equal(result.value.getMilliseconds(), 465, "Passed!");
     });
 
-    QUnit.skip("Date.prototype.setUTCMinutes(min [, sec [, ms ]])", function () {
+    test("Date.prototype.setUTCMinutes(min [, sec [, ms ]])", function () {
         var result = puma.evalPuma("var d = new Date(); d.setUTCMinutes(16, 4, 465); d;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.valued.getUTCMinutes(), 16, "Passed!");
-        equal(result.valued.getUTCSeconds(), 4, "Passed!");
-        equal(result.valued.getUTCMilliseconds(), 465, "Passed!");
+        equal(result.value.getUTCMinutes(), 16, "Passed!");
+        equal(result.value.getUTCSeconds(), 4, "Passed!");
+        equal(result.value.getUTCMilliseconds(), 465, "Passed!");
     });
 
-    QUnit.skip("Date.prototype.setHours(hour [, min [, sec [, ms ]]])", function () {
+    test("Date.prototype.setHours(hour [, min [, sec [, ms ]]])", function () {
         var result = puma.evalPuma("var d = new Date(); d.setHours(5, 16, 4, 465); d;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.valued.getHours(), 5, "Passed!");
-        equal(result.valued.getMinutes(), 16, "Passed!");
-        equal(result.valued.getSeconds(), 4, "Passed!");
-        equal(result.valued.getMilliseconds(), 465, "Passed!");
+        equal(result.value.getHours(), 5, "Passed!");
+        equal(result.value.getMinutes(), 16, "Passed!");
+        equal(result.value.getSeconds(), 4, "Passed!");
+        equal(result.value.getMilliseconds(), 465, "Passed!");
     });
 
-    QUnit.skip("Date.prototype.setUTCHours(hour [, min [, sec [, ms ]]])", function () {
+    test("Date.prototype.setUTCHours(hour [, min [, sec [, ms ]]])", function () {
         var result = puma.evalPuma("var d = new Date(); d.setUTCHours(5, 16, 4, 465); d;");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.valued.getUTCHours(), 5, "Passed!");
-        equal(result.valued.getUTCMinutes(), 16, "Passed!");
-        equal(result.valued.getUTCSeconds(), 4, "Passed!");
-        equal(result.valued.getUTCMilliseconds(), 465, "Passed!");
+        equal(result.value.getUTCHours(), 5, "Passed!");
+        equal(result.value.getUTCMinutes(), 16, "Passed!");
+        equal(result.value.getUTCSeconds(), 4, "Passed!");
+        equal(result.value.getUTCMilliseconds(), 465, "Passed!");
     });
 
-    QUnit.skip("Date.prototype.setDate(date)", function () {
+    test("Date.prototype.setDate(date)", function () {
         var result = puma.evalPuma("var d = new Date(); d.setDate(15);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'number', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.setUTCDate(date)", function () {
+    test("Date.prototype.setUTCDate(date)", function () {
         var result = puma.evalPuma("var d = new Date(); d.setUTCDate(15);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'number', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.setMonth(month [, date ])", function () {
+    test("Date.prototype.setMonth(month [, date ])", function () {
         var result = puma.evalPuma("var d = new Date(); d.setMonth(3, 14);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'number', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.setUTCMonth(month [, date ])", function () {
+    test("Date.prototype.setUTCMonth(month [, date ])", function () {
         var result = puma.evalPuma("var d = new Date(); d.setUTCMonth(3, 14);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'number', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.setFullYear(year [, month [, date ]])", function () {
+    test("Date.prototype.setFullYear(year [, month [, date ]])", function () {
         var result = puma.evalPuma("var d = new Date(); d.setFullYear(2191, 3, 14);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'number', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.setUTCFullYear(year [, month [, date ]])", function () {
+    test("Date.prototype.setUTCFullYear(year [, month [, date ]])", function () {
         var result = puma.evalPuma("var d = new Date(); d.setUTCFullYear(2191, 3, 14);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'number', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.toUTCString()", function () {
+    test("Date.prototype.toUTCString()", function () {
         var result = puma.evalPuma("var d = new Date(); d.toUTCString();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'string', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.toISOString()", function () {
+    test("Date.prototype.toISOString()", function () {
         var result = puma.evalPuma("var d = new Date(); d.toISOString();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'string', "Passed!");
     });
 
-    QUnit.skip("Date.prototype.toJSON(key)", function () {
+    test("Date.prototype.toJSON(key)", function () {
         var result = puma.evalPuma("var d = new Date(); d.toJSON(1);");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -2113,7 +2113,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.lastIndex, 0, "Passed!");
     });
 
-    QUnit.skip("The RegExp Constructor", function () {
+    test("The RegExp Constructor", function () {
         var result = puma.evalPuma("var x = new RegExp();");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -2121,7 +2121,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.toString(), '/(?:)/', "Passed!");
     });
 
-    QUnit.skip("new RegExp(pattern, flags)", function () {
+    test("new RegExp(pattern, flags)", function () {
         var result = puma.evalPuma("var x = new RegExp('^(?:4[0-9]{12}(?:[0-9]{3})?|(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11})$','gm');");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -2133,7 +2133,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.lastIndex, 0, "Passed!");
     });
 
-    QUnit.skip("new RegExp(expression)", function () {
+    test("new RegExp(expression)", function () {
         var result = puma.evalPuma("var x = new RegExp(/^(?:4[0-9]{12}(?:[0-9]{3})?|(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11})$/);");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -2245,15 +2245,15 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.message, 'lp0 on fire', "Passed!");
     });
 
-    QUnit.skip("The Error Constructor", function () {
+    test("The Error Constructor", function () {
         var result = puma.evalPuma("var e = new Error('lp0 on fire'); e;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.name, 'Error', "Passed!");
     });
 
-    QUnit.skip("new Error(message)", function () {
-        var result = puma.evalPuma("var e = new Error(); e;");
+    test("new Error(message)", function () {
+        var result = puma.evalPuma("var e = new Error('lp0 on fire'); e;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.message, 'lp0 on fire', "Passed!");
@@ -2495,15 +2495,15 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.message, 'lp0 on fire', "Passed!");
     });
 
-    QUnit.skip("The RangeError Constructor", function () {
+    test("The RangeError Constructor", function () {
         var result = puma.evalPuma("var e = new RangeError('lp0 on fire'); e;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.name, 'RangeError', "Passed!");
     });
 
-    QUnit.skip("new RangeError(message)", function () {
-        var result = puma.evalPuma("var e = new RangeError(); e;");
+    test("new RangeError(message)", function () {
+        var result = puma.evalPuma("var e = new RangeError('lp0 on fire'); e;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.message, 'lp0 on fire', "Passed!");
@@ -2579,15 +2579,15 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.message, 'lp0 on fire', "Passed!");
     });
 
-    QUnit.skip("The ReferenceError Constructor", function () {
+    test("The ReferenceError Constructor", function () {
         var result = puma.evalPuma("var e = new ReferenceError('lp0 on fire'); e;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.name, 'ReferenceError', "Passed!");
     });
 
-    QUnit.skip("new ReferenceError(message)", function () {
-        var result = puma.evalPuma("var e = new ReferenceError(); e;");
+    test("new ReferenceError(message)", function () {
+        var result = puma.evalPuma("var e = new ReferenceError('lp0 on fire'); e;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.message, 'lp0 on fire', "Passed!");
@@ -2663,15 +2663,15 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.message, 'lp0 on fire', "Passed!");
     });
 
-    QUnit.skip("The SyntaxError Constructor", function () {
+    test("The SyntaxError Constructor", function () {
         var result = puma.evalPuma("var e = new SyntaxError('lp0 on fire'); e;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.name, 'SyntaxError', "Passed!");
     });
 
-    QUnit.skip("new SyntaxError(message)", function () {
-        var result = puma.evalPuma("var e = new SyntaxError(); e;");
+    test("new SyntaxError(message)", function () {
+        var result = puma.evalPuma("var e = new SyntaxError('lp0 on fire'); e;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.message, 'lp0 on fire', "Passed!");
@@ -2747,15 +2747,15 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.message, 'lp0 on fire', "Passed!");
     });
 
-    QUnit.skip("The TypeError Constructor", function () {
+    test("The TypeError Constructor", function () {
         var result = puma.evalPuma("var e = new TypeError('lp0 on fire'); e;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.name, 'TypeError', "Passed!");
     });
 
-    QUnit.skip("new TypeError(message)", function () {
-        var result = puma.evalPuma("var e = new TypeError(); e;");
+    test("new TypeError(message)", function () {
+        var result = puma.evalPuma("var e = new TypeError('lp0 on fire'); e;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.message, 'lp0 on fire', "Passed!");
@@ -2831,15 +2831,15 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.message, 'lp0 on fire', "Passed!");
     });
 
-    QUnit.skip("The URIError Constructor", function () {
+    test("The URIError Constructor", function () {
         var result = puma.evalPuma("var e = new URIError('lp0 on fire'); e;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.name, 'URIError', "Passed!");
     });
 
-    QUnit.skip("new URIError(message)", function () {
-        var result = puma.evalPuma("var e = new URIError(); e;");
+    test("new URIError(message)", function () {
+        var result = puma.evalPuma("var e = new URIError('lp0 on fire'); e;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.message, 'lp0 on fire', "Passed!");
