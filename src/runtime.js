@@ -894,12 +894,114 @@ define([
         calleeResult.makeValue();
         var typeValue = calleeResult.value;
 
-        // create a new object from the prototype
-        var newObject = Object.create(typeValue.prototype);
-        // set "this" to the new object
-        state.setNewFrameThisBinding(newObject);
-        // call the constructor
-        this.callFunctionSymbol(typeValue, undefined, ast.arguments, state);
+        var STD_BIO = [
+        'Object',
+        'Function',
+        'Boolean',
+        'Number',
+        'String',
+        'RegExp',
+        'Array',
+        'Date',
+        'Error',
+        'EvalError',
+        'InternalError',
+        'RangeError',
+        'ReferenceError',
+        'SyntaxError',
+        'TypeError',
+        'URIError'];
+
+        var newObject;
+
+        /*
+        *   TODO: USE FOLLOWING WHEN ES6 IS SUPPORTED BY PHANTOMJS
+        *
+        
+        if (STD_BIO.includes(typeValue.name)) {
+        
+        *
+        */
+        if(!!~STD_BIO.indexOf(typeValue.name)) {
+        /* ^^^ (REPLACE ON ES6 SUPPORT) ^^^ - Checks if object to be created is a ES5 Built-in object. */
+            var argumentValues = [];
+            var result;
+            // Get the argument values
+            for (var n = 0; n < ast.arguments.length; n++) {
+                result = this.accept(ast.arguments[n], state);
+                result.makeValue();
+                argumentValues[n] = result.value;
+            }
+        /*
+        *   TODO: USE FOLLOWING WHEN SPREAD OPERATOR IS SUPPORTED BY PHANTOMJS
+        *
+        
+            newObject = new typeValue.prototype.constructor(...argumentValues);
+        
+        *
+        *   WORKAROUND TILL THEN IS TO PASS THE ARRAY VALUES IN A STATIC MANNER UP TO A MAXIMUM
+        *   OF 20 ARGUMENTS. IF LESS THAN THE ARGUMENTS ACCOUNTED FOR ARE PROVIDED THEN IT'S VALUES
+        *   WILL BE COERCED TO NULL SO THEY DON'T AFFECT THE CREATION OF OBJECT('S). FUNCTION('S)
+        *   CONSTRUCTOR, BEING NULL-ARGUMENT-SENSITIVE, WILL FAIL IF AMOUNT OF ARGUMENTS
+        *   PROVIDED EXCEED 7 (SEVEN). THIS COULD BE SOLVED EXPANDING THE SWITCH-CASE BEYOND 7 OR BY
+        *   AN EVAL CONTRUCTION. ARRAY'S ARE TRUNCATED TO THE AMOUNT OF ORIGINAL ARGUMENTS TO AVOID
+        *   THE ABOVE CONFLICT. LARGE ARRAY'S COULD BE CREATED WITH EVAL ALSO.
+        */
+        /* jshint ignore:start */
+            if (argumentValues.length > 20) console.log("The amount of arguments provided exceeds the amount of arguments supported by this version.");
+            
+            if (typeValue.name === 'Function' && argumentValues.length > 7) console.log("The amount of arguments provided exceeds the amount of arguments supported for Function creation by this version.");
+
+            var a = new Array(20);
+            for (var i = 0; i < 20; i++) {
+                a[i] = (i < argumentValues.length) ? argumentValues[i] : null;
+            }
+            
+            switch (argumentValues.length) {
+                case 0:
+                    //No arguments... No need to spread... U WIN =D
+                    newObject = new typeValue.prototype.constructor();
+                    break;
+                case 1:
+                    newObject = new typeValue.prototype.constructor(a[0]);
+                    break;
+                case 2:
+                    newObject = new typeValue.prototype.constructor(a[0], a[1]);
+                    break;
+                case 3:
+                    newObject = new typeValue.prototype.constructor(a[0], a[1], a[2]);
+                    break;
+                case 4:
+                    newObject = new typeValue.prototype.constructor(a[0], a[1], a[2], a[3]);
+                    break;
+                case 5:
+                    newObject = new typeValue.prototype.constructor(a[0], a[1], a[2], a[3], a[4]);
+                    break;
+                case 6:
+                    newObject = new typeValue.prototype.constructor(a[0], a[1], a[2], a[3], a[4], a[5]);
+                    break;
+                case 7:
+                    newObject = new typeValue.prototype.constructor(a[0], a[1], a[2], a[3], a[4], a[5], a[6]);
+                    break;
+                default:
+                    newObject = new typeValue.prototype.constructor(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9], a[10], a[11], a[12], a[13], a[14], a[16], a[17], a[18], a[19], a[20]);
+
+                //Splice up to the original amount of items.
+                if (typeValue.name === 'Array') newObject.splice(argumentValues.length);
+            }
+        /* jshint ignore:end */
+        /*
+        *   END OF WORKAROUND!
+        *   DISCLAIMER: PUMASCRIPT TEAM IS NOT RESPONSIBLE FOR LOSS OF VISION, PARTIAL OR TOTAL.
+        */        
+        } else {            
+            // create a new object from the prototype
+            newObject = Object.create(typeValue.prototype);
+            // set "this" to the new object
+            state.setNewFrameThisBinding(newObject);
+            // call the constructor
+            this.callFunctionSymbol(typeValue, undefined, ast.arguments, state);
+        }
 
         return new Result(true, newObject);
     };

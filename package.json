@@ -1,49 +1,49 @@
 {
-  "name": "pumascript",
-  "version": "0.0.1",
-  "description": "Easy Metaprograming for JS",
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/emravera/puma.git"
-  },
-  "bugs": {
-    "url": "https://github.com/emravera/puma/issues"
-  },
-  "author": {
-    "name": "Puma Team",
-    "email": "alexis.ferreyra@gmail.com",
-    "url": "http://github.com/emravera/puma"
-  },
-  "keywords": [
-    "meta-programming",
-    "metaprogramming",
-    "ecma",
-    "ecmascript",
-    "javascript",
-    "puma"
-  ],
-  "main": "dist/pumascript.js",
-  "bin": {
-    "pumascript": "build/pumascript.js"
-  },
-  "engines": {
-    "node": ">= 0.8.0"
-  },
-  "license": "MIT",
-  "dependencies": {
-    "commander": "2.9.0",
-    "escodegen": "1.6.1"
-  },
-  "devDependencies": {
-    "grunt": "~0.4.5",
-    "grunt-contrib-clean": "~0.7.0",
-    "grunt-contrib-jshint": "~0.11.3",
-    "grunt-contrib-qunit": "~0.5.1",
-    "grunt-contrib-requirejs": "0.4.4",
-    "jshint-stylish": "~1.0.1",
-    "load-grunt-tasks": "~3.1.0"
-  },
-  "scripts": {
-    "test": "grunt test"
-  }
+    "name": "pumascript",
+    "version": "0.0.1",
+    "description": "Easy Metaprograming for JS",
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@github.com/emravera/puma.git"
+    },
+    "bugs": {
+        "url": "https://github.com/emravera/puma/issues"
+    },
+    "author": {
+        "name": "Puma Team",
+        "email": "alexis.ferreyra@gmail.com",
+        "url": "http://github.com/emravera/puma"
+    },
+    "keywords": [
+        "meta-programming",
+        "metaprogramming",
+        "ecma",
+        "ecmascript",
+        "javascript",
+        "puma"
+    ],
+    "main": "dist/pumascript.js",
+    "bin": {
+        "pumascript": "bin/pumascript.js"
+    },
+    "engines": {
+        "node": ">= 0.8.0"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "commander": "2.9.0",
+        "escodegen": "1.6.1"
+    },
+    "devDependencies": {
+        "grunt": "~0.4.5",
+        "grunt-contrib-clean": "~0.7.0",
+        "grunt-contrib-jshint": "~0.11.3",
+        "grunt-contrib-qunit": "~0.5.1",
+        "grunt-contrib-requirejs": "0.4.4",
+        "jshint-stylish": "~1.0.1",
+        "load-grunt-tasks": "~3.1.0"
+    },
+    "scripts": {
+        "test": "grunt test"
+    }
 }

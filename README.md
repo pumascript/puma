@@ -134,7 +134,10 @@ Both functions returns an Array with the results. If the array is empty it means
 * Emanuel Ravera
 * Albertina Durante
 * Nestor Navarro
-* Diego Campos
+* Pedro Lucas Astrada
+* Alan Pipino
+* Carlos Ryser
+* Marcelo Pignataro
 
 ### Universidad Tecnologica Nacional - Facultad Regional Cordoba - Argentina
 The PumaScript project is being developed at the Department of Information Systems Engineering of the UTN-FRC.
