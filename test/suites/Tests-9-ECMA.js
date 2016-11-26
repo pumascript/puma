@@ -3,7 +3,7 @@
 define(['pumascript', 'esprima'], function(puma, esprima) {
 
     module("9.2 ToBoolean");
-  test("toBoolean undefined conversion test", function () {
+  test("toBoolean(undefined) conversion test", function () {
     	var result = puma.evalPuma("Boolean(undefined)");
     	ok(result.success && false === result.value, "Pass!");
 	});
@@ -65,7 +65,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
     ok(result.success && 1 === result.value, "Pass!");
   });
 
-  test("toNumber('hi') conversion test", function () {
+  test("toNumber(string) conversion test", function () {
     var result = puma.evalPuma("Number('hi')");
     ok(result.success && typeof NaN === typeof result.value, "Pass!");
   });
@@ -89,12 +89,12 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
 
     module("9.8 ToString");
 
-  QUnit.skip("toString(undefined) conversion test", function () {// ver con Ema
+  QUnit.skip("toString(undefined) conversion test", function () {
     var result = puma.evalPuma("toString(undefined)");
     ok(result.success && typeof 'object' === result.value, "Pass!");
   });
 
-  QUnit.skip("toString(null) conversion test", function () {// ver con Ema
+  QUnit.skip("toString(null) conversion test", function () {
     var result = puma.evalPuma("toString(null)");
     ok(result.success && '[object Undefined]' === result.value, "Pass!");
   });

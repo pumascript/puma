@@ -66,11 +66,13 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
      });
 
      test("configurable", function(){
-         try{
-         puma.evalPuma("var obj = {}; obj.key = 1; Object.defineProperty(obj, 'key', { configurable: true, writable: false }); Object.defineProperty(obj, 'key', { configurable: false, }); Object.defineProperty(obj, 'key', { writable: true, });");}
-         catch(e) { var result = e.message; console.log(e.message);}
-         
-         ok("Cannot redefine property: key" === result || "Attempting to change writable attribute of unconfigurable property." === result);
+         try {
+             puma.evalPuma("var obj = {}; Object.defineProperty(obj, 'key', { value: 1, configurable: false, writable: false}); Object.defineProperty(obj, 'key', { writable: true });");
+         }
+         catch(e) {
+             if (e instanceof TypeError) {
+                equal(true, true);
+            }
+         }
      });
-
 });

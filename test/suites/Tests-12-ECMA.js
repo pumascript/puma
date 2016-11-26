@@ -105,17 +105,30 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
 
     module("12.6 Iteration Statements");
 
-    //Revisar... deberia tirar 10
-    QUnit.skip("do Statement while (Expression)", function () {
-        var result = puma.evalPuma("var a = 0;  do {a++; }while (a<10); a;");
+    test("do Statement while (Expression)", function () {
+        var result = puma.evalPuma("var a = 0;  do { a++; } while (a<4); a;");
         result.makeValue();
-        equal(result.value, 9, "Passed!");
+        equal(result.value, 4, "Passed!");
+    });
+
+    test("do Statement while (Expression) 2", function () {
+        var result = puma.evalPuma("var a = true; do { a=!a; } while (a); a;");
+        result.makeValue();
+        equal(result.success, true);
+        equal(result.value, false, "Passed!");
     });
 
     test("while (Expression) Statement", function () {
-        var result = puma.evalPuma("var a = 0; while (a<10) a++; a === 10;");
+        var result = puma.evalPuma("var a = 0; while (a<8) { a++; } a;");
         result.makeValue();
-        equal(result.value, true, "Passed!");
+        equal(result.value, 8, "Passed!");
+    });
+
+    test("while (Expression) Statement 2", function () {
+        var result = puma.evalPuma("var a = 1; var b = true; while (b) { a++; b=!b; } a;");
+        result.makeValue();
+        equal(result.success, true);
+        equal(result.value, 2, "Passed!");
     });
 
     test("for (ExpressionNoIn ; Expression ; Expression) (no Statement)", function () {
