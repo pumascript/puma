@@ -238,7 +238,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
 
     module("11.12 Conditional Operators");
     
-    QUnit.skip("Conditional Operator ( ? : )",function () {
+    test("Conditional Operator ( ? : )",function () {
         var result = puma.evalPuma("false ? 'manzana' : 'naranja'");
         strictEqual(result.value, 'naranja', "Passed!");
     });
@@ -319,7 +319,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
 
     module("11.14 Comma Operators");
 
-    QUnit.skip("Comma Operators",function () {
+    test("Comma Operators",function () {
         var result = puma.evalPuma("function myFunc () {var x = 0; return (x += 1,x*=2, x);}; myFunc();");
         result.makeValue();
         equal(result.value,2,"Passed!");
