@@ -1,5 +1,11 @@
+# third-party dependencies
 **/node_modules/
 **/bower_components/
+
+# configuration and auto-generated files
 npm-debug.log
 .idea
 .DS_Store
+
+# distribution and generated pumascript.js build, and all the distribution directory
+dist/

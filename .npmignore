@@ -1,4 +1,5 @@
 # Ignore unnecessary folders and content for distribution and usages
+src/
 build/
 test/
 tracks/
