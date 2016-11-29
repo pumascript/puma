@@ -40,7 +40,7 @@ module.exports = function (grunt) {
                     baseUrl: 'src',
                     mainConfigFile: 'build/config.js',
                     out: '<%= buildConfig.output %>.js',
-                    name: '<%= buildConfig.name %>',
+                    name: 'runtime', // entry point for loading all deps under src/
                     optimize: 'none',
                     skipSemiColonInsertion: true,
                     paths: {
