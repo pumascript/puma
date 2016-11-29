@@ -319,7 +319,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
 
     module("11.14 Comma Operators");
 
-    test("Comma Operators",function () {
+    QUnit.skip("Comma Operators",function () {
         var result = puma.evalPuma("function myFunc () {var x = 0; return (x += 1,x*=2, x);}; myFunc();");
         result.makeValue();
         equal(result.value,2,"Passed!");
