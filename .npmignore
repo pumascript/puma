@@ -1,0 +1,15 @@
+# Ignore unnecessary folders and content for distribution and usages
+src/
+build/
+test/
+tracks/
+
+# Editor for development purposes
+editor/
+
+# Configuration files for development
+.jshintrc
+.travis.yml
+
+# Tasks
+gruntfile.js
