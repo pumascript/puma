@@ -1,6 +1,6 @@
 {
     "name": "pumascript",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "description": "Easy Metaprograming for JS",
     "repository": {
         "type": "git",
@@ -44,6 +44,7 @@
         "load-grunt-tasks": "~3.1.0"
     },
     "scripts": {
-        "test": "grunt test"
+        "test": "grunt test",
+        "prepublish": "grunt build"
     }
 }
