@@ -322,7 +322,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 1, "Passed!");
     });
 
-    QUnit.skip("Switch (Expression) case without break", function () {
+    test("Switch (Expression) case without break", function () {
         var result = puma.evalPuma("var a = 1; var b = 0; switch (a) { case 1: b += 1; case 2: b += 2;} b;");
         result.makeValue();
         equal(result.value, 3, "Passed!");

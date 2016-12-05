@@ -202,13 +202,8 @@ define([
             console.warn("SequenceExpression visitor not implemented yet");
             //result = this.visitSequenceExpression(ast, state);
             break;
-        case "SwitchCase":
-            console.warn("SwitchCase visitor not implemented yet");
-            //result = this.visitSwitchCase(ast, state);
-            break;
         case "SwitchStatement":
-            console.warn("SwitchStatement visitor not implemented yet");
-            //result = this.visitSwitchStatement(ast, state);
+            result = this.visitSwitchStatement(ast, state);
             break;
         case "ThisExpression":
             result = this.visitThisExpression(ast, state);
@@ -794,6 +789,41 @@ define([
             if (ast.alternate !== null) return this.accept(ast.alternate, state);
             else return emptyResult;
         }
+    };
+
+    FirstPass.prototype.visitSwitchStatement = function (ast, state) {
+        var c,
+            discriminant,
+            flagged,
+            result;
+
+        discriminant = this.accept(ast.discriminant, state);
+        discriminant.makeValue();
+
+        flagged = false;
+
+        if (ast.cases) {
+            for (c = 0; c < ast.cases.length; c++) {
+                var ast_case = ast.cases[c];
+                var test = this.accept(ast_case.test, state);
+
+                if (test.failed())
+                    return defaultResult;
+                test.makeValue();
+
+                if (test.value === discriminant.value || flagged) {
+                    flagged = true;
+                    result = this.acceptArray(ast_case.consequent, state);
+                    if (result.failed())
+                        return defaultResult;
+                } else {
+                    result = emptyResult;
+                }
+            }
+        } else {
+            result = new Result(true, undefined);
+        }
+        return result;
     };
 
     FirstPass.prototype.visitForStatement = function (ast, state) {
