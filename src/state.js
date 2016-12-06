@@ -28,7 +28,7 @@ define([
     };
 
     State.prototype.addSymbol = function (name, value) {
-        if (value === undefined) value = null;
+        if (value === undefined) value = undefined;
         var symbol = new Symbol(name, value);
         if (this._symbols[name] !== undefined) {
             console.warn("Duplicated symbol name \"" + name + "\" in current scope. Old symbol was discarded.");
