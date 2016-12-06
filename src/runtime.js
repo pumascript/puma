@@ -246,7 +246,7 @@ define([
             console.warn("PumaScript visitor: " + nodeType + "not implemented yet");
             break;
         }
-        
+
         this._lastStatementLoc = ast.loc.end;
         return result;
     };
