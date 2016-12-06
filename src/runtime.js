@@ -114,8 +114,7 @@ define([
             //result = this.visitComprehensionExpression(ast, state);
             break;
         case "ConditionalExpression":
-            console.warn("ConditionalExpression visitor not implemented yet");
-            //result = this.visitConditionalExpression(ast, state);
+            result = this.visitIfStatement(ast, state);
             break;
         case "ContinueStatement":
             console.warn("ContinueStatement visitor not implemented yet");
