@@ -124,6 +124,9 @@ define([
             console.warn("DebuggerStatement visitor not implemented yet");
             //result = this.visitDebuggerStatement(ast, state);
             break;
+        case "DoWhileStatement":
+            result = this.visitDoWhileStatement(ast, state);
+            break;
         case "EmptyStatement":
             console.warn("EmptyStatement visitor not implemented yet");
             //result = this.visitEmptyStatement(ast, state);
@@ -858,6 +861,25 @@ define([
             testResult = this.accept(ast.test, state);
             testResult.makeValue();
         }
+
+        bodyResult.makeValue();
+        return bodyResult;
+    };
+
+    FirstPass.prototype.visitDoWhileStatement = function (ast, state) {
+        var testResult = this.accept(ast.test, state),
+            bodyResult;
+
+        testResult.makeValue();
+
+        if (testResult.failed()) return defaultResult;
+
+        do {
+            bodyResult = this.accept(ast.body, state);
+            testResult = this.accept(ast.test, state);
+            testResult.makeValue();
+        }
+        while (testResult.value);
 
         bodyResult.makeValue();
         return bodyResult;

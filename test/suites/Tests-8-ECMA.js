@@ -10,7 +10,6 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
          ok(result.success && "undefined" === result.value, "Passed!");
      });
 
-     //It shows that the type of "a" is Object instead of undefined, because "a" is null instead of undefined
      test("undefined 2", function(){
          var result = puma.evalPuma("var a; typeof a");
          result.makeValue();
@@ -66,11 +65,13 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
      });
 
      test("configurable", function(){
-         try{
-         puma.evalPuma("var obj = {}; obj.key = 1; Object.defineProperty(obj, 'key', { configurable: true, writable: false }); Object.defineProperty(obj, 'key', { configurable: false, }); Object.defineProperty(obj, 'key', { writable: true, });");}
-         catch(e) { var result = e.name;}
-         
-         ok("TypeError" === result);
+         try {
+             puma.evalPuma("var obj = {}; Object.defineProperty(obj, 'key', { value: 1, configurable: false, writable: false}); Object.defineProperty(obj, 'key', { writable: true });");
+         }
+         catch(e) {
+             if (e instanceof TypeError) {
+                equal(true, true);
+            }
+         }
      });
-
 });
