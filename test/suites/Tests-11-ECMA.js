@@ -238,7 +238,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
 
     module("11.12 Conditional Operators");
     
-    QUnit.skip("Conditional Operator ( ? : )",function () {
+    test("Conditional Operator ( ? : )",function () {
         var result = puma.evalPuma("false ? 'manzana' : 'naranja'");
         strictEqual(result.value, 'naranja', "Passed!");
     });
