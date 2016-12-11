@@ -328,7 +328,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 3, "Passed!");
     });
 
-    QUnit.skip("Switch (Expression) case default", function () {
+    test("Switch (Expression) case default", function () {
         var result = puma.evalPuma("var a = 0; switch (a) { case 1: 1; break; default: 2;}");
         result.makeValue();
         equal(result.value, 2, "Passed!");

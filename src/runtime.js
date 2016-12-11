@@ -791,8 +791,10 @@ define([
         }
     };
 
+                            //TODO: check empty consequent
     FirstPass.prototype.visitSwitchStatement = function (ast, state) {
         var c,
+            hasDefault,
             discriminant,
             flagged,
             result;
@@ -801,23 +803,43 @@ define([
         discriminant.makeValue();
 
         flagged = false;
+        hasDefault = -1;
 
         if (ast.cases) {
             for (c = 0; c < ast.cases.length; c++) {
                 var ast_case = ast.cases[c];
-                var test = this.accept(ast_case.test, state);
 
-                if (test.failed())
-                    return defaultResult;
-                test.makeValue();
-
-                if (test.value === discriminant.value || flagged) {
-                    flagged = true;
-                    result = this.acceptArray(ast_case.consequent, state);
-                    if (result.failed())
-                        return defaultResult;
+                if (ast_case.test === null) { /* Is default case */
+                    if (!!~hasDefault ^ flagged) { /* First Pass [M], Second Pass: Execute default and continue */
+                        flagged = true;
+                        hasDefault = -1;
+                        result = this.acceptArray(ast_case.consequent, state);
+                        if (result.failed())
+                            return defaultResult;
+                    } else if (!~hasDefault && !flagged) { /* First Pass [NM]: Save default case number for second pass */
+                        hasDefault = c;
+                        result = emptyResult;
+                    } else { /* Second Pass [M]: Should not be possible. Enforce flow control */
+                        break;
+                    }
                 } else {
-                    result = emptyResult;
+                    var test = this.accept(ast_case.test, state);
+
+                    if (test.failed())
+                        return defaultResult;
+                    test.makeValue();
+
+                    if (test.value === discriminant.value || flagged) {
+                        flagged = true;
+                        result = this.acceptArray(ast_case.consequent, state);
+                        if (result.failed())
+                            return defaultResult;
+                    } else {
+                        result = emptyResult;
+                    }
+                }
+                if (c + 1 >= ast.cases.length && !!~hasDefault && !flagged) { /* First Pass [NM]: Trace back to default case and execute */
+                    c = hasDefault - 1;
                 }
             }
         } else {
