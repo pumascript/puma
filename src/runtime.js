@@ -791,7 +791,6 @@ define([
         }
     };
 
-                            //TODO: check empty consequent
     FirstPass.prototype.visitSwitchStatement = function (ast, state) {
         var c,
             hasDefault,
@@ -813,7 +812,7 @@ define([
                     if (!!~hasDefault ^ flagged) { /* First Pass [M], Second Pass: Execute default and continue */
                         flagged = true;
                         hasDefault = -1;
-                        result = this.acceptArray(ast_case.consequent, state);
+                        result = ast_case.consequent.length > 0 ? this.acceptArray(ast_case.consequent, state) : emptyResult;
                         if (result.failed())
                             return defaultResult;
                     } else if (!~hasDefault && !flagged) { /* First Pass [NM]: Save default case number for second pass */
@@ -831,7 +830,7 @@ define([
 
                     if (test.value === discriminant.value || flagged) {
                         flagged = true;
-                        result = this.acceptArray(ast_case.consequent, state);
+                        result = ast_case.consequent.length > 0 ? this.acceptArray(ast_case.consequent, state) : emptyResult;
                         if (result.failed())
                             return defaultResult;
                     } else {
