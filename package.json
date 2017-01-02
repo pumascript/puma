@@ -4,15 +4,15 @@
     "description": "Easy Metaprograming for JS",
     "repository": {
         "type": "git",
-        "url": "git+ssh://git@github.com/emravera/puma.git"
+        "url": "git+ssh://git@github.com/pumascript/puma.git"
     },
     "bugs": {
-        "url": "https://github.com/emravera/puma/issues"
+        "url": "https://github.com/pumascript/puma/issues"
     },
     "author": {
-        "name": "Puma Team",
-        "email": "alexis.ferreyra@gmail.com",
-        "url": "http://github.com/emravera/puma"
+        "name": "PumaScript Team",
+        "email": "pumascript-team@googlegroups.com",
+        "url": "https://github.com/pumascript"
     },
     "keywords": [
         "meta-programming",
