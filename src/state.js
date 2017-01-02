@@ -28,7 +28,6 @@ define([
     };
 
     State.prototype.addSymbol = function (name, value) {
-        if (value === undefined) value = undefined;
         var symbol = new Symbol(name, value);
         if (this._symbols[name] !== undefined) {
             console.warn("Duplicated symbol name \"" + name + "\" in current scope. Old symbol was discarded.");
@@ -42,6 +41,17 @@ define([
             return this.findSymbolInStackFrame(name, this._stackFrame.length - 1);
         }
         else return this._symbols[name];
+    };
+
+    /**
+     * Craft symbol but don't add it to stack.
+     */
+    State.prototype.transientSymbol = function (name, value) {
+        var symbol = new Symbol(name, value);
+        if (this._symbols[name] !== undefined) {
+            console.warn("Symbol already in scope.");
+        }
+        return symbol;
     };
 
     State.prototype.findSymbolInStackFrame = function (name, stackFrameIndex) {

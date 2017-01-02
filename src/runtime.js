@@ -837,7 +837,7 @@ define([
 
         var symbol = argumentResult.value;
         // If is postfix operator return transient clone of symbol
-        var _symbol = ast.prefix ? symbol : state.addSymbol("@" + symbol.name, symbol.value);
+        var _symbol = ast.prefix ? symbol : state.transientSymbol("@" + symbol.name, symbol.value);
 
         switch (ast.operator) {
         case "++":
