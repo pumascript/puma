@@ -43,8 +43,8 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
         equal(result.value,'value',"Passed!");
     });
 
-    test("The new operator",function () {
-        var result = puma.evalPuma("function Car(make, model, year) {this.make = make; this.model = model; this.year = year;} var mycar = new Car('Eagle', 'Talon TSi', 1993);");
+    test("The new Operator",function () {
+        var result = puma.evalPuma("function Car(make, model, year) { this.make = make; this.model = model; this.year = year; } var mycar = new Car('Eagle', 'Talon TSi', 1993);");
         ok(result.success,"Passed!");
     });
 
@@ -62,16 +62,38 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
 
     module("11.3 Postfix Expressions.");
 
-    test("Increment",function () {
-        var result = puma.evalPuma("var x = 0; x++; ");
+    test("Postfix Increment Operator",function () {
+        var result = puma.evalPuma("var x = 0; x++;");
         result.makeValue();
-        equal(result.value,1,"Passed!");
+        equal(result.success, true);
+        equal(result.value, 0);
     });
 
-    test("Decrement",function () {
-        var result = puma.evalPuma("var x = 1; x--; ");
+    test("Postfix Increment Operator 2",function () {
+        var result = puma.evalPuma("var i = 0; var a = []; a[i++] = (function(n,a){ a[n++] = n++; return n; })(i++,a); a[2] = i; a;");
         result.makeValue();
-        equal(result.value,0,"Passed!");
+        equal(result.success, true);
+        equal(result.value.length, 3);
+        equal(result.value[0], 3);
+        equal(result.value[1], 2);
+        equal(result.value[2], 2);
+    });
+
+    test("Postfix Decrement Operator",function () {
+        var result = puma.evalPuma("var x = 0; x--;");
+        result.makeValue();
+        equal(result.success, true);
+        equal(result.value, 0);
+    });
+
+    test("Postfix Decrement Operator 2",function () {
+        var result = puma.evalPuma("var i = 1; var a = []; a[i--] = (function(n,a){ a[n--] = n--; return n; })(i--,a); a[2] = i; a;");
+        result.makeValue();
+        equal(result.success, true);
+        equal(result.value.length, 3);
+        equal(result.value[0], -1);
+        equal(result.value[1], -2);
+        equal(result.value[2], -1);
     });
 
     module("11.4 Unary Operators");

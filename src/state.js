@@ -44,7 +44,7 @@ define([
     };
 
     /**
-     * Craft symbol but don't add it to stack.
+     * Craft symbol but don't add it to the stack.
      */
     State.prototype.transientSymbol = function (name, value) {
         var symbol = new Symbol(name, value);
