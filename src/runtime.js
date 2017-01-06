@@ -128,8 +128,7 @@ define([
             result = this.visitDoWhileStatement(ast, state);
             break;
         case "EmptyStatement":
-            console.warn("EmptyStatement visitor not implemented yet");
-            //result = this.visitEmptyStatement(ast, state);
+            result = this.visitEmptyStatement(ast, state);
             break;
         case "ExpressionStatement":
             result = this.accept(ast.expression, state);
@@ -298,6 +297,10 @@ define([
     FirstPass.prototype.visitBlockStatement = function (ast, state) {
         return this.acceptArray(ast.body, state);
     };
+
+    FirstPass.prototype.visitEmptyStatement = function (ast, state) {
+        return new Result(true, undefined);
+    }
 
     FirstPass.prototype.visitMemberExpression = function (ast, state) {
         var objResult = this.accept(ast.object, state);
