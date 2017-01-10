@@ -1,6 +1,6 @@
 // Copyright (c) 2013 - present UTN-LIS
 
-/*global define, test, ok, equal */
+/* global define, test, ok, equal */
 
 /*
  *          PUMASCRIPT RUNTIME TEST SUITE

@@ -1,6 +1,6 @@
 // Copyright (c) 2013 - present UTN-LIS
 
-/*global define, test, ok, equal */
+/* global define, test, ok, equal */
 
 /*
  *              PUMASCRIPT BASE TEST SUITE
@@ -8,27 +8,26 @@
  */
 define(['pumascript', 'esprima'], function (puma, esprima) {
 
-    // Tests de la seccion 12 de ECMA: Statements
     module("12.1 Blocks")
 
-    //Revisar, deberia devolver 1 supuestamente
-    QUnit.skip("Block Statement 1", function () {
+    test("Block Statement 1", function () {
         var result = puma.evalPuma("1;;;;;");
-        ok(result.success && 1 === result.value, "Passed!");
+        equal(result.success, true);
+        equal(result.value, 1);
     });
 
-    //Revisar segun la consola de chrome deberia devolver 1
-    QUnit.skip("Block Statement 2", function () {
+    test("Block Statement 2", function () {
         var result = puma.evalPuma("1;{}");
         result.makeValue();
-        equal(result.value, 1, "Passed!");
+        equal(result.success, true);
+        equal(result.value, 1);
     });
 
-    //Revisar
-    QUnit.skip("Block Statement 3", function () {
+    test("Block Statement 3", function () {
         var result = puma.evalPuma("1;var a;");
         result.makeValue();
-        equal(typeof result.value, 'number', "Passed!");
+        equal(result.success, true);
+        equal(result.value, 1);
     });
 
     module("12.2 Variables");
