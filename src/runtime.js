@@ -59,11 +59,15 @@ define([
     var emptyResult = new Result(true, null);
 
     FirstPass.prototype.acceptArray = function (arrayNodes, state) {
-        var result = defaultResult,
+        var result = new Result(true, undefined),
             i;
         for (i = 0; i < arrayNodes.length; i++) {
-            result = this.accept(arrayNodes[i], state);
-            if (result.isReturnResult()) break;
+            var nodeResult = this.accept(arrayNodes[i], state);
+            if (nodeResult.value !== undefined) {
+                result = nodeResult;
+            }
+
+            if (nodeResult.isReturnResult()) break;
         }
         return result;
     };
@@ -404,7 +408,8 @@ define([
 
     FirstPass.prototype.visitVariableDeclaration = function (ast, state) {
         if (ast.kind === "var") {
-            return this.acceptArray(ast.declarations, state);
+            var result = this.acceptArray(ast.declarations, state);
+            return result.success ? new Result(true, undefined) : defaultResult;
         } else {
             return defaultResult;
         }
@@ -795,7 +800,7 @@ define([
             return this.accept(ast.consequent, state);
         } else {
             if (ast.alternate !== null) return this.accept(ast.alternate, state);
-            else return emptyResult;
+            else return new Result(true, undefined);
         }
     };
 

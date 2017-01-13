@@ -19,7 +19,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
     });
 
     test("Array Initializer",function () {
-        var result = puma.evalPuma("var a = [1, 2, ]");
+        var result = puma.evalPuma("var a = [1, 2, ]; a;");
         equal(result.value.value[1], 2, "Passed!");
         equal(result.value.value[2], null, "Passed!");
         equal(result.value.value.length, 2, "Passed!");

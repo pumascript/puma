@@ -5,7 +5,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
      module("8.1 The Undefined Type");
 
      test("undefined 1", function(){
-         var result = puma.evalPuma("var b = typeof(a);");
+         var result = puma.evalPuma("var b = typeof(a); b;");
          result.makeValue();
          ok(result.success && "undefined" === result.value, "Passed!");
      });

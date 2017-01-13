@@ -30,6 +30,34 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 1);
     });
 
+    test("Block Statement 4", function () {
+        var result = puma.evalPuma("1;if(false){8;};;");
+        result.makeValue();
+        equal(result.success, true);
+        equal(result.value, 1);
+    });
+
+    test("Block Statement 5", function () {
+        var result = puma.evalPuma("1;{var b = 2;for (var i in null) {5;}};for (var i in undefined) {6};{{;}}");
+        result.makeValue();
+        equal(result.success, true);
+        equal(result.value, 1);
+    });
+
+    test("Block Statement 6", function () {
+        var result = puma.evalPuma("1;for (var i in [1]){;};if(true);");
+        result.makeValue();
+        equal(result.success, true);
+        equal(result.value, 1);
+    });
+
+    test("Block Statement 7", function () {
+        var result = puma.evalPuma("3;{9;{if(true){6}}}");
+        result.makeValue();
+        equal(result.success, true);
+        equal(result.value, 6);
+    });
+
     module("12.2 Variables");
 
     test("Variable Declaration: Variables are initialised to undefined when created", function () {
@@ -39,7 +67,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Variable Declaration: Value of AssignmentExpression on VariableStatement execution", function () {
-        var result = puma.evalPuma("var a1 = 1;");
+        var result = puma.evalPuma("var a1 = 1; a1;");
         result.makeValue();
         equal(result.value, 1, "Passed!");
     });
@@ -268,7 +296,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     module("12.9 The Return Statement");
 
     test("Return ; (no Expression)", function () {
-        var result = puma.evalPuma("function a() { return; } a()");
+        var result = puma.evalPuma("function a() { return; } a();");
         result.makeValue();
         equal(result.value, undefined, "Passed!");
     });
