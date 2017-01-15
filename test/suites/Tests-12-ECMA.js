@@ -37,14 +37,14 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 1);
     });
 
-    test("Block Statement 5", function () {
+    QUnit.skip("Block Statement 5", function () {
         var result = puma.evalPuma("1;{var b = 2;for (var i in null) {5;}};for (var i in undefined) {6};{{;}}");
         result.makeValue();
         equal(result.success, true);
         equal(result.value, 1);
     });
 
-    test("Block Statement 6", function () {
+    QUnit.skip("Block Statement 6", function () {
         var result = puma.evalPuma("1;for (var i in [1]){;};if(true);");
         result.makeValue();
         equal(result.success, true);

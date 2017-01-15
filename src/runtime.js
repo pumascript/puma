@@ -43,6 +43,14 @@ define([
         this._isReturnResult = value;
     };
 
+    Result.prototype.isEmptyResult = function () {
+        return this._isEmptyResult === true;
+    };
+
+    Result.prototype.setIsEmptyResult = function (value) {
+        this._isEmptyResult = value;
+    };
+
     /**
      * @constructor
      */
@@ -56,14 +64,15 @@ define([
     }
 
     var defaultResult = new Result(false, null);
-    var emptyResult = new Result(true, null);
+    var emptyResult = new Result(true, undefined);
+    emptyResult.setIsEmptyResult(true);
 
     FirstPass.prototype.acceptArray = function (arrayNodes, state) {
-        var result = new Result(true, undefined),
+        var result = emptyResult,
             i;
         for (i = 0; i < arrayNodes.length; i++) {
             var nodeResult = this.accept(arrayNodes[i], state);
-            if (nodeResult.value !== undefined) {
+            if (!nodeResult.isEmptyResult()) {
                 result = nodeResult;
             }
 
@@ -303,7 +312,7 @@ define([
     };
 
     FirstPass.prototype.visitEmptyStatement = function (ast, state) {
-        return new Result(true, undefined);
+        return emptyResult;
     }
 
     FirstPass.prototype.visitMemberExpression = function (ast, state) {
@@ -409,7 +418,7 @@ define([
     FirstPass.prototype.visitVariableDeclaration = function (ast, state) {
         if (ast.kind === "var") {
             var result = this.acceptArray(ast.declarations, state);
-            return result.success ? new Result(true, undefined) : defaultResult;
+            return result.success ? emptyResult : defaultResult;
         } else {
             return defaultResult;
         }
@@ -800,7 +809,7 @@ define([
             return this.accept(ast.consequent, state);
         } else {
             if (ast.alternate !== null) return this.accept(ast.alternate, state);
-            else return new Result(true, undefined);
+            else return emptyResult;
         }
     };
 
