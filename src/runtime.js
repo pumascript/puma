@@ -311,9 +311,9 @@ define([
         return this.acceptArray(ast.body, state);
     };
 
-    FirstPass.prototype.visitEmptyStatement = function (ast, state) {
+    FirstPass.prototype.visitEmptyStatement = function () {
         return emptyResult;
-    }
+    };
 
     FirstPass.prototype.visitMemberExpression = function (ast, state) {
         var objResult = this.accept(ast.object, state);
