@@ -172,13 +172,13 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
     });
 
     test("While statement 1", function(){
-        var result = puma.evalPuma("var a=0; while(a<10){a++;}");
-        equal(result.value, 10, "Passed!");
+        var result = puma.evalPuma("var a = 0; while(a < 10) { a++; }");
+        equal(result.value, 9, "Passed!");
     });
 
     test("While statement 2", function(){
-        var result = puma.evalPuma("var a=0; var b=true; while(b){if(a>=9){b=false;} a++;}");
-        equal(result.value, 10, "Passed!");
+        var result = puma.evalPuma("var a = 0; var b = true; while(b) { if(a >= 9){b=false;} a++; }");
+        equal(result.value, 9, "Passed!");
     });
 
     test("Object expression", function(){
