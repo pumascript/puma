@@ -28,7 +28,7 @@ module.exports = function (grunt) {
 
         exec: {
             webpack: {
-                cmd: './node_modules/webpack/bin/webpack.js --config webpack.config.js'
+                cmd: 'node ./node_modules/webpack/bin/webpack.js --config webpack.config.js'
             }
         },
 
