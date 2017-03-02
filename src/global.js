@@ -11,5 +11,5 @@ define([], function () {
         Global = global;
     }
 
-    return Global; /* exclude-build */
+    return Global;
 });

@@ -50,5 +50,5 @@ define([
         Symbol._updateMetaData(this.name, this._meta.returns, returnResult.value, "Return type");
     };
 
-    return FunctionSymbol; /* exclude-build */
+    return FunctionSymbol;
 });

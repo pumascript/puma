@@ -838,7 +838,6 @@ define([
     };
 
     FirstPass.prototype.visitComment = function (ast) {
-        //TODO Use RegEx
         if (ast.value.indexOf("@meta") >= 0) {
             var lineMetaComments = this._metaComments[ast.loc.end.line];
             if (lineMetaComments === undefined) {
@@ -854,6 +853,9 @@ define([
         if (argumentResult.failed()) return defaultResult;
 
         var symbol = argumentResult.value;
+        // If is postfix operator return transient clone of symbol
+        var _symbol = ast.prefix ? symbol : state.transientSymbol("@" + symbol.name, symbol.value);
+
         switch (ast.operator) {
         case "++":
             symbol.value++;
@@ -862,7 +864,7 @@ define([
             symbol.value--;
             break;
         }
-        return new Result(true, symbol);
+        return new Result(true, _symbol);
     };
 
     FirstPass.prototype.visitWhileStatement = function (ast, state) {

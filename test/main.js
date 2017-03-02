@@ -10,10 +10,10 @@
 require.config({
   paths: {
     'pumascript': '../src/pumascript',
-    'esprima': '../thirdparty/esprima/esprima'
+    'esprima': '../thirdparty/esprima/esprima',
+    'escodegen': '../thirdparty/escodegen/escodegen.browser'
   }
 });
-
 
 /**
  * @enum containing the list of test suites to execute

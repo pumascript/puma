@@ -32,5 +32,5 @@ define([
     PropertyWrapper.prototype = new Symbol();
     PropertyWrapper.prototype.constructor = PropertyWrapper;
 
-    return PropertyWrapper; /* exclude-build */
+    return PropertyWrapper;
 });
