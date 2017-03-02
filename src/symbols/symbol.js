@@ -73,5 +73,5 @@ define([], function () {
         }
     };
 
-    return Symbol; /* exclude-build */
+    return Symbol;
 });

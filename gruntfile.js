@@ -25,58 +25,40 @@ module.exports = function (grunt) {
                 reporter: require('jshint-stylish')
             }
         },
+
+        exec: {
+            webpack: {
+                cmd: './node_modules/webpack/bin/webpack.js --config webpack.config.js'
+            }
+        },
+
+        uglify: {
+            dist: {
+                options: {
+                    sourceMap: true,
+                    sourceMapName: 'dist/pumascript.min.map',
+                    sourceMapIn: 'dist/pumascript.map',
+                },
+                files: {
+                    'dist/pumascript.min.js': [ 'dist/pumascript.js' ]
+                }
+            }
+        },
+
         clean: {
-            tests: ['tmp']
+            tests: ['tmp'],
+            dist: ['dist']
         },
 
         qunit: {
             all: ['test/**/*.html']
-        },
-
-        // build pumascript
-        requirejs: {
-            compile: {
-                options: {
-                    baseUrl: 'src',
-                    mainConfigFile: 'build/config.js',
-                    out: '<%= buildConfig.output %>.js',
-                    name: 'runtime', // entry point for loading all deps under src/
-                    optimize: 'none',
-                    skipSemiColonInsertion: true,
-                    paths: {
-                        escodegen: 'empty:',
-                        esprima: 'empty:'
-                    },
-                    wrap: {
-                        startFile: 'build/start.js',
-                        endFile: 'build/end.js'
-                    },
-                    onBuildWrite: function (name, path, contents) {
-                        // remove define wrappers and closure ends,
-                        // lines to exclude: /* exclude-build */
-                        contents = contents
-                            .replace(/define\([^{]*?{/, '') // define start
-                            .replace(/\}\);[^}\w]*$/, '') // define end
-                            .replace(/[^\n]*\/\*\s*exclude-build\s*\*\/[^\n]*/, '') // exclusions
-                            .replace(/define\(\[[^\]]+\]\)[\W\n]+$/, ''); // empty definition
-
-                        return contents;
-                    }
-                }
-            }
         }
     });
-
-    // Whenever the "test" task is run, first clean the "tmp" dir, then run this
-    // plugin's task(s), then test the result.
-    grunt.registerTask('test', ['clean', 'requirejs', 'qunit']);
-
-    grunt.registerTask('travis', ['jshint', 'test']);
 
     grunt.registerTask('init', 'Prepare to start working with Puma', function () {
         // Use spawn to report progress of the task
         var spawn = require('child_process').spawn;
-        var cmd    = spawn('bower', ['install'], { cwd: './editor'});
+        var cmd = spawn('bower', ['install'], { cwd: './editor' });
         var done = this.async();
 
         cmd.stdout.on('data', function (data) {
@@ -88,7 +70,7 @@ module.exports = function (grunt) {
         });
 
         cmd.on('exit', function (code) {
-            if(code > 0){
+            if (code > 0) {
                 grunt.fail.fatal('Process Finished Code: ' + code.toString());
             } else {
                 grunt.log.ok('Process Finished Code: ' + code.toString());
@@ -98,7 +80,15 @@ module.exports = function (grunt) {
         });
     });
 
-    grunt.registerTask('build',['requirejs']);
+    grunt.registerTask('build-dev', ['clean:dist', 'exec:webpack']);
+
+    grunt.registerTask('build', ['build-dev', 'uglify:dist']);
+
+    // Whenever the "test" task is run, first clean the "tmp" dir, then run this
+    // plugin's task(s), then test the result.
+    grunt.registerTask('test', ['clean', 'exec:webpack', 'qunit']);
+
+    grunt.registerTask('travis', ['jshint', 'test']);
 
     grunt.registerTask('default', ['init']);
 };

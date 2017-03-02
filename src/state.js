@@ -77,5 +77,5 @@ define([
         this._newFrameThisBinding = thisBinding;
     };
 
-    return State; /* exclude-build */
+    return State;
 });

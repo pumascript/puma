@@ -31,5 +31,5 @@ define([], function () {
         return this._programAst;
     };
 
-    return PrunePass; /* exclude-build */
+    return PrunePass;
 });
