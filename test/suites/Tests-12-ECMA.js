@@ -108,13 +108,13 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 4, "Passed!");
     });
 
-    QUnit.skip("Empty Statement For", function () {
+    test("Empty Statement For", function () {
         var result = puma.evalPuma("var a = ['E','M','P']; for(var i = 0; i < a.length; a[i++] = 0); a;");
         result.makeValue();
         equal(result.success, true);
-        equal(result[0], 0);
-        equal(result[1], 0);
-        equal(result[2], 0);
+        equal(result.value[0], 0);
+        equal(result.value[1], 0);
+        equal(result.value[2], 0);
     });
 
     // TODO testear An ExpressionStatement cannot start with an opening curly brace because that might make it ambiguous with a
