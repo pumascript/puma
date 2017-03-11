@@ -23,7 +23,8 @@ require(['pumascript'], function(puma){
             if (this.readyState == 4 && this.status == 200) {
                 // Action to be performed when the document is read;
                 try {
-                    that.puma.evalPuma(this.responseText);
+                    var result = that.puma.evalPuma(this.responseText);
+                    if(result.success) that.createScriptNode(url);
                 }
                 catch (e) {
                     console.log('Error in puma interpretation');
@@ -33,6 +34,13 @@ require(['pumascript'], function(puma){
         };
         xhttp.open("GET", url, true);
         xhttp.send();
+    };
+
+
+    PumaInjector.prototype.createScriptNode = function(url){
+        var script = document.createElement('script');
+        script.src = url;
+        document.getElementsByTagName('head')[0].appendChild(script);
     };
 
     PumaInjector.prototype.installDeps = function(deps){
