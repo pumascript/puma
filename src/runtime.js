@@ -727,7 +727,7 @@ define([
         for (n = 0; n < functionSymbol.parameters.length; n++) {
             parameter = functionSymbol.parameters[n];
             argumentValue = argumentValues[n];
-            if (isNotMetaCall) {
+            if (isNotMetaCall && argumentValue) {
                 argumentValue.makeValue();
                 argumentValue = argumentValue.value;
             }
