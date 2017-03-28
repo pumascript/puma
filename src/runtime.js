@@ -214,13 +214,8 @@ define([
             console.warn("SequenceExpression visitor not implemented yet");
             //result = this.visitSequenceExpression(ast, state);
             break;
-        case "SwitchCase":
-            console.warn("SwitchCase visitor not implemented yet");
-            //result = this.visitSwitchCase(ast, state);
-            break;
         case "SwitchStatement":
-            console.warn("SwitchStatement visitor not implemented yet");
-            //result = this.visitSwitchStatement(ast, state);
+            result = this.visitSwitchStatement(ast, state);
             break;
         case "ThisExpression":
             result = this.visitThisExpression(ast, state);
@@ -811,6 +806,62 @@ define([
             if (ast.alternate !== null) return this.accept(ast.alternate, state);
             else return emptyResult;
         }
+    };
+
+    FirstPass.prototype.visitSwitchStatement = function (ast, state) {
+        var c,
+            hasDefault,
+            discriminant,
+            flagged,
+            result;
+
+        discriminant = this.accept(ast.discriminant, state);
+        discriminant.makeValue();
+
+        flagged = false;
+        hasDefault = -1;
+
+        if (ast.cases) {
+            for (c = 0; c < ast.cases.length; c++) {
+                var ast_case = ast.cases[c];
+
+                if (ast_case.test === null) { /* Is default case */
+                    if (!!~hasDefault ^ flagged) { /* First Pass [M], Second Pass: Execute default and continue */
+                        flagged = true;
+                        hasDefault = -1;
+                        result = ast_case.consequent.length > 0 ? this.acceptArray(ast_case.consequent, state) : emptyResult;
+                        if (result.failed())
+                            return defaultResult;
+                    } else if (!~hasDefault && !flagged) { /* First Pass [NM]: Save default case number for second pass */
+                        hasDefault = c;
+                        result = emptyResult;
+                    } else { /* Second Pass [M]: Should not be possible. Enforce flow control */
+                        break;
+                    }
+                } else {
+                    var test = this.accept(ast_case.test, state);
+
+                    if (test.failed())
+                        return defaultResult;
+                    test.makeValue();
+
+                    if (test.value === discriminant.value || flagged) {
+                        flagged = true;
+                        result = ast_case.consequent.length > 0 ? this.acceptArray(ast_case.consequent, state) : emptyResult;
+                        if (result.failed())
+                            return defaultResult;
+                    } else {
+                        result = emptyResult;
+                    }
+                }
+                if (c + 1 >= ast.cases.length && !!~hasDefault && !flagged) { /* First Pass [NM]: Trace back to default case and execute */
+                    c = hasDefault - 1;
+                }
+            }
+        } else {
+            result = new Result(true, undefined);
+        }
+        return result;
     };
 
     FirstPass.prototype.visitForStatement = function (ast, state) {

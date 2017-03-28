@@ -360,22 +360,64 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, undefined, "Passed!");
     });
 
+    test("Switch (Expression) with CaseBlock", function () {
+        var result = puma.evalPuma("var n = 1; switch ('Apples') { case 'Oranges': n = n*2; case 'Apples': n = n*3; case 'Bananas': n = n*6; }");
+        result.makeValue();
+        equal(result.value, 18, "Passed!");
+    });
+
+    test("Switch (Expression) null", function () {
+        var result = puma.evalPuma("var n = 2; switch (null) { case undefined: n = n*0; case null: n = n*-1;}");
+        result.makeValue();
+        equal(result.value, -2, "Passed!");
+    });
+
+    test("Switch (Expression) undefined", function () {
+        var result = puma.evalPuma("var n = 2; switch (undefined) { case undefined: n = n*0; case null: n = n*-1;}");
+        result.makeValue();
+        equal(result.value, 0, "Passed!");
+    });
+
+    test("Switch (Expression) expr", function () {
+        var result = puma.evalPuma("switch (typeof u) { case 'undefined': -1;}");
+        result.makeValue();
+        equal(result.value, -1, "Passed!");
+    });
+
+    test("Switch (Expression) expr 2", function () {
+        var result = puma.evalPuma("switch (typeof Math.E) { case 'number': 0;}");
+        result.makeValue();
+        equal(result.value, 0, "Passed!");
+    });
+
     QUnit.skip("Switch (Expression) case with break", function () {
-        var result = puma.evalPuma("var a = 1; switch (a) { case 1: 1; break; case 2: 2;}");
+        var result = puma.evalPuma("var a = 1; switch (a) { case 1: 1; break; case 2: 2; }");
         result.makeValue();
         equal(result.value, 1, "Passed!");
     });
 
-    QUnit.skip("Switch (Expression) case without break", function () {
-        var result = puma.evalPuma("var a = 1; var b = 0; switch (a) { case 1: b += 1; case 2: b += 2;} b;");
+    test("Switch (Expression) case without break", function () {
+        var result = puma.evalPuma("var a = 1; var b = 0; switch (a) { case 1: b += 1; case 2: b += 2; } b;");
         result.makeValue();
         equal(result.value, 3, "Passed!");
     });
 
     QUnit.skip("Switch (Expression) case default", function () {
-        var result = puma.evalPuma("var a = 0; switch (a) { case 1: 1; break; default: 2;}");
+        var result = puma.evalPuma("var a = 0; switch (a) { case 1: 1; break; default: 2; }");
         result.makeValue();
         equal(result.value, 2, "Passed!");
+    });
+
+    test("Switch (Expression) case default no break", function () {
+        var result = puma.evalPuma("var a = 4; var b = 0; switch (a) { default: b += 3; case 1: b += 1; case 2: b += 2; } b;");
+        result.makeValue();
+        equal(result.value, 6, "Passed!");
+    });
+
+    test("Switch (Expression) empty case", function () {
+        var result = puma.evalPuma("var a = 4; var b = 0; switch (a) { default: case 1: b += 1; case 2: case 3: b += 3; } b;");
+        result.makeValue();
+        equal(result.value, 4, "Passed!");
     });
 
     module("12.12 Labeled Statements");
