@@ -4,135 +4,135 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
 
      module("7.2 White space");
 
-     test("White spaces between every thing", function(){
-         var result = puma.evalPuma("var a = 1 ;");
+     test("White space characters", function(){
+         var result = puma.evalPuma(" var a = 1 ; a; ");
          result.makeValue();
          ok(result.success && 1 === result.value, "Passed!");
      });
 
-     test("Tab between every thing", function(){
-         var result = puma.evalPuma("var a   =   1   ;");
+     test("Tab characters", function(){
+         var result = puma.evalPuma("   var a   =   1   ;   a;   ");
          result.makeValue();
          ok(result.success && 1 === result.value, "Passed!");
      });
 
      test("UTF spaces aceptation 1", function(){
-         var result = puma.evalPuma("var a= \"a\u0009b\"");
+         var result = puma.evalPuma("var a = 'a\u0009b'; a;");
          result.makeValue();
          ok(result.success && "a\tb" === result.value, "Passed!");
      });
 
      test("UTF spaces aceptation 2", function(){
-         var result = puma.evalPuma("var a= \"a\u00A0b\"");
+         var result = puma.evalPuma("var a = 'a\u00A0b'; a;");
          result.makeValue();
          ok(result.success && "a\xA0b" === result.value, "Passed!");
      });
 
      test("UTF spaces aceptation 3", function(){
-         var result = puma.evalPuma("var a= \"a\u000Bb\"");
+         var result = puma.evalPuma("var a = 'a\u000Bb'; a;");
          result.makeValue();
          ok(result.success && "a\x0Bb" === result.value, "Passed!");
      });
 
      test("UTF spaces aceptation 4", function(){
-         var result = puma.evalPuma("var a= \"a\u000Cb\"");
+         var result = puma.evalPuma("var a = 'a\u000Cb'; a;");
          result.makeValue();
          ok(result.success && "a\fb" === result.value, "Passed!");
      });
 
 
-     test("7.2 White space- UTF spaces aceptation 5", function(){
-         var result = puma.evalPuma("var a= \"a\u2000b\"");
+     test("UTF spaces aceptation 5", function(){
+         var result = puma.evalPuma("var a = 'a\u2000b'; a;");
          result.makeValue();
          ok(result.success && "a\u2000b" === result.value, "Passed!");
      });
 
-     test("7.2 White space- UTF spaces aceptation 6", function(){
-         var result = puma.evalPuma("var a= \"a\u2001b\"");
+     test("UTF spaces aceptation 6", function(){
+         var result = puma.evalPuma("var a = 'a\u2001b'; a;");
          result.makeValue();
          ok(result.success && "a\u2001b" === result.value, "Passed!");
      });
 
-     test("7.2 White space- UTF spaces aceptation 7", function(){
-         var result = puma.evalPuma("var a= \"a\u2002b\"");
+     test("UTF spaces aceptation 7", function(){
+         var result = puma.evalPuma("var a = 'a\u2002b'; a;");
          result.makeValue();
          ok(result.success && "a\u2002b" === result.value, "Passed!");
      });
 
-     test("7.2 White space- UTF spaces aceptation 8", function(){
-         var result = puma.evalPuma("var a= \"a\u2003b\"");
+     test("UTF spaces aceptation 8", function(){
+         var result = puma.evalPuma("var a = 'a\u2003b'; a;");
          result.makeValue();
          ok(result.success && "a\u2003b" === result.value, "Passed!");
      });
 
-     test("7.2 White space- UTF spaces aceptation 9", function(){
-         var result = puma.evalPuma("var a= \"a\u2004b\"");
+     test("UTF spaces aceptation 9", function(){
+         var result = puma.evalPuma("var a = 'a\u2004b'; a;");
          result.makeValue();
          ok(result.success && "a\u2004b" === result.value, "Passed!");
      });
 
-     test("7.2 White space- UTF spaces aceptation 10", function(){
-         var result = puma.evalPuma("var a= \"a\u2005b\"");
+     test("UTF spaces aceptation 10", function(){
+         var result = puma.evalPuma("var a = 'a\u2005b'; a;");
          result.makeValue();
          ok(result.success && "a\u2005b" === result.value, "Passed!");
      });
 
-     test("7.2 White space- UTF spaces aceptation 11", function(){
-         var result = puma.evalPuma("var a= \"a\u2006b\"");
+     test("UTF spaces aceptation 11", function(){
+         var result = puma.evalPuma("var a = 'a\u2006b'; a;");
          result.makeValue();
          ok(result.success && "a\u2006b" === result.value, "Passed!");
      });
 
-     test("7.2 White space- UTF spaces aceptation 12", function(){
-         var result = puma.evalPuma("var a= \"a\u2007b\"");
+     test("UTF spaces aceptation 12", function(){
+         var result = puma.evalPuma("var a = 'a\u2007b'; a;");
          result.makeValue();
          ok(result.success && "a\u2007b" === result.value, "Passed!");
      });
 
-     test("7.2 White space- UTF spaces aceptation 13", function(){
-         var result = puma.evalPuma("var a= \"a\u2008b\"");
+     test("UTF spaces aceptation 13", function(){
+         var result = puma.evalPuma("var a = 'a\u2008b'; a;");
          result.makeValue();
          ok(result.success && "a\u2008b" === result.value, "Passed!");
      });
 
-     test("7.2 White space- UTF spaces aceptation 14", function(){
-         var result = puma.evalPuma("var a= \"a\u2009b\"");
+     test("UTF spaces aceptation 14", function(){
+         var result = puma.evalPuma("var a = 'a\u2009b'; a;");
          result.makeValue();
          ok(result.success && "a\u2009b" === result.value, "Passed!");
      });
 
-     test("7.2 White space- UTF spaces aceptation 15", function(){
-         var result = puma.evalPuma("var a= \"a\u200Ab\"");
+     test("UTF spaces aceptation 15", function(){
+         var result = puma.evalPuma("var a = 'a\u200Ab'; a;");
          result.makeValue();
          ok(result.success && "a\u200Ab" === result.value, "Passed!");
      });
 
      test("UTF spaces aceptation 16", function(){
-         var result = puma.evalPuma("var a= \"a\u1680b\"");
+         var result = puma.evalPuma("var a = 'a\u1680b'; a;");
          result.makeValue();
          ok(result.success && "a\u1680b" === result.value, "Passed!");
      });
 
      test("UTF spaces aceptation 17", function(){
-         var result = puma.evalPuma("var a= \"a\u180Eb\"");
+         var result = puma.evalPuma("var a= 'a\u180Eb'; a;");
          result.makeValue();
          ok(result.success && "a\u180Eb" === result.value, "Passed!");
      });
 
      test("UTF spaces aceptation 18", function(){
-         var result = puma.evalPuma("var a= \"a\u202Fb\"");
+         var result = puma.evalPuma("var a = 'a\u202Fb'; a;");
          result.makeValue();
          ok(result.success && "a\u202Fb" === result.value, "Passed!");
      });
 
      test("UTF spaces aceptation 19", function(){
-         var result = puma.evalPuma("var a= \"a\u205Fb\"");
+         var result = puma.evalPuma("var a = 'a\u205Fb'; a;");
          result.makeValue();
          ok(result.success && "a\u205Fb" === result.value, "Passed!");
      });
 
      test("UTF spaces aceptation 20", function(){
-         var result = puma.evalPuma("var a= \"a\u3000b\"");
+         var result = puma.evalPuma("var a= 'a\u3000b'; a;");
          result.makeValue();
          ok(result.success && "a\u3000b" === result.value, "Passed!");
      });
@@ -140,13 +140,13 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
      module("7.6 Identifier names and identifiers");
 
      test("Identifier names and identifiers 1", function(){
-         var result = puma.evalPuma("var $a$b$ = 1;");
+         var result = puma.evalPuma("var $a$b$ = 1; $a$b$;");
          result.makeValue();
          ok(result.success && 1 === result.value, "Passed!");
      });
 
      test("Identifier names and identifiers 2", function(){
-         var result = puma.evalPuma("var _a_b_ = 1;");
+         var result = puma.evalPuma("var _a_b_ = 1; _a_b_");
          result.makeValue();
          ok(result.success && 1 === result.value, "Passed!");
      });
@@ -498,14 +498,14 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
      });
 
      test("without use strict: implements", function(){
-         var result = puma.evalPuma("var implements = 1;");
+         var result = puma.evalPuma("var implements = 1; implements;");
          result.makeValue();
          ok(result.success && 1 === result.value, "Passed!");
      });
 
      test("with use strict: private", function(){
         try {
-            puma.evalPuma("\"use strict\" \n var private=1;");
+            puma.evalPuma("\"use strict\" \n var private = 1; private;");
         }
         catch (e) {
             var result = e.message;
@@ -514,14 +514,14 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
      });
 
      test("without use strict: private", function(){
-         var result = puma.evalPuma("var private = 1;");
+         var result = puma.evalPuma("var private = 1; private;");
          result.makeValue();
          ok(result.success && 1 === result.value, "Passed!");
      });
 
      test("with use strict: public", function(){
         try {
-            puma.evalPuma("\"use strict\" \n var public=1;");
+            puma.evalPuma("\"use strict\" \n var public = 1; public;");
         }
         catch (e) {
             var result = e.message;
@@ -530,14 +530,14 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
      });
 
      test("without use strict: public", function(){
-         var result = puma.evalPuma("var public = 1;");
+         var result = puma.evalPuma("var public = 1; public;");
          result.makeValue();
          ok(result.success && 1 === result.value, "Passed!");
      });
 
      test("with use strict: interface", function(){
         try {
-            puma.evalPuma("\"use strict\" \n var interface=1;");
+            puma.evalPuma("\"use strict\" \n var interface = 1; interface;");
         }
         catch (e) {
             var result = e.message;
@@ -546,14 +546,14 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
      });
 
      test("without use strict: interface", function(){
-         var result = puma.evalPuma("var interface = 1;");
+         var result = puma.evalPuma("var interface = 1; interface;");
          result.makeValue();
          ok(result.success && 1 === result.value, "Passed!");
      });
 
      test("with use strict: package", function(){
         try {
-            puma.evalPuma("\"use strict\" \n var package=1;");
+            puma.evalPuma("\"use strict\" \n var package = 1; package;");
         }
         catch (e) {
             var result = e.message;
@@ -562,14 +562,14 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
      });
 
      test("without use strict: package", function(){
-         var result = puma.evalPuma("var package = 1;");
+         var result = puma.evalPuma("var package = 1; package;");
          result.makeValue();
          ok(result.success && 1 === result.value, "Passed!");
      });
 
      test("with use strict: protected", function(){
         try {
-            puma.evalPuma("\"use strict\" \n var protected=1;");
+            puma.evalPuma("\"use strict\" \n var protected = 1; protected;");
         }
         catch (e) {
             var result = e.message;
@@ -578,14 +578,14 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
      });
 
      test("without use strict: protected", function(){
-         var result = puma.evalPuma("var protected = 1;");
+         var result = puma.evalPuma("var protected = 1; protected;");
          result.makeValue();
          ok(result.success && 1 === result.value, "Passed!");
      });
 
      test("with use strict: static", function(){
         try {
-            puma.evalPuma("\"use strict\" \n var static=1;");
+            puma.evalPuma("\"use strict\" \n var static = 1; static;");
         }
         catch (e) {
             var result = e.message;
@@ -594,7 +594,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
      });
 
      test("without use strict: static", function(){
-         var result = puma.evalPuma("var static = 1;");
+         var result = puma.evalPuma("var static = 1; static;");
          result.makeValue();
          ok(result.success && 1 === result.value, "Passed!");
      });
@@ -602,7 +602,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
 
      test("with use strict: yield", function(){
         try {
-            puma.evalPuma("\"use strict\" \n var yield=1;");
+            puma.evalPuma("\"use strict\" \n var yield = 1; yield;");
         }
         catch (e) {
             var result = e.message;
@@ -612,14 +612,14 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
 
      //Throws Uncaught Error: Unexpected token
      QUnit.skip("without use strict: yield", function(){
-         var result = puma.evalPuma("var yield = 1;");
+         var result = puma.evalPuma("var yield = 1; yield;");
          result.makeValue();
          ok(result.success && 1 === result.value, "Passed!");
      });
 
      test("with use strict: let", function(){
         try {
-            puma.evalPuma("\"use strict\" \n var let=1;");
+            puma.evalPuma("\"use strict\" \n var let = 1; let;");
         }
         catch (e) {
             var result = e.message;
@@ -629,7 +629,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
 
      //Throws Uncaught Error: Unexpected token
      QUnit.skip("without use strict: let", function(){
-         var result = puma.evalPuma("var let = 1;");
+         var result = puma.evalPuma("var let = 1; let;");
          result.makeValue();
          ok(result.success && 1 === result.value, "Passed!");
      });
@@ -637,13 +637,13 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
      module("7.8.2 Boolean Literals");
 
      test("true", function(){
-         var result = puma.evalPuma("var a = Boolean(true);");
+         var result = puma.evalPuma("var a = Boolean(true); a;");
          result.makeValue();
          ok(result.success && true === result.value, "Passed!");
      });
 
       test("false", function(){
-         var result = puma.evalPuma("var a = Boolean(false);");
+         var result = puma.evalPuma("var a = Boolean(false); a;");
          result.makeValue();
          ok(result.success && false === result.value, "Passed!");
      });
@@ -759,13 +759,13 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
      });
 
      test("Automatic Semicolon Insertion 3", function(){
-         var result = puma.evalPuma("var x \n = 1");
+         var result = puma.evalPuma("var x \n = 1; x;");
          result.makeValue();
          ok(result.success && 1 === result.value, "Passed!");
      });
 
      test("Automatic Semicolon Insertion 4", function(){
-         var result = puma.evalPuma("var x = \n 1");
+         var result = puma.evalPuma("var x = \n 1; x;");
          result.makeValue();
          ok(result.success && 1 === result.value, "Passed!");
      });

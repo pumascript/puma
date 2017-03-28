@@ -43,6 +43,14 @@ define([
         this._isReturnResult = value;
     };
 
+    Result.prototype.isEmptyResult = function () {
+        return this._isEmptyResult === true;
+    };
+
+    Result.prototype.setIsEmptyResult = function (value) {
+        this._isEmptyResult = value;
+    };
+
     /**
      * @constructor
      */
@@ -56,14 +64,19 @@ define([
     }
 
     var defaultResult = new Result(false, null);
-    var emptyResult = new Result(true, null);
+    var emptyResult = new Result(true, undefined);
+    emptyResult.setIsEmptyResult(true);
 
     FirstPass.prototype.acceptArray = function (arrayNodes, state) {
-        var result = defaultResult,
+        var result = emptyResult,
             i;
         for (i = 0; i < arrayNodes.length; i++) {
-            result = this.accept(arrayNodes[i], state);
-            if (result.isReturnResult()) break;
+            var nodeResult = this.accept(arrayNodes[i], state);
+            if (!nodeResult.isEmptyResult()) {
+                result = nodeResult;
+            }
+
+            if (nodeResult.isReturnResult()) break;
         }
         return result;
     };
@@ -128,8 +141,7 @@ define([
             result = this.visitDoWhileStatement(ast, state);
             break;
         case "EmptyStatement":
-            console.warn("EmptyStatement visitor not implemented yet");
-            //result = this.visitEmptyStatement(ast, state);
+            result = this.visitEmptyStatement(ast, state);
             break;
         case "ExpressionStatement":
             result = this.accept(ast.expression, state);
@@ -299,6 +311,10 @@ define([
         return this.acceptArray(ast.body, state);
     };
 
+    FirstPass.prototype.visitEmptyStatement = function () {
+        return emptyResult;
+    };
+
     FirstPass.prototype.visitMemberExpression = function (ast, state) {
         var objResult = this.accept(ast.object, state);
         if (objResult.failed()) return defaultResult;
@@ -401,7 +417,8 @@ define([
 
     FirstPass.prototype.visitVariableDeclaration = function (ast, state) {
         if (ast.kind === "var") {
-            return this.acceptArray(ast.declarations, state);
+            var result = this.acceptArray(ast.declarations, state);
+            return result.success ? emptyResult : defaultResult;
         } else {
             return defaultResult;
         }

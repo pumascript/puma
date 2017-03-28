@@ -1,6 +1,6 @@
 // Copyright (c) 2013 - present UTN-LIS
 
-/*global define, test, ok, equal */
+/* global define, test, ok, equal */
 
 /*
  *              PUMASCRIPT BASE TEST SUITE
@@ -225,7 +225,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
     });
 
     test("Array expression", function(){
-        var result = puma.evalPuma("var a = [1, 2, ]");
+        var result = puma.evalPuma("var a = [1, 2, ]; a;");
         equal(result.value.value[1], 2, "Passed!");
         equal(result.value.value[2], null, "Passed!");
         equal(result.value.value.length, 2, "Passed!");

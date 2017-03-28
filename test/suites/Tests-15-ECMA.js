@@ -198,7 +198,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
 
     test("Object.create(O [, Properties])", function () {
         var c = { value: "Puma", writable: true, enumerable: false, configurable: false };
-        var result = puma.evalPuma("var o = Object.create(null, { foo: { writable: true, configurable: false, enumerable: false, value: 'Puma' }, bar: { value: 20 } } );");
+        var result = puma.evalPuma("var o = Object.create(null, { foo: { writable: true, configurable: false, enumerable: false, value: 'Puma' }, bar: { value: 20 } } ); o;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value.bar, 20, "Passed!");
@@ -494,7 +494,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     module("15.4: Array Objects");
 
     test("The Array Constructor Called as a Function", function () {
-        var result = puma.evalPuma("var a = Array();");
+        var result = puma.evalPuma("var a = Array(); a;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'object', "Passed!");
@@ -502,7 +502,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Array([ item1 [, item2 [, ... ]]])", function () {
-        var result = puma.evalPuma("var a = Array(16, 'F', true, [7, 'M', false], Object.create(null,{ name: { value: 'Zion' } }));");
+        var result = puma.evalPuma("var a = Array(16, 'F', true, [7, 'M', false], Object.create(null,{ name: { value: 'Zion' } })); a;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'object', "Passed!");
@@ -514,7 +514,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("The Array Constructor", function () {
-        var result = puma.evalPuma("var a = new Array();");
+        var result = puma.evalPuma("var a = new Array(); a;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'object', "Passed!");
@@ -522,7 +522,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("new Array([ item0 [, item1 [, ... ]]])", function () {
-        var result = puma.evalPuma("var a = new Array(16, 'F', true, [7, 'M', false], Object.create(null,{ name: { value: 'Zion' } }));");
+        var result = puma.evalPuma("var a = new Array(16, 'F', true, [7, 'M', false], Object.create(null,{ name: { value: 'Zion' } })); a;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'object', "Passed!");
@@ -534,7 +534,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("new Array(len)", function () {
-        var result = puma.evalPuma("var a = new Array(4);");
+        var result = puma.evalPuma("var a = new Array(4); a;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'object', "Passed!");
@@ -826,28 +826,28 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     module("15.5: String Objects");
 
     test("The String Constructor Called as a Function", function () {
-        var result = puma.evalPuma("var s = String();");
+        var result = puma.evalPuma("var s = String(); s;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, '', "Passed!");
     });
 
     test("String([ns])", function () {
-        var result = puma.evalPuma("var s = String(4);");
+        var result = puma.evalPuma("var s = String(4); s;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, '4', "Passed!");
     });
 
     test("String([value])", function () {
-        var result = puma.evalPuma("var s = String('Puma');");
+        var result = puma.evalPuma("var s = String('Puma'); s;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 'Puma', "Passed!");
     });
 
     test("The String Constructor", function () {
-        var result = puma.evalPuma("var s = new String();");
+        var result = puma.evalPuma("var s = new String(); s;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'object', "Passed!");
@@ -855,7 +855,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("new String([ns])", function () {
-        var result = puma.evalPuma("var s = new String(0004);");
+        var result = puma.evalPuma("var s = new String(0004); s;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'object', "Passed!");
@@ -864,7 +864,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("new String([value])", function () {
-        var result = puma.evalPuma("var s = new String('Puma');");
+        var result = puma.evalPuma("var s = new String('Puma'); s;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'object', "Passed!");
@@ -1211,21 +1211,21 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     module("15.6: Boolean Objects");
 
     test("The Boolean Constructor Called as a Function", function () {
-        var result = puma.evalPuma("var b = Boolean();");
+        var result = puma.evalPuma("var b = Boolean(); b;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, false, "Passed!");
     });
 
     test("Boolean(value)", function () {
-        var result = puma.evalPuma("var b = Boolean(1);");
+        var result = puma.evalPuma("var b = Boolean(1); b;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, true, "Passed!");
     });
 
     test("The Boolean Constructor", function () {
-        var result = puma.evalPuma("var b = new Boolean();");
+        var result = puma.evalPuma("var b = new Boolean(); b;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'object', "Passed!");
@@ -1233,7 +1233,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("new Boolean(value)", function () {
-        var result = puma.evalPuma("var b = new Boolean(1);");
+        var result = puma.evalPuma("var b = new Boolean(1); b;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'object', "Passed!");
@@ -1296,28 +1296,28 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     module("15.7: Number Objects");
 
     test("The Number Constructor Called as a Function", function () {
-        var result = puma.evalPuma("var n = Number();");
+        var result = puma.evalPuma("var n = Number(); n;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 0, "Passed!");
     });
 
     test("Number([value])", function () {
-        var result = puma.evalPuma("var n = Number(2);");
+        var result = puma.evalPuma("var n = Number(2); n;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 2, "Passed!");
     });
 
     test("Number([string])", function () {
-        var result = puma.evalPuma("var n = Number('3');");
+        var result = puma.evalPuma("var n = Number('3'); n;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 3, "Passed!");
     });
 
     test("The Number Constructor", function () {
-        var result = puma.evalPuma("var n = new Number();");
+        var result = puma.evalPuma("var n = new Number(); n;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'object', "Passed!");
@@ -1325,7 +1325,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("new Number([value])", function () {
-        var result = puma.evalPuma("var n = new Number(2);");
+        var result = puma.evalPuma("var n = new Number(2); n;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'object', "Passed!");
@@ -1333,7 +1333,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("new Number([string])", function () {
-        var result = puma.evalPuma("var n = new Number('3');");
+        var result = puma.evalPuma("var n = new Number('3'); n;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'object', "Passed!");
@@ -2082,7 +2082,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     module("15.10: RegExp (Regular Expression) Objects");
 
     test("The RegExp Constructor Called as a Function", function () {
-        var result = puma.evalPuma("var x = RegExp();");
+        var result = puma.evalPuma("var x = RegExp(); x;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'object', "Passed!");
@@ -2090,7 +2090,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("RegExp(pattern, flags)", function () {
-        var result = puma.evalPuma("var x = RegExp('^(?:4[0-9]{12}(?:[0-9]{3})?|(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11})$','gm');");
+        var result = puma.evalPuma("var x = RegExp('^(?:4[0-9]{12}(?:[0-9]{3})?|(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11})$','gm'); x;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'object', "Passed!");
@@ -2102,7 +2102,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("RegExp(expression)", function () {
-        var result = puma.evalPuma("var x = RegExp(/^(?:4[0-9]{12}(?:[0-9]{3})?|(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11})$/);");
+        var result = puma.evalPuma("var x = RegExp(/^(?:4[0-9]{12}(?:[0-9]{3})?|(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11})$/); x;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'object', "Passed!");
@@ -2114,7 +2114,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("The RegExp Constructor", function () {
-        var result = puma.evalPuma("var x = new RegExp();");
+        var result = puma.evalPuma("var x = new RegExp(); x;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'object', "Passed!");
@@ -2122,7 +2122,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("new RegExp(pattern, flags)", function () {
-        var result = puma.evalPuma("var x = new RegExp('^(?:4[0-9]{12}(?:[0-9]{3})?|(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11})$','gm');");
+        var result = puma.evalPuma("var x = new RegExp('^(?:4[0-9]{12}(?:[0-9]{3})?|(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11})$','gm'); x;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'object', "Passed!");
@@ -2134,7 +2134,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("new RegExp(expression)", function () {
-        var result = puma.evalPuma("var x = new RegExp(/^(?:4[0-9]{12}(?:[0-9]{3})?|(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11})$/);");
+        var result = puma.evalPuma("var x = new RegExp(/^(?:4[0-9]{12}(?:[0-9]{3})?|(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11})$/); x;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(typeof result.value, 'object', "Passed!");
@@ -2924,7 +2924,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("JSON.stringify ( value [ , replacer [ , space ] ] )", function () {
-        var result = puma.evalPuma("var foo = { foundation: \"Mozilla\", model: \"box\", week: 45, transport: \"car\", month: 7, working: false }; var j = JSON.stringify(foo, Function('key', 'value', 'if (typeof value === \"string\") { return undefined; } return value;'), \"\t\");");
+        var result = puma.evalPuma("var foo = { foundation: \"Mozilla\", model: \"box\", week: 45, transport: \"car\", month: 7, working: false }; var j = JSON.stringify(foo, Function('key', 'value', 'if (typeof value === \"string\") { return undefined; } return value;'), \"\t\"); j;");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, "{\n\t\"week\": 45,\n\t\"month\": 7,\n\t\"working\": false\n}", "Passed!");

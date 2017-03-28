@@ -1,6 +1,6 @@
 // Copyright (c) 2013 - present UTN-LIS
 
-/*global define, test, ok, equal */
+/* global define, test, ok, equal */
 
 /*
  *              PUMASCRIPT BASE TEST SUITE
@@ -8,44 +8,71 @@
  */
 define(['pumascript', 'esprima'], function (puma, esprima) {
 
-    // Tests de la seccion 12 de ECMA: Statements
     module("12.1 Blocks")
 
-    //Revisar, deberia devolver 1 supuestamente
-    QUnit.skip("block statement 1", function () {
+    test("Block Statement 1", function () {
         var result = puma.evalPuma("1;;;;;");
-        ok(result.success && 1 === result.value, "Passed!");
+        equal(result.success, true);
+        equal(result.value, 1);
     });
 
-    //Revisar segun la consola de chrome deberia devolver 1
-    QUnit.skip("block statement 2", function () {
+    test("Block Statement 2", function () {
         var result = puma.evalPuma("1;{}");
         result.makeValue();
-        equal(result.value, 1, "Passed!");
+        equal(result.success, true);
+        equal(result.value, 1);
     });
 
-    //Revisar
-    QUnit.skip("block statement 3", function () {
+    test("Block Statement 3", function () {
         var result = puma.evalPuma("1;var a;");
         result.makeValue();
-        equal(typeof result.value, 'number', "Passed!");
+        equal(result.success, true);
+        equal(result.value, 1);
+    });
+
+    test("Block Statement 4", function () {
+        var result = puma.evalPuma("1;if(false){8;};;");
+        result.makeValue();
+        equal(result.success, true);
+        equal(result.value, 1);
+    });
+
+    QUnit.skip("Block Statement 5", function () {
+        var result = puma.evalPuma("1;{var b = 2;for (var i in null) {5;}};for (var i in undefined) {6};{{;}}");
+        result.makeValue();
+        equal(result.success, true);
+        equal(result.value, 1);
+    });
+
+    QUnit.skip("Block Statement 6", function () {
+        var result = puma.evalPuma("1;for (var i in [1]){;};if(true);");
+        result.makeValue();
+        equal(result.success, true);
+        equal(result.value, 1);
+    });
+
+    test("Block Statement 7", function () {
+        var result = puma.evalPuma("3;{9;{if(true){6}}}");
+        result.makeValue();
+        equal(result.success, true);
+        equal(result.value, 6);
     });
 
     module("12.2 Variables");
 
-    test("variable declaration: variables are initialised to undefined when created", function () {
+    test("Variable Declaration: Variables are initialised to undefined when created", function () {
         var result = puma.evalPuma("var a1; a1;");
         result.makeValue();
         equal(result.value, undefined, "Passed!");
     });
 
-    test("variable declaration: variables are assigned the value of their AssignmentExpression when the VariableStatement is executed.", function () {
-        var result = puma.evalPuma("var a1 = 1;");
+    test("Variable Declaration: Value of AssignmentExpression on VariableStatement execution", function () {
+        var result = puma.evalPuma("var a1 = 1; a1;");
         result.makeValue();
         equal(result.value, 1, "Passed!");
     });
 
-    test("variable declaration in strict mode: 'eval' as identifier", function () {
+    test("Variable Declaration in strict mode: 'eval' as identifier", function () {
         var exceptionMessage;
         try {
             var result = puma.evalPuma("'use strict';var eval;");
@@ -55,7 +82,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(exceptionMessage, "Line 1: Variable name may not be eval or arguments in strict mode", "Passed!");
     });
 
-    test("variable declaration in strict mode: 'arguments' as identifier", function () {
+    test("Variable Declaration in strict mode: 'arguments' as identifier", function () {
         var exceptionMessage;
         try {
             var result = puma.evalPuma("\"use strict\"; var arguments;");
@@ -67,10 +94,27 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
 
     module("12.3 Empty Statement");
 
-    test("empty statement", function () {
+    test("Empty Statement", function () {
         var result = puma.evalPuma(";");
         result.makeValue();
-        equal(result.value, null, "Passed!");
+        equal(result.success, true);
+        equal(result.value, undefined, "Passed!");
+    });
+
+    test("Empty Statement Conditional Arrest", function () {
+        var result = puma.evalPuma("var a = 0, b = 4; if((a==0) || (b = 0)); b.valueOf();");
+        result.makeValue();
+        equal(result.success, true);
+        equal(result.value, 4, "Passed!");
+    });
+
+    test("Empty Statement For", function () {
+        var result = puma.evalPuma("var a = ['E','M','P']; for(var i = 0; i < a.length; a[i++] = 0); a;");
+        result.makeValue();
+        equal(result.success, true);
+        equal(result.value[0], 0);
+        equal(result.value[1], 0);
+        equal(result.value[2], 0);
     });
 
     // TODO testear An ExpressionStatement cannot start with an opening curly brace because that might make it ambiguous with a
@@ -80,24 +124,24 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
 
     module("12.5 If Statement");
 
-    test("if statement: true", function () {
+    test("If statement: true", function () {
         var result = puma.evalPuma("if (true) 1; else 2;");
         result.makeValue();
         equal(result.value, 1, "Passed!");
     });
-    test("if statement : true with curly", function () {
+    test("If statement : true with curly", function () {
         var result = puma.evalPuma("if (true) {1;} else{2;}");
         result.makeValue();
         equal(result.value, 1, "Passed!");
     })
 
-    test("if statement: false", function () {
+    test("If statement: false", function () {
         var result = puma.evalPuma("if (false) 1; else 2;");
         result.makeValue();
         equal(result.value, 2, "Passed!");
     });
 
-    test("if statement: false with curly", function () {
+    test("If statement: false with curly", function () {
         var result = puma.evalPuma("if (false){1;} else {2;}");
         result.makeValue();
         equal(result.value, 2, "Passed!");
@@ -252,7 +296,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     module("12.9 The Return Statement");
 
     test("Return ; (no Expression)", function () {
-        var result = puma.evalPuma("function a() { return; } a()");
+        var result = puma.evalPuma("function a() { return; } a();");
         result.makeValue();
         equal(result.value, undefined, "Passed!");
     });
