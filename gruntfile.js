@@ -57,8 +57,8 @@ module.exports = function (grunt) {
 
     grunt.registerTask('init', 'Prepare to start working with Puma', function () {
         // Use spawn to report progress of the task
-        var spawn = require('child_process').spawn;
-        var cmd = spawn('bower', ['install'], { cwd: './editor' });
+        var exec = require('child_process').exec;
+        var cmd = exec('bower install', { cwd: './editor' });
         var done = this.async();
 
         cmd.stdout.on('data', function (data) {
