@@ -129,6 +129,7 @@ define([
 
             if (nodeResult.isReturnResult()) break;
         }
+        
         return result;
     };
 
@@ -138,11 +139,17 @@ define([
 
     FirstPass.prototype.accept = function (ast, state) {
         if (ast === undefined || ast === null) throw "invalid call to accept with null ast.";
-        if (ast.type === 'ExpressionStatement') ast = ast.expression;
-       
-        var result = this._visitorStatements[ast.type].call(this, ast, state) || defaultResult;
-        this._lastStatementLoc = ast.loc.end;
+        if (ast.type === 'ExpressionStatement') ast = ast.expression;        
         
+        var result = defaultResult;
+        if(this._visitorStatements[ast.type]){
+            result = this._visitorStatements[ast.type].call(this, ast, state);
+        }else{
+            console.warn("Statment "+ ast.type +" not implemented");
+        }
+        
+        this._lastStatementLoc = ast.loc.end;        
+       
         return result;
     };
 
