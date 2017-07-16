@@ -877,7 +877,8 @@ define([
 
         while (testResult.value) {
             bodyResult = this.accept(ast.body, state);
-            this.accept(ast.update, state);
+            if (ast.update)
+                this.accept(ast.update, state);
             if (ast.test) {
                 testResult = this.accept(ast.test, state);
                 testResult.makeValue();
