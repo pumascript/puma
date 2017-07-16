@@ -865,21 +865,25 @@ define([
     };
 
     FirstPass.prototype.visitForStatement = function (ast, state) {
-        // TODO check all empty cases for subitems
-        var initResult = ast.init !== null ? this.accept(ast.init, state) : null;
-        var testResult = this.accept(ast.test, state);
+        var initResult = ast.init ? this.accept(ast.init, state) : emptyResult;
+        var testResult = ast.test ? this.accept(ast.test, state) : new Result(true, true);
         var bodyResult;
 
-        testResult.makeValue();
+        if (ast.test)
+            testResult.makeValue();
 
-        if (initResult !== null && initResult.failed() || testResult.failed()) return defaultResult;
+        if (initResult.failed() || testResult.failed())
+            return defaultResult;
 
         while (testResult.value) {
             bodyResult = this.accept(ast.body, state);
             this.accept(ast.update, state);
-            testResult = this.accept(ast.test, state);
-            testResult.makeValue();
+            if (ast.test) {
+                testResult = this.accept(ast.test, state);
+                testResult.makeValue();
+            }
         }
+
         if (bodyResult !== undefined) {
             bodyResult.makeValue();
         } else {
