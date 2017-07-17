@@ -877,6 +877,12 @@ define([
 
         while (testResult.value) {
             bodyResult = this.accept(ast.body, state);
+            /* If body is an Empty Statement, then pass it as is, conversly,
+             * if result's value property is a Symbol, coerce it to primitive
+             * as so it perdures unaffected by subsequent updates.
+             */
+            if (!bodyResult.isEmptyResult())
+                bodyResult.makeValue();
             if (ast.update)
                 this.accept(ast.update, state);
             if (ast.test) {
@@ -885,11 +891,6 @@ define([
             }
         }
 
-        if (bodyResult !== undefined) {
-            bodyResult.makeValue();
-        } else {
-            bodyResult = new Result(true, undefined);
-        }
         return bodyResult;
     };
 
