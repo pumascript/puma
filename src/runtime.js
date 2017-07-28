@@ -867,7 +867,7 @@ define([
     FirstPass.prototype.visitForStatement = function (ast, state) {
         var initResult = ast.init ? this.accept(ast.init, state) : emptyResult;
         var testResult = ast.test ? this.accept(ast.test, state) : new Result(true, true);
-        var bodyResult;
+        var bodyResult = emptyResult;
 
         if (ast.test)
             testResult.makeValue();

@@ -152,6 +152,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     test("do Statement while (Expression)", function () {
         var result = puma.evalPuma("var a = 0;  do { a++; } while (a<4); a;");
         result.makeValue();
+        equal(result.success, true);
         equal(result.value, 4, "Passed!");
     });
 
@@ -165,6 +166,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     test("while (Expression) Statement", function () {
         var result = puma.evalPuma("var a = 0; while (a<8) { a++; } a;");
         result.makeValue();
+        equal(result.success, true);
         equal(result.value, 8, "Passed!");
     });
 
@@ -175,57 +177,87 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 2, "Passed!");
     });
 
-    test("for (ExpressionNoIn ; Expression ; Expression) (no Statement)", function () {
-        var result = puma.evalPuma("for(var i = 0; i < 10 ; i++){i;}");
-        ok(result.success && 10 === result.value, "Passed!");
+    test("for (ExpressionNoIn ; Expression ; Expression) (Value)", function () {
+        var result = puma.evalPuma("for(var i = 0; i < 10; i++) {i;}");
+        ok(result.success && result.value === 9, "Passed!");
+    });
+
+    test("for (ExpressionNoIn ; Expression ; Expression) (No Statement)", function () {
+        var result = puma.evalPuma("for(var i = 0; i < 10; i++);");
+        ok(result.success && result.value === undefined, "Passed!");
     });
 
     test("for (ExpressionNoIn ; Expression ; Expression) Statement", function () {
-        var result = puma.evalPuma("for(var i = 0; i < 10 ; i++)  i++;  i;");
+        var result = puma.evalPuma("var j = 0; for(var i = 0; i < 10; i++) j+=i;");
         result.makeValue();
-        equal(result.value, 10, "Passed!");
+        equal(result.success, true);
+        equal(result.value, 45, "Passed!");
     });
-    //Revisar
-    QUnit.skip("for (ExpressionNoIn ; Expression ; ) Statement", function () {
-        var result = puma.evalPuma("for(var i = 0; i < 10 ; ) i++; i;");
+
+    test("for (ExpressionNoIn ; Expression ; ) Expression", function () {
+        var result = puma.evalPuma("for(var i = 0; i < 10; ) i++;");
+        result.makeValue();
+        equal(result.success, true);
+        equal(result.value, 9, "Passed!");
+    });
+
+    test("for (ExpressionNoIn ; Expression ; ) Statement", function () {
+        var result = puma.evalPuma("for(var i = 0; i < 10; ) i++; i;");
+        result.makeValue();
+        equal(result.success, true);
         equal(result.value, 10, "Passed!");
     });
 
-    //Revisar Uncaught invalid call to accept with null ast.
     QUnit.skip("for (ExpressionNoIn ;  ; Expression) Statement", function () {
-        var result = puma.evalPuma("for(var i = 0; ; i++) {if (i === 6) break;} i;");
+        var result = puma.evalPuma("for(var i = 0; ; i++) { if (i === 6) break; } i;");
         result.makeValue();
+        equal(result.success, true);
         equal(result.value, 6, "Passed!");
     });
 
-    test("for ( ; Expression ; Expression) ", function () {
-        var result = puma.evalPuma("var i = 0; \n for( ; i < 10 ; i++); \n i;");
+    test("for ( ; Expression ; Expression) Statement", function () {
+        var result = puma.evalPuma("var i = 6; for( ; i < 10; i++); i;");
         result.makeValue();
+        equal(result.success, true);
         equal(result.value, 10, "Passed!");
     });
 
-    //revisar
+    QUnit.skip("for ( ; ; Expression) Statement", function () {
+        var result = puma.evalPuma("var i = 6, j = 0; for( ; ; i++) { if (i > 9) break; j+=i; } j+i;");
+        result.makeValue();
+        equal(result.success, true);
+        equal(result.value, 10, "Passed!");
+    });
+
+    QUnit.skip("for ( ; ; ) Statement", function () {
+        var result = puma.evalPuma("var i = 2, j = 4; for( ; ; ) { if (i < 0) break; j+=i; i-- } j+i;");
+        result.makeValue();
+        equal(result.success, true);
+        equal(result.value, 6, "Passed!");
+    });
+
     QUnit.skip("for ( LeftHandSideExpression in Expression ) Statement", function () {
         var result = puma.evalPuma("var person = {a:1, b:2, c:3}; var res = 0; var x; for (x in person) { res += person[x]; } res;");
         result.makeValue();
+        equal(result.success, true);
         equal(result.value, 6, "Passed!");
     });
-    //revisar
+
     QUnit.skip("for ( var VariableDeclarationNoIn in Expression ) Statement", function () {
         var result = puma.evalPuma("var res = 0; var obj = {a:1, b:2, c:3}; for (var prop in obj) { res += obj[prop] } res;");
         result.makeValue();
+        equal(result.success, true);
         equal(result.value, 6, "Passed!");
     });
 
     module("12.7 The Continue Statement");
 
-    //revisar
     QUnit.skip("continue ; (no Identifier)", function () {
         var result = puma.evalPuma("var res = 0; for(var i = 0; i < 5 ; i++) { if (i < 3) continue; res += i; } res;");
         result.makeValue();
         equal(result.value, 7, "Passed!");
     });
-    //revisar
+
     QUnit.skip("continue ; (no Identifier)", function () {
         var result = puma.evalPuma("var res = 0; for(var i = 0; i < 5 ; i++) { if (i < 3) continue; res += i; } res;");
         result.makeValue();
@@ -241,7 +273,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         }
         equal(errorMessage, "Line 1: Illegal continue statement", "Passed!");
     });
-    //revisar
+
     QUnit.skip("continue [no LineTerminator here] Identifier;", function () {
         var result = puma.evalPuma("var res = 0; anIdentifier: for(var i = 0; i < 5 ; i++) { if (i < 3) continue anIdentifier; res += i; } res;");
         result.makeValue();
@@ -260,7 +292,6 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
 
     module("12.8 The Break Statement");
 
-    //revisar
     QUnit.skip("Break ; (no Identifier)", function () {
         var result = puma.evalPuma("var res = 0; for(var i = 0; i < 5 ; i++) { if (i >= 3) break; res += i; } res;");
         result.makeValue();
@@ -276,7 +307,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         }
         equal(errorMessage, "Line 1: Illegal break statement", "Passed!");
     });
-    //revisar
+
     QUnit.skip("break [no LineTerminator here] Identifier;", function () {
         var result = puma.evalPuma("var res = 0; anIdentifier: for(var i = 0; i < 5 ; i++) { if (i >= 3) break anIdentifier; res += i; } res;");
         result.makeValue();
