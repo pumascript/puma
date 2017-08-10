@@ -142,8 +142,7 @@ Both functions returns an Array with the results. If the array is empty it means
 ### Universidad Tecnologica Nacional - Facultad Regional Cordoba - Argentina
 The PumaScript project is being developed at the Department of Information Systems Engineering of the UTN-FRC.
 
-![alt text][utn]
-[utn]: http://upload.wikimedia.org/wikipedia/commons/thumb/6/67/UTN_logo.jpg/200px-UTN_logo.jpg "UTN logo"
+![UTN logo](http://upload.wikimedia.org/wikipedia/commons/thumb/6/67/UTN_logo.jpg/200px-UTN_logo.jpg "UTN logo")
 
 ## License
 
