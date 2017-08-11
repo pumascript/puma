@@ -255,12 +255,14 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     QUnit.skip("continue ; (no Identifier)", function () {
         var result = puma.evalPuma("var res = 0; for(var i = 0; i < 5 ; i++) { if (i < 3) continue; res += i; } res;");
         result.makeValue();
+        equal(result.success, true);
         equal(result.value, 7, "Passed!");
     });
 
     QUnit.skip("continue ; (no Identifier)", function () {
         var result = puma.evalPuma("var res = 0; for(var i = 0; i < 5 ; i++) { if (i < 3) continue; res += i; } res;");
         result.makeValue();
+        equal(result.success, true);
         equal(result.value, 7, "Passed!");
     });
 

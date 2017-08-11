@@ -869,8 +869,9 @@ define([
         var testResult = ast.test ? this.accept(ast.test, state) : new Result(true, true);
         var bodyResult = emptyResult;
 
-        if (ast.test)
+        if (ast.test) {
             testResult.makeValue();
+        }
 
         if (initResult.failed() || testResult.failed())
             return defaultResult;
