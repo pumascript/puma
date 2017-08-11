@@ -865,26 +865,33 @@ define([
     };
 
     FirstPass.prototype.visitForStatement = function (ast, state) {
-        // TODO check all empty cases for subitems
-        var initResult = ast.init !== null ? this.accept(ast.init, state) : null;
-        var testResult = this.accept(ast.test, state);
-        var bodyResult;
+        var initResult = ast.init ? this.accept(ast.init, state) : emptyResult;
+        var testResult = ast.test ? this.accept(ast.test, state) : new Result(true, true);
+        var bodyResult = emptyResult;
 
-        testResult.makeValue();
+        if (ast.test) {
+            testResult.makeValue();
+        }
 
-        if (initResult !== null && initResult.failed() || testResult.failed()) return defaultResult;
+        if (initResult.failed() || testResult.failed())
+            return defaultResult;
 
         while (testResult.value) {
             bodyResult = this.accept(ast.body, state);
-            this.accept(ast.update, state);
-            testResult = this.accept(ast.test, state);
-            testResult.makeValue();
+            /* If body is an Empty Statement, then pass it as is, conversly,
+             * if result's value property is a Symbol, coerce it to primitive
+             * as so it perdures unaffected by subsequent updates.
+             */
+            if (!bodyResult.isEmptyResult())
+                bodyResult.makeValue();
+            if (ast.update)
+                this.accept(ast.update, state);
+            if (ast.test) {
+                testResult = this.accept(ast.test, state);
+                testResult.makeValue();
+            }
         }
-        if (bodyResult !== undefined) {
-            bodyResult.makeValue();
-        } else {
-            bodyResult = new Result(true, undefined);
-        }
+
         return bodyResult;
     };
 
