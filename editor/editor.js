@@ -3,7 +3,7 @@
 'use strict';
 
 require.config({
-    paths: {        
+    paths: {
         jquery: 'node_modules/jquery/dist/jquery.min',
         bootstrap: 'node_modules/bootstrap/dist/js/bootstrap',
         cm: 'node_modules/codemirror/',
