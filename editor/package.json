@@ -1,0 +1,36 @@
+{
+  "name": "pumascript-editor",
+  "version": "0.1.0",
+  "description": "Installs Puma Editor dependencies",
+  "main": "editor.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/consugus/puma.git"
+  },
+  "author": {
+    "name": "PumaScript Team",
+    "email": "pumascript-team@googlegroups.com",
+    "url": "https://github.com/pumascript"
+  },
+  "keywords": [
+    "meta-programming",
+    "metaprogramming",
+    "ecma",
+    "ecmascript",
+    "javascript",
+    "puma"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pumascript/puma/issues"
+  },
+  "homepage": "https://github.com/pumascript/puma#readme",
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "codemirror": "^5.18.2",
+    "jquery": "^1.9.1"
+  }
+}
