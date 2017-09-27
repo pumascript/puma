@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/consugus/puma.git"
+    "url": "git+https://github.com/pumascript/puma.git"
   },
   "author": {
     "name": "PumaScript Team",
