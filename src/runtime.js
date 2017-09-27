@@ -145,7 +145,7 @@ define([
         if(this._visitorStatements[ast.type]){
             result = this._visitorStatements[ast.type].call(this, ast, state);
         }else{
-            console.warn("Statment "+ ast.type +" not implemented");
+            console.warn("Statement "+ ast.type +" not implemented");
         }
         
         this._lastStatementLoc = ast.loc.end;        
