@@ -581,6 +581,7 @@ define([
      * Visitor that need to be developed. Were implemented for refactor purpose.
      * Please Move this message taking into account that are not developed yet.
      */
+    /*jshint ignore:start*/
     FirstPass.prototype.visitArrowExpression = function(ast, state){
         console.warn("ArrowExpression visitor not implemented yet");
         return;
@@ -670,6 +671,7 @@ define([
         console.warn("YieldExpression visitor not implemented yet");
         return;
     };
+    /*jshint ignore:end*/
 
     FirstPass.prototype.callNativeFunction = function (targetObject, nativeFunction, argumentsAst, state) {
         var argumentValues = [];
