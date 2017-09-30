@@ -20,17 +20,17 @@ define([
     }
 
     State.prototype.initializeDefaultSymbols = function () {
-        var pumaAst = new FunctionSymbol("pumaAst", [], null, true);
+        var pumaAst = new FunctionSymbol('pumaAst', [], null, true);
         pumaAst.isAstConstructionFunction = true;
-        this.addSymbol("pumaAst", pumaAst);
+        this.addSymbol('pumaAst', pumaAst);
         // TODO: should "this" be set to the global object?
-        this.addSymbol("this", {});
+        this.addSymbol('this', {});
     };
 
     State.prototype.addSymbol = function (name, value) {
         var symbol = new Symbol(name, value);
         if (this._symbols[name] !== undefined) {
-            console.warn("Duplicated symbol name \"" + name + "\" in current scope. Old symbol was discarded.");
+            console.warn('Duplicated symbol name "' + name + '" in current scope. Old symbol was discarded.');
         }
         this._symbols[name] = symbol;
         return symbol;
@@ -49,7 +49,7 @@ define([
     State.prototype.transientSymbol = function (name, value) {
         var symbol = new Symbol(name, value);
         if (this._symbols[name] !== undefined) {
-            console.warn("Symbol already in scope.");
+            console.warn('Symbol already in scope.');
         }
         return symbol;
     };
@@ -69,14 +69,14 @@ define([
         this._symbols = {};
 
         if (this._newFrameThisBinding !== undefined) {
-            this.addSymbol("this", this._newFrameThisBinding);
+            this.addSymbol('this', this._newFrameThisBinding);
             this._newFrameThisBinding = undefined;
         }
     };
 
     State.prototype.popStackFrame = function () {
         if (this._stackFrame.length === 0) {
-            console.warn("You are trying to pop a stack frame with an empty stack!");
+            console.warn('You are trying to pop a stack frame with an empty stack!');
             return;
         }
         this._symbols = this._stackFrame[this._stackFrame.length - 1];

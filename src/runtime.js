@@ -57,8 +57,8 @@ define([
     function FirstPass(programAst) {
         this._metaComments = [];
         this._lastStatementLoc = {
-            "line": 0,
-            "column": 0
+            'line': 0,
+            'column': 0
         };
         this._programAst = programAst;
 
@@ -129,7 +129,7 @@ define([
 
             if (nodeResult.isReturnResult()) break;
         }
-        
+
         return result;
     };
 
@@ -138,18 +138,18 @@ define([
     };
 
     FirstPass.prototype.accept = function (ast, state) {
-        if (ast === undefined || ast === null) throw "invalid call to accept with null ast.";
-        if (ast.type === 'ExpressionStatement') ast = ast.expression;        
-        
+        if (ast === undefined || ast === null) throw 'invalid call to accept with null ast.';
+        if (ast.type === 'ExpressionStatement') ast = ast.expression;
+
         var result = defaultResult;
-        if(this._visitorStatements[ast.type]){
+        if (this._visitorStatements[ast.type]) {
             result = this._visitorStatements[ast.type].call(this, ast, state);
-        }else{
-            console.warn("Statement "+ ast.type +" not implemented");
+        } else {
+            console.warn('Statement ' + ast.type + ' not implemented');
         }
-        
-        this._lastStatementLoc = ast.loc.end;        
-       
+
+        this._lastStatementLoc = ast.loc.end;
+
         return result;
     };
 
@@ -160,12 +160,12 @@ define([
         for (var i = 0; i < propertiesCount; i++) {
             var propertyAst = propertiesAst[i];
             var propertyName;
-            if (propertyAst.key.type === "Literal") {
+            if (propertyAst.key.type === 'Literal') {
                 propertyName = propertyAst.key.value;
-            } else if (propertyAst.key.type === "Identifier") {
+            } else if (propertyAst.key.type === 'Identifier') {
                 propertyName = propertyAst.key.name;
             } else {
-                console.warn(loc(propertyAst) + "Error executing object expression. Property name not found!");
+                console.warn(loc(propertyAst) + 'Error executing object expression. Property name not found!');
             }
 
             var propertyValue = this.accept(propertyAst.value, state);
@@ -180,9 +180,9 @@ define([
     };
 
     FirstPass.prototype.visitProgram = function (ast, state) {
-        state.addSymbol("pumaProgram", this._programAst);
+        state.addSymbol('pumaProgram', this._programAst);
         var that = this;
-        state.addSymbol("evalPumaAst", function (astPortion) {
+        state.addSymbol('evalPumaAst', function (astPortion) {
             return that.accept(astPortion, state);
         });
 
@@ -218,8 +218,8 @@ define([
 
         // if the property name is "prototype" then rename it to avoid conflicts
         var astPropertyName = ast.property.name;
-        if (astPropertyName === "prototype")
-            astPropertyName = "prototypeProperty";
+        if (astPropertyName === 'prototype')
+            astPropertyName = 'prototypeProperty';
 
         // TODO check ECMAScript standard for additional cases when evaluating member expression
         if (ast.property.type === 'Identifier' && ast.computed === false) {
@@ -235,8 +235,8 @@ define([
             }
         }
 
-        if (propertyName == "prototypeProperty")
-            propertyName = "prototype";
+        if (propertyName === 'prototypeProperty')
+            propertyName = 'prototype';
         if (!(propertyName in obj)) {
             obj[propertyName] = undefined;
         }
@@ -258,13 +258,13 @@ define([
     };
 
     FirstPass.prototype.visitFunctionDeclaration = function (ast, state) {
-        if (ast.id.type === "Identifier") {
+        if (ast.id.type === 'Identifier') {
             var isMeta = this.isMetaFunction(ast.loc.start);
             ast.isMeta = isMeta;
 
             return this.addFunctionDeclaration(ast.id.name, ast.params, ast.body, state, isMeta);
         } else {
-            console.warn(loc(ast) + "Invalid function declaration.");
+            console.warn(loc(ast) + 'Invalid function declaration.');
             return defaultResult;
         }
     };
@@ -303,7 +303,7 @@ define([
     };
 
     FirstPass.prototype.visitVariableDeclaration = function (ast, state) {
-        if (ast.kind === "var") {
+        if (ast.kind === 'var') {
             var result = this.acceptArray(ast.declarations, state);
             return result.success ? emptyResult : defaultResult;
         } else {
@@ -312,7 +312,7 @@ define([
     };
 
     FirstPass.prototype.visitVariableDeclarator = function (ast, state) {
-        if (ast.id.type === "Identifier") {
+        if (ast.id.type === 'Identifier') {
             return new Result(true, this.addLocalVariableDeclaration(ast.id.name, ast.init, state));
         } else {
             return defaultResult;
@@ -340,12 +340,12 @@ define([
         if (rightResult.failed()) return defaultResult;
 
         if (!(leftResult.value instanceof Symbol)) {
-            console.warn(loc(ast.left) + "ReferenceError: Invalid left-hand side in assignment.");
+            console.warn(loc(ast.left) + 'ReferenceError: Invalid left-hand side in assignment.');
             return defaultResult;
         }
         if (leftResult.value.isUndefined()) {
             var undefinedName = ast.left.name;
-            console.warn(loc(ast.left) + "Implicit definition of property \"" + undefinedName + "\".");
+            console.warn(loc(ast.left) + 'Implicit definition of property "' + undefinedName + '".');
             state.addSymbol(undefinedName);
             leftResult = this.accept(ast.left, state);
         }
@@ -355,42 +355,42 @@ define([
         var symbol = leftResult.value;
 
         switch (ast.operator) {
-        case "=":
-            symbol.value = rightResult.value;
-            break;
-        case "+=":
-            symbol.value += rightResult.value;
-            break;
-        case "-=":
-            symbol.value -= rightResult.value;
-            break;
-        case "*=":
-            symbol.value *= rightResult.value;
-            break;
-        case "/=":
-            symbol.value /= rightResult.value;
-            break;
-        case "%=":
-            symbol.value %= rightResult.value;
-            break;
-        case "<<=":
-            symbol.value <<= rightResult.value;
-            break;
-        case ">>=":
-            symbol.value >>= rightResult.value;
-            break;
-        case ">>>=":
-            symbol.value >>>= rightResult.value;
-            break;
-        case "&=":
-            symbol.value &= rightResult.value;
-            break;
-        case "|=":
-            symbol.value |= rightResult.value;
-            break;
-        case "^=":
-            symbol.value ^= rightResult.value;
-            break;
+            case '=':
+                symbol.value = rightResult.value;
+                break;
+            case '+=':
+                symbol.value += rightResult.value;
+                break;
+            case '-=':
+                symbol.value -= rightResult.value;
+                break;
+            case '*=':
+                symbol.value *= rightResult.value;
+                break;
+            case '/=':
+                symbol.value /= rightResult.value;
+                break;
+            case '%=':
+                symbol.value %= rightResult.value;
+                break;
+            case '<<=':
+                symbol.value <<= rightResult.value;
+                break;
+            case '>>=':
+                symbol.value >>= rightResult.value;
+                break;
+            case '>>>=':
+                symbol.value >>>= rightResult.value;
+                break;
+            case '&=':
+                symbol.value &= rightResult.value;
+                break;
+            case '|=':
+                symbol.value |= rightResult.value;
+                break;
+            case '^=':
+                symbol.value ^= rightResult.value;
+                break;
         }
         return new Result(true, symbol);
     };
@@ -406,77 +406,77 @@ define([
 
         var value;
         switch (ast.operator) {
-        case "<":
-            value = leftResult.value < rightResult.value;
-            break;
-        case ">":
-            value = leftResult.value > rightResult.value;
-            break;
-        case "<=":
-            value = leftResult.value <= rightResult.value;
-            break;
-        case ">=":
-            value = leftResult.value >= rightResult.value;
-            break;
-        case "==":
-            value = leftResult.value == rightResult.value;
-            break;
-        case "!=":
-            value = leftResult.value != rightResult.value;
-            break;
-        case "===":
-            value = leftResult.value === rightResult.value;
-            break;
-        case "!==":
-            value = leftResult.value !== rightResult.value;
-            break;
-        case "+":
-            value = leftResult.value + rightResult.value;
-            break;
-        case "-":
-            value = leftResult.value - rightResult.value;
-            break;
-        case "*":
-            value = leftResult.value * rightResult.value;
-            break;
-        case "/":
-            value = leftResult.value / rightResult.value;
-            break;
-        case "%":
-            value = leftResult.value % rightResult.value;
-            break;
-        case "<<":
-            value = leftResult.value << rightResult.value;
-            break;
-        case ">>":
-            value = leftResult.value >> rightResult.value;
-            break;
-        case ">>>":
-            value = leftResult.value >>> rightResult.value;
-            break;
-        case "&":
-            value = leftResult.value & rightResult.value;
-            break;
-        case "|":
-            value = leftResult.value | rightResult.value;
-            break;
-        case "^":
-            value = leftResult.value ^ rightResult.value;
-            break;
-        case "&&":
-            value = leftResult.value && rightResult.value;
-            break;
-        case "||":
-            value = leftResult.value || rightResult.value;
-            break;
-        case "in":
-            value = leftResult.value in rightResult.value;
-            break;
-        case "instanceof":
-            value = leftResult.value instanceof rightResult.value;
-            break;
-        default:
-            console.warn(loc(ast) + "binary operator \"" + ast.operator + "\" not found");
+            case '<':
+                value = leftResult.value < rightResult.value;
+                break;
+            case '>':
+                value = leftResult.value > rightResult.value;
+                break;
+            case '<=':
+                value = leftResult.value <= rightResult.value;
+                break;
+            case '>=':
+                value = leftResult.value >= rightResult.value;
+                break;
+            case '==':
+                value = leftResult.value == rightResult.value; // eslint-disable-line eqeqeq
+                break;
+            case '!=':
+                value = leftResult.value != rightResult.value; // eslint-disable-line eqeqeq
+                break;
+            case '===':
+                value = leftResult.value === rightResult.value;
+                break;
+            case '!==':
+                value = leftResult.value !== rightResult.value;
+                break;
+            case '+':
+                value = leftResult.value + rightResult.value;
+                break;
+            case '-':
+                value = leftResult.value - rightResult.value;
+                break;
+            case '*':
+                value = leftResult.value * rightResult.value;
+                break;
+            case '/':
+                value = leftResult.value / rightResult.value;
+                break;
+            case '%':
+                value = leftResult.value % rightResult.value;
+                break;
+            case '<<':
+                value = leftResult.value << rightResult.value;
+                break;
+            case '>>':
+                value = leftResult.value >> rightResult.value;
+                break;
+            case '>>>':
+                value = leftResult.value >>> rightResult.value;
+                break;
+            case '&':
+                value = leftResult.value & rightResult.value;
+                break;
+            case '|':
+                value = leftResult.value | rightResult.value;
+                break;
+            case '^':
+                value = leftResult.value ^ rightResult.value;
+                break;
+            case '&&':
+                value = leftResult.value && rightResult.value;
+                break;
+            case '||':
+                value = leftResult.value || rightResult.value;
+                break;
+            case 'in':
+                value = leftResult.value in rightResult.value;
+                break;
+            case 'instanceof':
+                value = leftResult.value instanceof rightResult.value;
+                break;
+            default:
+                console.warn(loc(ast) + 'binary operator "' + ast.operator + '" not found');
         }
         return new Result(true, value);
     };
@@ -489,28 +489,28 @@ define([
 
         var value;
         switch (ast.operator) {
-        case "||":
-            if (leftResult.value) {
-                value = leftResult.value;
-            } else {
-                rightResult = this.accept(ast.right, state);
-                rightResult.makeValue();
-                value = rightResult.value;
-            }
-            break;
+            case '||':
+                if (leftResult.value) {
+                    value = leftResult.value;
+                } else {
+                    rightResult = this.accept(ast.right, state);
+                    rightResult.makeValue();
+                    value = rightResult.value;
+                }
+                break;
 
-        case "&&":
-            if (leftResult.value) {
-                rightResult = this.accept(ast.right, state);
-                rightResult.makeValue();
-                value = rightResult.value;
-            } else {
-                value = leftResult.value;
-            }
-            break;
+            case '&&':
+                if (leftResult.value) {
+                    rightResult = this.accept(ast.right, state);
+                    rightResult.makeValue();
+                    value = rightResult.value;
+                } else {
+                    value = leftResult.value;
+                }
+                break;
 
-        default:
-            console.warn(loc(ast) + "logical operator \"" + ast.operator + "\" not found");
+            default:
+                console.warn(loc(ast) + 'logical operator "' + ast.operator + '" not found');
         }
         return new Result(true, value);
     };
@@ -519,31 +519,31 @@ define([
         var argumentResult = this.accept(ast.argument, state);
         if (argumentResult.failed()) return defaultResult;
 
-        if (ast.operator !== "delete") argumentResult.makeValue();
+        if (ast.operator !== 'delete') argumentResult.makeValue();
 
         var value;
         switch (ast.operator) {
-        case "delete":
-            value = delete argumentResult.value.obj[ast.argument.property.name];
-            break;
-        case "void":
-            value = void argumentResult.value;
-            break;
-        case "typeof":
-            value = typeof argumentResult.value;
-            break;
-        case "+":
-            value = +argumentResult.value;
-            break;
-        case "-":
-            value = -argumentResult.value;
-            break;
-        case "~":
-            value = ~argumentResult.value;
-            break;
-        case "!":
-            value = !argumentResult.value;
-            break;
+            case 'delete':
+                value = delete argumentResult.value.obj[ast.argument.property.name];
+                break;
+            case 'void':
+                value = void argumentResult.value;
+                break;
+            case 'typeof':
+                value = typeof argumentResult.value;
+                break;
+            case '+':
+                value = +argumentResult.value;
+                break;
+            case '-':
+                value = -argumentResult.value;
+                break;
+            case '~':
+                value = ~argumentResult.value;
+                break;
+            case '!':
+                value = !argumentResult.value;
+                break;
             // the "++" and "--" operators are identified as "UpdateExpression" by the parser
             // instead of "UnaryExpression" so a special handler was added for them
         }
@@ -564,7 +564,7 @@ define([
             } else if (calleeResult.value instanceof Symbol) {
                 functionSymbol = calleeResult.value.value;
             } else {
-                console.warn(loc(ast.callee) + "left expression is not a function");
+                console.warn(loc(ast.callee) + 'left expression is not a function');
             }
 
             if (functionSymbol instanceof FunctionSymbol) {
@@ -577,98 +577,98 @@ define([
         return defaultResult;
     };
 
-   /**
+    /**
      * Visitor that need to be developed. Were implemented for refactor purpose.
      * Please Move this message taking into account that are not developed yet.
      */
     /*jshint ignore:start*/
     FirstPass.prototype.visitArrowExpression = function(ast, state){
-        console.warn("ArrowExpression visitor not implemented yet");
+        console.warn('ArrowExpression visitor not implemented yet');
         return;
     };
 
     FirstPass.prototype.visitBreakStatement = function(ast, state){
-        console.warn("BreakStatement visitor not implemented yet");
+        console.warn('BreakStatement visitor not implemented yet');
         return;
     };
 
     FirstPass.prototype.visitCatchClause = function(ast, state){
-        console.warn("CatchClause visitor not implemented yet");
+        console.warn('CatchClause visitor not implemented yet');
         return;
     };
 
     FirstPass.prototype.visitComprehensionExpression = function(ast, state){
-         console.warn("ComprehensionExpression visitor not implemented yet");
-         return;
+        console.warn('ComprehensionExpression visitor not implemented yet');
+        return;
     };
 
     FirstPass.prototype.visitContinueStatement = function(ast, state){
-        console.warn("ContinueStatement visitor not implemented yet");
+        console.warn('ContinueStatement visitor not implemented yet');
         return;
     };
 
     FirstPass.prototype.visitDebuggerStatement = function(ast, state){
-        console.warn("DebuggerStatement visitor not implemented yet");
+        console.warn('DebuggerStatement visitor not implemented yet');
         return;
     };
 
     FirstPass.prototype.visitForInStatement = function(ast, state){
-        console.warn("ForInStatement visitor not implemented yet");
+        console.warn('ForInStatement visitor not implemented yet');
         return;
     };
 
     FirstPass.prototype.visitGraphExpression = function(ast, state){
-        console.warn("GraphExpression visitor not implemented yet");
+        console.warn('GraphExpression visitor not implemented yet');
         return;
     };
 
     FirstPass.prototype.visitGraphIndexExpression = function(ast, state){
-         console.warn("GraphIndexExpression visitor not implemented yet");
-         return;
+        console.warn('GraphIndexExpression visitor not implemented yet');
+        return;
     };
 
     FirstPass.prototype.visitGeneratorExpression = function(ast, state){
-        console.warn("GeneratorExpression visitor not implemented yet");
+        console.warn('GeneratorExpression visitor not implemented yet');
         return;
     };
 
     FirstPass.prototype.visitLabeledStatement = function(ast, state){
-        console.warn("LabeledStatement visitor not implemented yet");
+        console.warn('LabeledStatement visitor not implemented yet');
         return;
     };
 
     FirstPass.prototype.visitLetStatement = function(ast, state){
-        console.warn("LetStatement visitor not implemented yet");
+        console.warn('LetStatement visitor not implemented yet');
         return;
     };
 
     FirstPass.prototype.visitProperty = function(ast, state){
-        console.warn("Property visitor not implemented yet");
+        console.warn('Property visitor not implemented yet');
         return;
     };
 
     FirstPass.prototype.visitSequenceExpression = function(ast, state){
-        console.warn("SequenceExpression visitor not implemented yet");
+        console.warn('SequenceExpression visitor not implemented yet');
         return;
     };
 
     FirstPass.prototype.visitThrowStatement = function(ast, state){
-        console.warn("ThrowStatement visitor not implemented yet");
+        console.warn('ThrowStatement visitor not implemented yet');
         return;
     };
 
     FirstPass.prototype.visitTryStatement = function(ast, state){
-        console.warn("TryStatement visitor not implemented yet");
+        console.warn('TryStatement visitor not implemented yet');
         return;
     };
 
     FirstPass.prototype.visitWithStatement = function(ast, state){
-        console.warn("WithStatement visitor not implemented yet");
+        console.warn('WithStatement visitor not implemented yet');
         return;
     };
 
     FirstPass.prototype.visitYieldExpression = function(ast, state){
-        console.warn("YieldExpression visitor not implemented yet");
+        console.warn('YieldExpression visitor not implemented yet');
         return;
     };
     /*jshint ignore:end*/
@@ -736,7 +736,7 @@ define([
 
         // bind special meta function implicit arguments
         if (isMetaCall) {
-            state.addSymbol("context", callExpressionAst);
+            state.addSymbol('context', callExpressionAst);
         }
 
         // call meta function data collection
@@ -884,7 +884,7 @@ define([
     };
 
     FirstPass.prototype.visitComment = function (ast) {
-        if (ast.value.indexOf("@meta") >= 0) {
+        if (ast.value.indexOf('@meta') >= 0) {
             var lineMetaComments = this._metaComments[ast.loc.end.line];
             if (lineMetaComments === undefined) {
                 lineMetaComments = this._metaComments[ast.loc.end.line] = [];
@@ -900,15 +900,15 @@ define([
 
         var symbol = argumentResult.value;
         // If is postfix operator return transient clone of symbol
-        var _symbol = ast.prefix ? symbol : state.transientSymbol("@" + symbol.name, symbol.value);
+        var _symbol = ast.prefix ? symbol : state.transientSymbol('@' + symbol.name, symbol.value);
 
         switch (ast.operator) {
-        case "++":
-            symbol.value++;
-            break;
-        case "--":
-            symbol.value--;
-            break;
+            case '++':
+                symbol.value++;
+                break;
+            case '--':
+                symbol.value--;
+                break;
         }
         return new Result(true, _symbol);
     };
@@ -969,7 +969,7 @@ define([
     };
 
     FirstPass.prototype.visitThisExpression = function (ast, state) {
-        return new Result(true, state.getSymbol("this"));
+        return new Result(true, state.getSymbol('this'));
     };
 
     FirstPass.prototype.visitNewExpression = function (ast, state) {
@@ -981,34 +981,34 @@ define([
         var typeValue = calleeResult.value;
 
         var STD_BIO = [
-        'Object',
-        'Function',
-        'Boolean',
-        'Number',
-        'String',
-        'RegExp',
-        'Array',
-        'Date',
-        'Error',
-        'EvalError',
-        'InternalError',
-        'RangeError',
-        'ReferenceError',
-        'SyntaxError',
-        'TypeError',
-        'URIError'];
+            'Object',
+            'Function',
+            'Boolean',
+            'Number',
+            'String',
+            'RegExp',
+            'Array',
+            'Date',
+            'Error',
+            'EvalError',
+            'InternalError',
+            'RangeError',
+            'ReferenceError',
+            'SyntaxError',
+            'TypeError',
+            'URIError'];
 
         var newObject;
 
         /*
         *   TODO: USE FOLLOWING WHEN ES6 IS SUPPORTED BY PHANTOMJS
         *
-        
+
         if (STD_BIO.includes(typeValue.name)) {
-        
+
         *
         */
-        if(!!~STD_BIO.indexOf(typeValue.name)) {
+        if (~STD_BIO.indexOf(typeValue.name)) {
         /* ^^^ (REPLACE ON ES6 SUPPORT) ^^^ - Checks if object to be created is a ES5 Built-in object. */
             var argumentValues = [];
             var result;
@@ -1018,12 +1018,12 @@ define([
                 result.makeValue();
                 argumentValues[n] = result.value;
             }
-        /*
+            /*
         *   TODO: USE FOLLOWING WHEN SPREAD OPERATOR IS SUPPORTED BY PHANTOMJS
         *
-        
+
             newObject = new typeValue.prototype.constructor(...argumentValues);
-        
+
         *
         *   WORKAROUND TILL THEN IS TO PASS THE ARRAY VALUES IN A STATIC MANNER UP TO A MAXIMUM
         *   OF 20 ARGUMENTS. IF LESS THAN THE ARGUMENTS ACCOUNTED FOR ARE PROVIDED THEN IT'S VALUES
@@ -1033,16 +1033,16 @@ define([
         *   AN EVAL CONTRUCTION. ARRAY'S ARE TRUNCATED TO THE AMOUNT OF ORIGINAL ARGUMENTS TO AVOID
         *   THE ABOVE CONFLICT. LARGE ARRAY'S COULD BE CREATED WITH EVAL ALSO.
         */
-        /* jshint ignore:start */
-            if (argumentValues.length > 20) console.log("The amount of arguments provided exceeds the amount of arguments supported by this version.");
-            
-            if (typeValue.name === 'Function' && argumentValues.length > 7) console.log("The amount of arguments provided exceeds the amount of arguments supported for Function creation by this version.");
+            /* jshint ignore:start */
+            if (argumentValues.length > 20) console.log('The amount of arguments provided exceeds the amount of arguments supported by this version.');
+
+            if (typeValue.name === 'Function' && argumentValues.length > 7) console.log('The amount of arguments provided exceeds the amount of arguments supported for Function creation by this version.');
 
             var a = new Array(20);
             for (var i = 0; i < 20; i++) {
                 a[i] = (i < argumentValues.length) ? argumentValues[i] : null;
             }
-            
+
             switch (argumentValues.length) {
                 case 0:
                     //No arguments... No need to spread... U WIN =D
@@ -1072,15 +1072,15 @@ define([
                 default:
                     newObject = new typeValue.prototype.constructor(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9], a[10], a[11], a[12], a[13], a[14], a[16], a[17], a[18], a[19], a[20]);
 
-                //Splice up to the original amount of items.
-                if (typeValue.name === 'Array') newObject.splice(argumentValues.length);
+                    //Splice up to the original amount of items.
+                    if (typeValue.name === 'Array') newObject.splice(argumentValues.length);
             }
         /* jshint ignore:end */
         /*
         *   END OF WORKAROUND!
         *   DISCLAIMER: PUMASCRIPT TEAM IS NOT RESPONSIBLE FOR LOSS OF VISION, PARTIAL OR TOTAL.
-        */        
-        } else {            
+        */
+        } else {
             // create a new object from the prototype
             newObject = Object.create(typeValue.prototype);
             // set "this" to the new object
@@ -1120,7 +1120,7 @@ define([
         if (list === undefined) list = [];
 
         if (ast !== null) {
-            if (ast.type === "Identifier" && ast.name.indexOf("$") === 0) {
+            if (ast.type === 'Identifier' && ast.name.indexOf('$') === 0) {
                 list.push({
                     id: ast,
                     parent: parentAst,
@@ -1128,7 +1128,7 @@ define([
                 });
             } else {
                 for (var i in ast) {
-                    if (typeof (ast[i]) === "object") this.findTemplateIds(ast[i], list, ast, i);
+                    if (typeof (ast[i]) === 'object') this.findTemplateIds(ast[i], list, ast, i);
                 }
             }
         }
@@ -1167,7 +1167,7 @@ define([
     FirstPass.prototype.mergeNodes = function (idMatchData, astToMerge) {
         var isStatement = (astToMerge.type.indexOf('Statement') > -1);
 
-        if (isStatement && idMatchData.parent.type === "ExpressionStatement") {
+        if (isStatement && idMatchData.parent.type === 'ExpressionStatement') {
             for (var key in astToMerge) {
                 idMatchData.parent[key] = astToMerge[key];
             }
@@ -1186,16 +1186,15 @@ define([
     CodeGenerator.prototype.generateCode = function () {
         if (Global.escodegen) { // browser === true
             return Global.escodegen.generate(this.programAstPruned);
-        } else{
+        } else {
             return escodegen.generate(this.programAstPruned);
         }
-        return escodegen.generate(this.programAstPruned);
     };
 
     function addParent(ast) {
         var key;
 
-        if (ast === undefined || ast === null) throw "invalid call to accept with null ast.";
+        if (ast === undefined || ast === null) throw 'invalid call to accept with null ast.';
 
         for (key in ast) {
             var node = ast[key];
@@ -1207,13 +1206,13 @@ define([
     }
 
     function loc(ast) {
-        return "[" + ast.loc.start.line + ", " + ast.loc.start.column + "] ";
+        return '[' + ast.loc.start.line + ', ' + ast.loc.start.column + '] ';
     }
 
     // puma API
 
     function evalPuma(programStr) {
-        var ast = esprima.parse(programStr, {"comment": true, "loc": true});
+        var ast = esprima.parse(programStr, {'comment': true, 'loc': true});
         addParent(ast);
         return evalPumaAst(ast);
     }
@@ -1244,7 +1243,7 @@ define([
 
         // Exclude the parent node so it doesn't create a circular reference
         var replacer = function (key, value) {
-            if (key === "parent") return undefined;
+            if (key === 'parent') return undefined;
             else return value;
         };
 
@@ -1309,7 +1308,7 @@ define([
                 }
                 else {
                     for (var i in ast) {
-                        if (i !== 'parent' && typeof(ast[i]) === "object") {
+                        if (i !== 'parent' && typeof(ast[i]) === 'object') {
                             internalPumaFindByProperty(ast[i], propertyList, value, list, compareFunction);
                         }
                     }

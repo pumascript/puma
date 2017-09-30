@@ -1,5 +1,7 @@
 // Copyright (c) 2013 - present UTN-LIS
 
+/* eslint global-require: 0 */
+
 module.exports = function (grunt) {
 
     'use strict';
@@ -13,17 +15,18 @@ module.exports = function (grunt) {
             output: 'dist/<%= buildConfig.name %>'
         },
 
-        jshint: {
-            all: [
-                'gruntfile.js',
-                'src/**/*.js',
-                'tasks/*.js',
-                'test/*.js'
-            ],
+        eslint: {
             options: {
-                jshintrc: '.jshintrc',
-                reporter: require('jshint-stylish')
-            }
+                configFile: '.eslintrc.js',
+                format: 'stylish'
+            },
+            target: [
+                './editor/*.js',
+                './src/**/*.js',
+                './test/suites/*.js',
+                './test/*.js',
+                './tracks/**/*.js'
+            ]
         },
 
         exec: {
@@ -37,7 +40,7 @@ module.exports = function (grunt) {
                 options: {
                     sourceMap: true,
                     sourceMapName: 'dist/pumascript.min.map',
-                    sourceMapIn: 'dist/pumascript.map',
+                    sourceMapIn: 'dist/pumascript.map'
                 },
                 files: {
                     'dist/pumascript.min.js': [ 'dist/pumascript.js' ]
@@ -90,7 +93,7 @@ module.exports = function (grunt) {
     // plugin's task(s), then test the result.
     grunt.registerTask('test', ['clean', 'exec:webpack', 'qunit']);
 
-    grunt.registerTask('travis', ['jshint', 'test']);
+    grunt.registerTask('travis', ['eslint', 'test']);
 
     grunt.registerTask('default', ['init']);
 };

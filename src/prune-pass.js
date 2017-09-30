@@ -13,7 +13,7 @@ define([], function () {
     }
 
     PrunePass.prototype.start = function () {
-        if (this._programAst === null) throw "null ast";
+        if (this._programAst === null) throw 'null ast';
         var tree = this._programAst.body;
         var prunedAst = this.walk(tree);
         return prunedAst;

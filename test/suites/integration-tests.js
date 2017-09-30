@@ -1,9 +1,9 @@
 // Copyright (c) 2013 - present UTN-LIS
 
-/* global define, test, ok, equal */
+/* eslint quotes: 0, no-unused-vars: 0 */
 
-/*
- *                      PUMASCRIPT INTEGRATION TEST SUITE
+/**
+ *      PUMASCRIPT INTEGRATION TEST SUITE
  *  @file: Integration test suite including complex and real applications of puma
  */
 define(['pumascript', 'esprima'], function(puma, esprima) {

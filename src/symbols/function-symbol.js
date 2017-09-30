@@ -37,7 +37,7 @@ define([
                 this._meta.parameters[n] = types;
             }
             actualArgumentValue = actualArguments[n].value;
-            Symbol._updateMetaData(this.name, types, actualArgumentValue, "Parameter " + n + " of function");
+            Symbol._updateMetaData(this.name, types, actualArgumentValue, 'Parameter ' + n + ' of function');
         }
     };
 
@@ -47,7 +47,7 @@ define([
      * @return {void}
      */
     FunctionSymbol.prototype.registerCallReturn = function (returnResult) {
-        Symbol._updateMetaData(this.name, this._meta.returns, returnResult.value, "Return type");
+        Symbol._updateMetaData(this.name, this._meta.returns, returnResult.value, 'Return type');
     };
 
     return FunctionSymbol;

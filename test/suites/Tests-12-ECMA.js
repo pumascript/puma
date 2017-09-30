@@ -1,14 +1,14 @@
 // Copyright (c) 2013 - present UTN-LIS
 
-/* global define, test, ok, equal */
+/* eslint quotes: 0, no-unused-vars: 0 */
 
-/*
- *              PUMASCRIPT BASE TEST SUITE
- *  @file: Base expressions test suite for the language
+/**
+ *      PUMASCRIPT ECMA-12 TEST SUITE
+ *  @file: Statements Test Suite
  */
 define(['pumascript', 'esprima'], function (puma, esprima) {
 
-    module("12.1 Blocks")
+    module("12.1 Blocks");
 
     test("Block Statement 1", function () {
         var result = puma.evalPuma("1;;;;;");
@@ -133,7 +133,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         var result = puma.evalPuma("if (true) {1;} else{2;}");
         result.makeValue();
         equal(result.value, 1, "Passed!");
-    })
+    });
 
     test("If statement: false", function () {
         var result = puma.evalPuma("if (false) 1; else 2;");
