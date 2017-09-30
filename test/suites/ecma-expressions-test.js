@@ -6,10 +6,6 @@
  */
 define(['pumascript', 'esprima'], function(puma, esprima) {
 
-/*
- *                      Expressions
- */
-
     module("11.1 Primary Expressions");
 
     test("The this Keyword",function () {
@@ -259,7 +255,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
     });
 
     module("11.12 Conditional Operators");
-    
+
     test("Conditional Operator ( ? : )",function () {
         var result = puma.evalPuma("false ? 'manzana' : 'naranja'");
         strictEqual(result.value, 'naranja', "Passed!");
