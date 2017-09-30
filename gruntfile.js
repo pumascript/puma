@@ -25,7 +25,7 @@ module.exports = function (grunt) {
                 './src/**/*.js',
                 './test/suites/*.js',
                 './test/*.js',
-                './tracks/**/*.js'
+                //'./tracks/**/*.js'
             ]
         },
 

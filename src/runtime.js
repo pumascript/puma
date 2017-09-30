@@ -578,10 +578,10 @@ define([
     };
 
     /**
-     * Visitor that need to be developed. Were implemented for refactor purpose.
-     * Please Move this message taking into account that are not developed yet.
+     * Visitors that need to be developed. Warnings implemented for refactoring purposes.
+     * Please move this message taking into account that are not developed yet.
      */
-    /*jshint ignore:start*/
+
     FirstPass.prototype.visitArrowExpression = function(ast, state){
         console.warn('ArrowExpression visitor not implemented yet');
         return;
@@ -671,7 +671,6 @@ define([
         console.warn('YieldExpression visitor not implemented yet');
         return;
     };
-    /*jshint ignore:end*/
 
     FirstPass.prototype.callNativeFunction = function (targetObject, nativeFunction, argumentsAst, state) {
         var argumentValues = [];
@@ -1033,7 +1032,7 @@ define([
         *   AN EVAL CONTRUCTION. ARRAY'S ARE TRUNCATED TO THE AMOUNT OF ORIGINAL ARGUMENTS TO AVOID
         *   THE ABOVE CONFLICT. LARGE ARRAY'S COULD BE CREATED WITH EVAL ALSO.
         */
-            /* jshint ignore:start */
+
             if (argumentValues.length > 20) console.log('The amount of arguments provided exceeds the amount of arguments supported by this version.');
 
             if (typeValue.name === 'Function' && argumentValues.length > 7) console.log('The amount of arguments provided exceeds the amount of arguments supported for Function creation by this version.');
@@ -1075,7 +1074,7 @@ define([
                     //Splice up to the original amount of items.
                     if (typeValue.name === 'Array') newObject.splice(argumentValues.length);
             }
-        /* jshint ignore:end */
+
         /*
         *   END OF WORKAROUND!
         *   DISCLAIMER: PUMASCRIPT TEAM IS NOT RESPONSIBLE FOR LOSS OF VISION, PARTIAL OR TOTAL.
