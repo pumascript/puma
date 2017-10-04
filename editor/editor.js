@@ -4,9 +4,9 @@
 
 require.config({
     paths: {
-        jquery: 'bower_components/jquery/dist/jquery.min',
-        bootstrap: 'bower_components/bootstrap/dist/js/bootstrap',
-        cm: 'bower_components/codemirror/',
+        jquery: 'node_modules/jquery/dist/jquery.min',
+        bootstrap: 'node_modules/bootstrap/dist/js/bootstrap',
+        cm: 'node_modules/codemirror/',
         pumascript: '../src/pumascript'
     },
     shim: {
