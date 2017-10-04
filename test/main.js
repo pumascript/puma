@@ -22,14 +22,14 @@ var suites = [
   './suites/base-tests.js',
   './suites/runtime-tests.js',
   './suites/integration-tests.js',
-  './suites/Tests-7-ECMA.js',
-  './suites/Tests-8-ECMA.js',
-  './suites/Tests-9-ECMA.js',
-  './suites/Tests-10-ECMA.js',
-  './suites/Tests-11-ECMA.js',
-  './suites/Tests-12-ECMA.js',
-  './suites/Tests-13-ECMA.js',
-  './suites/Tests-15-ECMA.js'
+  './suites/ecma-lexical-conventions-test.js',
+  './suites/ecma-type-test.js',
+  './suites/ecma-type-conversion-and-testing.js',
+  './suites/ecma-executable-code-and-execution-contexts-test.js',
+  './suites/ecma-expressions-test.js',
+  './suites/ecma-statements-test.js',
+  './suites/ecma-function-definition-test.js',
+  './suites/ecma-standard-built-in-ecmascript-objects-test.js'
 ];
 
 require(suites, function () {
