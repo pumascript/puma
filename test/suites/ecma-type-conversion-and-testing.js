@@ -89,11 +89,13 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
 
   module('9.8 ToString');
 
+  //typeof result.value == Object (Expected type String)
   QUnit.skip('toString(undefined) conversion test', function () {
     var result = puma.evalPuma('toString(undefined)');
-    ok(result.success && typeof 'object' === result.value);
+    ok(result.success && typeof 'object' === typeof result.value);
   });
 
+  //'[object Undefined]' != result.value
   QUnit.skip('toString(null) conversion test', function () {
     var result = puma.evalPuma('toString(null)');
     ok(result.success && '[object Undefined]' === result.value);

@@ -61,8 +61,9 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 'Clotho');
     });
 
+    //SequenceExpression visitor not implemented yet
     QUnit.skip('Indirect Call to Eval', function () {
-        var result = puma.evalPuma('var indirectEval = (1, eval); indirectEval(\'var f = \'Atropos\'; f;\');');
+        var result = puma.evalPuma('var indirectEval = (1, eval); indirectEval(\'var f = "Atropos"; f;\');');
         result.makeValue();
         equal(result.success, true);
         equal(result.value, 'Atropos');
@@ -322,14 +323,14 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, '[object Math]');
     });
 
-    QUnit.skip('Object.prototype.toString(): undefined', function () {
+    test('Object.prototype.toString(): undefined', function () {
         var result = puma.evalPuma('var toStringU = Object.prototype.toString; toStringU.call(undefined);');
         result.makeValue();
         equal(result.success, true);
         equal(result.value, '[object Undefined]');
     });
 
-    QUnit.skip('Object.prototype.toString(): null', function () {
+    test('Object.prototype.toString(): null', function () {
         var result = puma.evalPuma('var toStringN = Object.prototype.toString; toStringN.call(null);');
         result.makeValue();
         equal(result.success, true);
@@ -475,20 +476,21 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 'Alphonse: "Good-bye, Eleanor."');
     });
 
-    QUnit.skip('Function.prototype.bind(thisArg [, arg1 [, arg2, … ]])', function () {
+    test('Function.prototype.bind(thisArg [, arg1 [, arg2, … ]])', function () {
         var result = puma.evalPuma('var scope = \'global\'; var order = { action: \'move\', scope: \'flank\', subject: \'ridge\', getScope: Function(\'return this.scope;\') }; var unbound_scope = order.getScope; var order_scope = unbound_scope.bind(order); order_scope();');
         result.makeValue();
         equal(result.success, true);
         equal(result.value, 'flank');
     });
 
-    QUnit.skip('[[Call]] internal method', function () {
+    test('[[Call]] internal method', function () {
         var result = puma.evalPuma('var scope = \'global\'; var order = { action: \'move\', scope: \'flank\', subject: \'ridge\', getScope: Function(\'return this.scope;\') }; var unbound_scope = order.getScope; var order_scope = unbound_scope.bind(order); order_scope.call(this);');
         result.makeValue();
         equal(result.success, true);
         equal(result.value, 'flank');
     });
 
+    //TypeError: Object prototype may only be an Object or null: undefined
     QUnit.skip('[[Construct]] internal method', function () {
         var result = puma.evalPuma('var scope = \'global\'; var order = { action: \'move\', scope: \'flank\', subject: \'ridge\', getScope: Function(\'return this.scope;\') }; var unbound_scope = order.getScope; var order_scope = unbound_scope.bind(order); var o = new order_scope; o.toString();');
         result.makeValue();
@@ -496,6 +498,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, '[object Object]');
     });
 
+    //TypeError: Object prototype may only be an Object or null: undefined
     QUnit.skip('[[HasInstance]] internal method', function () {
         var result = puma.evalPuma('var scope = \'global\'; var order = { action: \'move\', scope: \'flank\', subject: \'ridge\', getScope: Function(\'return this.scope;\') }; var unbound_scope = order.getScope; var order_scope = unbound_scope.bind(order); var o = new order_scope; o instanceof unbound_scope;');
         result.makeValue();
@@ -519,6 +522,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.constructor.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c);
     });
 
+    //TypeError: Cannot read property 'makeValue' of undefined
     QUnit.skip('[[HasInstance]] (V)', function () {
         var result = puma.evalPuma('function store(item, quantity, location) { /**/ }; var a = new store; a instanceof store;');
         result.makeValue();
@@ -2434,6 +2438,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     */
 
+    //Throws no error
     QUnit.skip('ReferenceError: GetValue(V)', function () {
         try {
             var result = puma.evalPuma('var u = UndefinedVariable;');
@@ -2484,6 +2489,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     */
 
+    //Throws no error
     QUnit.skip('TypeError: Object Internal Properties and Methods', function () {
         try {
             var result = puma.evalPuma('Object().put(this);');
@@ -3005,7 +3011,6 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         The next two methods are not working. 
         The error appear using the same quotation marks inside "JSON.stringify()"
     */
-
 
     QUnit.skip('JSON.stringify(text)', function () {
         var c = '{\'Name\':\'LEO\',\'Terminal\':25000}';

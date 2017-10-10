@@ -425,7 +425,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         ok(result === 'Line 1: Unexpected reserved word');
     });
 
-    //throws Unexpected token const
+    //throws "Unexpected token const"
     QUnit.skip('const', function () {
         try {
             puma.evalPuma('var const=1;');
@@ -585,7 +585,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         ok(result === 'Line 2: Use of future reserved word in strict mode');
     });
 
-    //Throws Uncaught Error: Unexpected token
+    //Throws "Unexpected token let"
     QUnit.skip('without use strict: let', function () {
         var result = puma.evalPuma('var let = 1; let;');
         result.makeValue();

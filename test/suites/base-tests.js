@@ -298,8 +298,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 4);
     });
 
-    /* This test is when the support for new expression added */
-    QUnit.skip('test for native string and property access against object type', function () {
+    test('test for native string and property access against object type', function () {
         var result = puma.evalPuma('\'hola\'.substr(1) === new String(\'ola\')');
         equal(result.value, false);
     });

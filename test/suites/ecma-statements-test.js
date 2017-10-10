@@ -37,6 +37,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 1);
     });
 
+    //ForInStatement visitor not implemented yet
     QUnit.skip('Block Statement 5', function () {
         var result = puma.evalPuma('1;{var b = 2;for (var i in null) {5;}};for (var i in undefined) {6};{{;}}');
         result.makeValue();
@@ -44,6 +45,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 1);
     });
 
+    //ForInStatement visitor not implemented yet
     QUnit.skip('Block Statement 6', function () {
         var result = puma.evalPuma('1;for (var i in [1]){;};if(true);');
         result.makeValue();
@@ -208,6 +210,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 10);
     });
 
+    //BreakStatement visitor not implemented yet
     QUnit.skip('for (ExpressionNoIn ;  ; Expression) Statement', function () {
         var result = puma.evalPuma('for(var i = 0; ; i++) { if (i === 6) break; } i;');
         result.makeValue();
@@ -222,6 +225,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 10);
     });
 
+    //BreakStatement visitor not implemented yet
     QUnit.skip('for ( ; ; Expression) Statement', function () {
         var result = puma.evalPuma('var i = 6, j = 0; for( ; ; i++) { if (i > 9) break; j+=i; } j+i;');
         result.makeValue();
@@ -229,6 +233,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 10);
     });
 
+    //BreakStatement visitor not implemented yet
     QUnit.skip('for ( ; ; ) Statement', function () {
         var result = puma.evalPuma('var i = 2, j = 4; for( ; ; ) { if (i < 0) break; j+=i; i-- } j+i;');
         result.makeValue();
@@ -236,6 +241,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 6);
     });
 
+    //ForInStatement visitor not implemented yet
     QUnit.skip('for ( LeftHandSideExpression in Expression ) Statement', function () {
         var result = puma.evalPuma('var person = {a:1, b:2, c:3}; var res = 0; var x; for (x in person) { res += person[x]; } res;');
         result.makeValue();
@@ -243,6 +249,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 6);
     });
 
+    //ForInStatement visitor not implemented yet
     QUnit.skip('for ( var VariableDeclarationNoIn in Expression ) Statement', function () {
         var result = puma.evalPuma('var res = 0; var obj = {a:1, b:2, c:3}; for (var prop in obj) { res += obj[prop] } res;');
         result.makeValue();
@@ -252,6 +259,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
 
     module('12.7 The Continue Statement');
 
+    //ContinueStatement visitor not implemented yet
     QUnit.skip('continue ; (no Identifier)', function () {
         var result = puma.evalPuma('var res = 0; for(var i = 0; i < 5 ; i++) { if (i < 3) continue; res += i; } res;');
         result.makeValue();
@@ -259,6 +267,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 7);
     });
 
+    //ContinueStatement visitor not implemented yet
     QUnit.skip('continue ; (no Identifier)', function () {
         var result = puma.evalPuma('var res = 0; for(var i = 0; i < 5 ; i++) { if (i < 3) continue; res += i; } res;');
         result.makeValue();
@@ -276,6 +285,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(errorMessage, 'Line 1: Illegal continue statement');
     });
 
+    //ContinueStatement visitor not implemented yet
     QUnit.skip('continue [no LineTerminator here] Identifier;', function () {
         var result = puma.evalPuma('var res = 0; anIdentifier: for(var i = 0; i < 5 ; i++) { if (i < 3) continue anIdentifier; res += i; } res;');
         result.makeValue();
@@ -294,6 +304,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
 
     module('12.8 The Break Statement');
 
+    //BreakStatement visitor not implemented yet
     QUnit.skip('Break ; (no Identifier)', function () {
         var result = puma.evalPuma('var res = 0; for(var i = 0; i < 5 ; i++) { if (i >= 3) break; res += i; } res;');
         result.makeValue();
@@ -310,6 +321,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(errorMessage, 'Line 1: Illegal break statement');
     });
 
+    //LabeledStatement visitor not implemented yet and BreakStatement visitor not implemented yet
     QUnit.skip('break [no LineTerminator here] Identifier;', function () {
         var result = puma.evalPuma('var res = 0; anIdentifier: for(var i = 0; i < 5 ; i++) { if (i >= 3) break anIdentifier; res += i; } res;');
         result.makeValue();
@@ -362,13 +374,13 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
 
     module('12.10 The With Statement');
 
-    //revisar
+    //WithStatement visitor not implemented yet
     QUnit.skip('With (Expression) read property inside Expression', function () {
         var result = puma.evalPuma('var a = 5; var obj = { a : 10 }; with (obj) { a }');
         result.makeValue();
         equal(result.value, 10);
     });
-    //revisar
+    //WithStatement visitor not implemented yet
     QUnit.skip('With (Expression) read property outside Expression', function () {
         var result = puma.evalPuma('var b = 5; var obj = { a : 10 }; with (obj) { b }');
         result.makeValue();
@@ -423,6 +435,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 0);
     });
 
+    //BreakStatement visitor not implemented yet
     QUnit.skip('Switch (Expression) case with break', function () {
         var result = puma.evalPuma('var a = 1; switch (a) { case 1: 1; break; case 2: 2; }');
         result.makeValue();
@@ -435,7 +448,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 3);
     });
 
-    QUnit.skip('Switch (Expression) case default', function () {
+    test('Switch (Expression) case default', function () {
         var result = puma.evalPuma('var a = 0; switch (a) { case 1: 1; break; default: 2; }');
         result.makeValue();
         equal(result.value, 2);
@@ -455,12 +468,14 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
 
     module('12.12 Labeled Statements');
 
+    //LabeledStatement visitor not implemented yet
     QUnit.skip('LabelledStatement : Identifier : Statement', function () {
         var result = puma.evalPuma('anIdentifier: for(var i = 0; i < 5 ; i++) { } i;');
         result.makeValue();
         equal(result.value, 5);
     });
 
+    //LabeledStatement visitor not implemented yet
     QUnit.skip('Nested labels with different identifiers', function () {
         var result = puma.evalPuma('anIdentifier: for(var i = 0; i < 5; i++) { anIdentifier2: for (var j = 0; j < 5; j++) {} } i + j;');
         result.makeValue();
@@ -479,6 +494,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
 
     module('12.13 The Throw Statement');
 
+    //ThrowStatement visitor not implemented yet
     QUnit.skip('throw string', function () {
         var errorMessage;
         try {
@@ -488,7 +504,8 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         }
         equal(errorMessage, 'someString');
     });
-    //PumaScript no evalua los throw
+
+    //ThrowStatement visitor not implemented yet
     QUnit.skip('throw number', function () {
         var errorMessage = null;
         try {
@@ -500,6 +517,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(errorMessage, 42);
     });
 
+    //ThrowStatement visitor not implemented yet
     QUnit.skip('throw true', function () {
         var errorMessage;
         try {
