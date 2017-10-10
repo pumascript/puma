@@ -68,19 +68,21 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, '5', "Passed!");
     });
 
+    //result.value == NaN
     QUnit.skip("Creates a function and uses prototype method", function () {
         var result = puma.evalPuma("function operations (x,y) {this.x = x; this.y = y;} operations.prototype.mul = function () {return this.x*this.y;};var op = new operations(2,3); op.mul();");
         result.makeValue();
         equal(result.value, 6, "Passed!");
     });
 
-
+    //Uncaught TypeError: Getter must be a function
     QUnit.skip("Creates a function and gets its internal value with a getter function", function () {
         var result = puma.evalPuma("function operations(x) {this._x = x;}Object.defineProperty(operations.prototype, 'x', {get: function () {return this._x;}});var op = new operations(2);op.x;");
         result.makeValue();
         equal(result.value, 2, "Passed!");
     });
 
+    //result.value == NaN
     QUnit.skip("Creates a function and calls its internal method", function () {
         var result = puma.evalPuma("function Square (side) {this.side = side;this.area = function () {return this.side * this.side;}}var s1 = new Square(2);s1.area();");
         equal(result.value, '4', "Passed!");

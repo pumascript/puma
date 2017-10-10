@@ -42,8 +42,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         var err;
         try {
             var result = puma.evalPuma("eval(\"var 1;\");");
-        }
-        catch (e) {
+        } catch (e) {
             if (e instanceof SyntaxError) {
                 equal(true, true, "Passed!");
             }
@@ -64,6 +63,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 'Clotho', "Passed!");
     });
 
+    //SequenceExpression visitor not implemented yet
     QUnit.skip("Indirect Call to Eval", function () {
         var result = puma.evalPuma("var indirectEval = (1, eval); indirectEval(\"var f = 'Atropos'; f;\");");
         result.makeValue();
@@ -158,7 +158,10 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Object Constructor", function () {
-        var obj = new Object({Name:'LEO', Terminal:25000});
+        var obj = new Object({
+            Name: 'LEO',
+            Terminal: 25000
+        });
         var result = puma.evalPuma("new Object({Name:'LEO', Terminal:25000});");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -181,7 +184,12 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Object.getOwnPropertyDescriptor(O,P)", function () {
-        var c = { value: 42, writable: true, enumerable: true, configurable: true };
+        var c = {
+            value: 42,
+            writable: true,
+            enumerable: true,
+            configurable: true
+        };
         var result = puma.evalPuma("var o, d; o = { bar: 42 }; d = Object.getOwnPropertyDescriptor(o, 'bar');");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -199,7 +207,12 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Object.create(O [, Properties])", function () {
-        var c = { value: "Puma", writable: true, enumerable: false, configurable: false };
+        var c = {
+            value: "Puma",
+            writable: true,
+            enumerable: false,
+            configurable: false
+        };
         var result = puma.evalPuma("var o = Object.create(null, { foo: { writable: true, configurable: false, enumerable: false, value: 'Puma' }, bar: { value: 20 } } ); o;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -208,7 +221,12 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Object.defineProperty(O, P, Attributes)", function () {
-        var c = { value: "Rawr!", writable: true, enumerable: false, configurable: true };
+        var c = {
+            value: "Rawr!",
+            writable: true,
+            enumerable: false,
+            configurable: true
+        };
         var result = puma.evalPuma("var o = Object(); Object.defineProperty(o, 'puma', { configurable: true, writable: true, value: 'Rawr!' } ); o;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -216,7 +234,12 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Object.defineProperties(O, Properties)", function () {
-        var c = { value: "Rawr!", writable: true, enumerable: false, configurable: false };
+        var c = {
+            value: "Rawr!",
+            writable: true,
+            enumerable: false,
+            configurable: false
+        };
         var result = puma.evalPuma("var o = Object(); Object.defineProperties(o, { 'puma': { writable: true, value: 'Rawr!' }, 'script': { value: true } } ); o;");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -225,7 +248,12 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Object.seal(O)", function () {
-        var c = { value: "Shaher", writable: true, enumerable: false, configurable: false };
+        var c = {
+            value: "Shaher",
+            writable: true,
+            enumerable: false,
+            configurable: false
+        };
         var result = puma.evalPuma("var Fallen = Object.create(null, { name: { writable: true, configurable: true, value: 'Shaher' } } ); Object.seal(Fallen);");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -234,7 +262,12 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Object.freeze(O)", function () {
-        var c = { value: "Shaher", writable: false, enumerable: false, configurable: false };
+        var c = {
+            value: "Shaher",
+            writable: false,
+            enumerable: false,
+            configurable: false
+        };
         var result = puma.evalPuma("var Fallen = Object.create(null, { name: { writable: true, configurable: true, value: 'Shaher' } } ); Object.freeze(Fallen);");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -292,14 +325,14 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, '[object Math]', "Passed!");
     });
 
-    QUnit.skip("Object.prototype.toString(): undefined", function () {
+    test("Object.prototype.toString(): undefined", function () {
         var result = puma.evalPuma("var toStringU = Object.prototype.toString; toStringU.call(undefined);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, '[object Undefined]', "Passed!");
     });
 
-    QUnit.skip("Object.prototype.toString(): null", function () {
+    test("Object.prototype.toString(): null", function () {
         var result = puma.evalPuma("var toStringN = Object.prototype.toString; toStringN.call(null);");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -314,7 +347,17 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Object.prototype.valueOf()", function () {
-        var oni = Object.create(null, { height: { value: 1 }, width: { value: 6 }, color: { value: 'red' } });
+        var oni = Object.create(null, {
+            height: {
+                value: 1
+            },
+            width: {
+                value: 6
+            },
+            color: {
+                value: 'red'
+            }
+        });
         var result = puma.evalPuma("var ono = Object.create(null, { height: { value: 1 }, width: { value: 6 }, color: { value: 'red' } }); var valueOfO = Object.prototype.valueOf; valueOfO.call(ono);");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -435,27 +478,28 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, "Alphonse: \"Good-bye, Eleanor.\"", "Passed!");
     });
 
-    QUnit.skip("Function.prototype.bind(thisArg [, arg1 [, arg2, … ]])", function () {
+    test("Function.prototype.bind(thisArg [, arg1 [, arg2, … ]])", function () {
         var result = puma.evalPuma("var scope = 'global'; var order = { action: 'move', scope: 'flank', subject: 'ridge', getScope: Function('return this.scope;') }; var unbound_scope = order.getScope; var order_scope = unbound_scope.bind(order); order_scope();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 'flank', "Passed!");
     });
 
-    QUnit.skip("[[Call]] internal method", function () {
+    test("[[Call]] internal method", function () {
         var result = puma.evalPuma("var scope = 'global'; var order = { action: 'move', scope: 'flank', subject: 'ridge', getScope: Function('return this.scope;') }; var unbound_scope = order.getScope; var order_scope = unbound_scope.bind(order); order_scope.call(this);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, 'flank', "Passed!");
     });
 
-    QUnit.skip("[[Construct]] internal method", function () {
+    test("[[Construct]] internal method", function () {
         var result = puma.evalPuma("var scope = 'global'; var order = { action: 'move', scope: 'flank', subject: 'ridge', getScope: Function('return this.scope;') }; var unbound_scope = order.getScope; var order_scope = unbound_scope.bind(order); var o = new order_scope; o.toString();");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(result.value, '[object Object]', "Passed!");
     });
 
+    //TypeError: Object prototype may only be an Object or null: undefined
     QUnit.skip("[[HasInstance]] internal method", function () {
         var result = puma.evalPuma("var scope = 'global'; var order = { action: 'move', scope: 'flank', subject: 'ridge', getScope: Function('return this.scope;') }; var unbound_scope = order.getScope; var order_scope = unbound_scope.bind(order); var o = new order_scope; o instanceof unbound_scope;");
         result.makeValue();
@@ -479,6 +523,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value.constructor.toString().replace(/\r?\n|( )+|(\/\*\*\/){1}/g, ''), c, "Passed!");
     });
 
+    //TypeError: Cannot read property 'makeValue' of undefined
     QUnit.skip("[[HasInstance]] (V)", function () {
         var result = puma.evalPuma("function store(item, quantity, location) { /**/ }; var a = new store; a instanceof store;");
         result.makeValue();
@@ -592,7 +637,8 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Array.prototype.toLocaleString()", function () {
-        var a = Array(1200.96, 0.223); var c = a.toLocaleString();
+        var a = Array(1200.96, 0.223);
+        var c = a.toLocaleString();
         var result = puma.evalPuma("var a = Array(1200.96, 0.223); a.toLocaleString();");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -813,7 +859,12 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Properties of Array Instances", function () {
-        var pd = { value: 4, writable: true, enumerable: false, configurable: false };
+        var pd = {
+            value: 4,
+            writable: true,
+            enumerable: false,
+            configurable: false
+        };
         var result = puma.evalPuma("var a = [36,10,59,97]; Object.defineProperty(a, '0', { writable: false, value: 7 }); a[1] = 0; Object.defineProperty(a, '2', { enumerable: false, value: 0 }); Object.defineProperty(a, '3', { enumerable: false }); a.valueOf();");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -1259,7 +1310,12 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Properties of the Boolean Prototype Object", function () {
-        var pd = { value: false, writable: false, enumerable: false, configurable: false };
+        var pd = {
+            value: false,
+            writable: false,
+            enumerable: false,
+            configurable: false
+        };
         var result = puma.evalPuma("Object.getOwnPropertyDescriptor(Boolean, 'prototype');");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -1394,7 +1450,12 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Properties of the Number Prototype Object", function () {
-        var pd = { value: 0, writable: false, enumerable: false, configurable: false };
+        var pd = {
+            value: 0,
+            writable: false,
+            enumerable: false,
+            configurable: false
+        };
         var result = puma.evalPuma("Object.getOwnPropertyDescriptor(Number, 'prototype');");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -1417,7 +1478,8 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Number.prototype.toLocaleString()", function () {
-        var a = 2029; var c = a.toLocaleString();
+        var a = 2029;
+        var c = a.toLocaleString();
         var result = puma.evalPuma("var n = Number(2029); n.toLocaleString();");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -1459,14 +1521,14 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 2, "Passed!");
     });
 
-    QUnit.assert.aritmeticEqual = function( value, expected, message ) {
+    QUnit.assert.aritmeticEqual = function (value, expected, message) {
         var actual = value - expected;
-        this.pushResult( {
+        this.pushResult({
             result: actual < 0.00000001 || actual > 0.00000001,
             actual: actual,
             expected: expected,
             message: message + "Diff:" + actual
-        } );
+        });
     };
 
     module("15.8: The Math Object");
@@ -2211,7 +2273,12 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Properties of RegExp Instances", function () {
-        var pd = { value: 0, writable: true, enumerable: false, configurable: false };
+        var pd = {
+            value: 0,
+            writable: true,
+            enumerable: false,
+            configurable: false
+        };
         var result = puma.evalPuma("var x = / {0,1}<[a-z_0-9]*:{0,1}[a-z0-9]{1,3}>/i; x.valueOf();");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -2351,8 +2418,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     test("RangeError: new Array(len)", function () {
         try {
             var result = puma.evalPuma("var a = new Array(-1);");
-        }
-        catch (e) {
+        } catch (e) {
             if (e instanceof Error) {
                 equal(true, true, "Passed!");
             }
@@ -2373,11 +2439,11 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
     */
 
+    //Throws no error
     QUnit.skip("ReferenceError: GetValue(V)", function () {
         try {
             var result = puma.evalPuma("var u = UndefinedVariable;");
-        }
-        catch (e) {
+        } catch (e) {
             if (e instanceof Error) {
                 equal(true, true, "Passed!");
             }
@@ -2402,8 +2468,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     test("SyntaxError: Object Initialiser", function () {
         try {
             var result = puma.evalPuma("obj = new Object({Name:'LEO', Terminal:25000, Trayectorie:'Panchaea}); obj;");
-        }
-        catch (e) {
+        } catch (e) {
             if (e instanceof Error) {
                 equal(true, true, "Passed!");
             }
@@ -2428,8 +2493,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     QUnit.skip("TypeError: Object Internal Properties and Methods", function () {
         try {
             var result = puma.evalPuma("Object().put(this);");
-        }
-        catch (e) {
+        } catch (e) {
             if (e instanceof Error) {
                 equal(true, true, "Passed!");
             }
@@ -2454,8 +2518,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     test("URIError: decodeURI(encodedURI)", function () {
         try {
             var result = puma.evalPuma("decodeURI('%');");
-        }
-        catch (e) {
+        } catch (e) {
             if (e instanceof Error) {
                 equal(true, true, "Passed!");
             }

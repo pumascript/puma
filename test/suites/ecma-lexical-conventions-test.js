@@ -430,6 +430,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         }
     });
 
+    //throws "Unexpected token const"
     QUnit.skip("const", function () {
         try {
             puma.evalPuma("var const=1;");
@@ -590,6 +591,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         }
     });
 
+    //Throws "Unexpected token let"
     QUnit.skip("without use strict: let", function () {
         var result = puma.evalPuma("var let = 1; let;");
         result.makeValue();

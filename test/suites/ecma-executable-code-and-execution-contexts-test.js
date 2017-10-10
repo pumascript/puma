@@ -23,12 +23,13 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         ok(result.success && 'strict mode into function' === result.value, "Pass!");
     });
 
+    //Error: the varible "expresion" is not defined
     QUnit.skip("Use strict eval code", function () {
         var result = puma.evalPuma("var expresion = new String('2 + 2');eval(\"'use strict'; expresion.toString()\");");
         ok(result.success && "2 + 2" === result.value, "Pass!");
     });
 
-    //section 10.2
+    //WithStatement visitor not implemented yet
     QUnit.skip("with function", function () {
         var result = puma.evalPuma("var a, x, y;var r = 10; with (Math) {a = PI * r * r;x = r * cos(PI);y = r * sin(PI/2);}");
         result.makeValue();
