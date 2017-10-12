@@ -3,8 +3,8 @@
 /* eslint quotes: 0, no-unused-vars: 0 */
 
 /**
- *      PUMASCRIPT INTEGRATION TEST SUITE
- *  @file: Integration test suite including complex and real applications of puma
+ *                  PUMASCRIPT INTEGRATION TEST SUITE
+ * @file: Integration test suite including complex and real applications of puma
  */
 define(['pumascript', 'esprima'], function(puma, esprima) {
 

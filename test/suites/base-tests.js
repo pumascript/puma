@@ -3,8 +3,8 @@
 /* eslint quotes: 0, no-unused-vars: 0 */
 
 /**
- *              PUMASCRIPT BASE TEST SUITE
- *  @file: Base expressions test suite for the language
+ *          PUMASCRIPT BASE TEST SUITE
+ * @file: Base expressions test suite for the language
  */
 define(['pumascript', 'esprima'], function(puma, esprima) {
 

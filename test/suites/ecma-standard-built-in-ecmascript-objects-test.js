@@ -4,7 +4,7 @@
 
 /**
  *      PUMASCRIPT ECMA-15 TEST SUITE
- *  @file: Standard Built-in ECMAScript Objects
+ * @file: Standard Built-in ECMAScript Objects
  */
 define(['pumascript', 'esprima'], function (puma, esprima) {
 

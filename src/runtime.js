@@ -1,9 +1,9 @@
 // Copyright (c) 2013 - present UTN-LIS
 
-/*global define, console */
-/*
-    PumaScript main source code
+/**
+ * @file: PumaScript main source code
  */
+
 define([
     'escodegen',
     'esprima',

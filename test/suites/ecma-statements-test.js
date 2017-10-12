@@ -3,8 +3,8 @@
 /* eslint quotes: 0, no-unused-vars: 0 */
 
 /**
- *      PUMASCRIPT ECMA-12 TEST SUITE
- *  @file: Statements Test Suite
+ * PUMASCRIPT ECMA-12 TEST SUITE
+ * @file: Statements Test Suite
  */
 define(['pumascript', 'esprima'], function (puma, esprima) {
 

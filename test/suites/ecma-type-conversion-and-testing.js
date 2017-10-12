@@ -4,7 +4,7 @@
 
 /**
  *      PUMASCRIPT ECMA-9 TEST SUITE
- *  @file: Type Conversion and Testing Test Suite
+ * @file: Type Conversion and Testing Test Suite
  */
 define(['pumascript', 'esprima'], function (puma, esprima) {
 

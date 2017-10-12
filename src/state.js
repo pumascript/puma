@@ -1,7 +1,5 @@
 // Copyright (c) 2013 - present UTN-LIS
 
-/*global define, console */
-
 define([
     '../src/global',
     '../src/symbols/symbol',

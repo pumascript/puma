@@ -4,7 +4,7 @@
 
 /**
  *      PUMASCRIPT ECMA-7 TEST SUITE
- *  @file: Lexical Conventions Test Suite
+ * @file: Lexical Conventions Test Suite
  */
 define(['pumascript', 'esprima'], function (puma, esprima) {
     module("7.2 White space");
