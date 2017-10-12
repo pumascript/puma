@@ -1,10 +1,16 @@
 // Copyright (c) 2013 - present UTN-LIS
 
-/*
- *              PUMASCRIPT ECMA-11 TEST SUITE
- *  @file: Base expressions test suite for the language
+/* eslint quotes: 0 */
+
+/**
+ * PUMASCRIPT ECMA-11 TEST SUITE
+ * @file: Expressions Test Suite
  */
 define(['pumascript', 'esprima'], function(puma, esprima) {
+
+    /**
+     * Expressions
+     */
 
     module("11.1 Primary Expressions");
 
@@ -51,10 +57,10 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
     });
 
 
-    /*11.2.4 Argument Lists
-
-    11.2.5 Function Expressions
-    */
+    /**
+     * 11.2.4 Argument Lists
+     * 11.2.5 Function Expressions
+     */
 
     module("11.3 Postfix Expressions.");
 
@@ -148,9 +154,9 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
     module("11.5 Multiplicative Operators and 11.6 Additive Operators");
 
     test("Multiplicative and Additive Operators",function () {
-         var result = puma.evalPuma("2 * 3 / 4 + 5 - 6 % 2;");
-         result.makeValue();
-         equal(result.value,6.5,"Passed!");
+        var result = puma.evalPuma("2 * 3 / 4 + 5 - 6 % 2;");
+        result.makeValue();
+        equal(result.value,6.5,"Passed!");
     });
 
     module("11.7 Bitwise Shift Operators");

@@ -1,9 +1,11 @@
 // Copyright (c) 2013 - present UTN-LIS
 
-/*          PUMASCRIPT TEST SUITE FOR ECMA COMPLIANCE
- *                        SECTION 15
- */
+/* eslint quotes: 0, no-useless-escape: 0, no-unused-vars: 0 */
 
+/**
+ *      PUMASCRIPT ECMA-15 TEST SUITE
+ * @file: Standard Built-in ECMAScript Objects
+ */
 define(['pumascript', 'esprima'], function (puma, esprima) {
 
     module("15.1: The Global Object");
@@ -156,7 +158,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
     test("Object Constructor", function () {
-        obj = new Object({Name:'LEO', Terminal:25000});
+        var obj = new Object({Name:'LEO', Terminal:25000});
         var result = puma.evalPuma("new Object({Name:'LEO', Terminal:25000});");
         result.makeValue();
         equal(result.success, true, "Passed!");
@@ -190,7 +192,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
 
     test("Object.getOwnPropertyNames(Object)", function () {
         var c = ["0", "1", "2", "length"];
-        var result = puma.evalPuma("var arr = ['Alpha', 'Beta', 'Gamma']; Object.getOwnPropertyNames(arr);")
+        var result = puma.evalPuma("var arr = ['Alpha', 'Beta', 'Gamma']; Object.getOwnPropertyNames(arr);");
         result.makeValue();
         equal(result.success, true, "Passed!");
         equal(JSON.stringify(result.value), JSON.stringify(c), "Passed!");
@@ -2920,7 +2922,7 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         var result = puma.evalPuma("JSON.stringify({\"Name\":\"LEO\",\"Terminal\":25000});");
         result.makeValue();
         equal(result.success, true, "Passed!");
-        equal(result.value, '{"Name":"LEO","Terminal":25000}', "Passed!");
+        equal(result.value, c, "Passed!");
     });
 
     test("JSON.stringify ( value [ , replacer [ , space ] ] )", function () {

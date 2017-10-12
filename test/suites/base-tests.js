@@ -1,10 +1,10 @@
 // Copyright (c) 2013 - present UTN-LIS
 
-/* global define, test, ok, equal */
+/* eslint quotes: 0, no-unused-vars: 0 */
 
-/*
- *              PUMASCRIPT BASE TEST SUITE
- *  @file: Base expressions test suite for the language
+/**
+ *          PUMASCRIPT BASE TEST SUITE
+ * @file: Base expressions test suite for the language
  */
 define(['pumascript', 'esprima'], function(puma, esprima) {
 
@@ -252,12 +252,12 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
     });
 
     test("test call to native functions", function(){
-        var result = puma.evalPuma("var regex = /^([0-9]+)?(\.[0-9]+)?$/; regex.test('1231233')");
+        var result = puma.evalPuma("var regex = /^([0-9]+)?(.[0-9]+)?$/; regex.test('1231233')");
         equal(result.value, true, "Passed!");
     });
 
     test("test call to native functions using objects as arguments", function(){
-        var result = puma.evalPuma("var regex = /^([0-9]+)?(\.[0-9]+)?$/; var a1 = { value: '12.56' }; regex.test(a1.value)");
+        var result = puma.evalPuma("var regex = /^([0-9]+)?(.[0-9]+)?$/; var a1 = { value: '12.56' }; regex.test(a1.value)");
         equal(result.value, true, "Passed!");
     });
 
@@ -298,8 +298,7 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
         equal(result.value, 4, "Passed!");
     });
 
-     /* This test is when the support for new expression added */
-    QUnit.skip("test for native string and property access against object type", function(){
+    test("test for native string and property access against object type", function(){
         var result = puma.evalPuma("'hola'.substr(1) === new String('ola')");
         equal( result.value, false, "Passed!");
     });
