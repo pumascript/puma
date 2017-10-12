@@ -24,8 +24,7 @@ module.exports = function (grunt) {
                 './editor/*.js',
                 './src/**/*.js',
                 './test/suites/*.js',
-                './test/*.js',
-                //'./tracks/**/*.js'
+                './test/*.js'
             ]
         },
 
