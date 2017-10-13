@@ -1,9 +1,11 @@
 // Copyright (c) 2013 - present UTN-LIS
 
-/*          PUMASCRIPT TEST SUITE FOR ECMA COMPLIANCE
- *                        SECTION 15
- */
+/* eslint quotes: 0, no-useless-escape: 0, no-unused-vars: 0 */
 
+/**
+ *      PUMASCRIPT ECMA-15 TEST SUITE
+ * @file: Standard Built-in ECMAScript Objects
+ */
 define(['pumascript', 'esprima'], function (puma, esprima) {
 
     module('15.1: The Global Object');

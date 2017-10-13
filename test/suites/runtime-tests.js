@@ -1,10 +1,10 @@
 // Copyright (c) 2013 - present UTN-LIS
 
-/* global define, test, ok, equal */
+/* eslint quotes: 0, no-unused-vars: 0 */
 
-/*
- *          PUMASCRIPT RUNTIME TEST SUITE
- *  @file: Runtime specific functionality tests
+/**
+ *      PUMASCRIPT RUNTIME TEST SUITE
+ * @file: Runtime specific functionality tests
  */
 define(['pumascript', 'esprima'], function (puma, esprima) {
 

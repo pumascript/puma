@@ -1,7 +1,5 @@
 // Copyright (c) 2013 - present UTN-LIS
 
-/*global define, console */
-
 define([], function () {
 
     /**
@@ -11,7 +9,7 @@ define([], function () {
         this._value = value;
         this.name = name;
 
-        Object.defineProperty(this, "value", {
+        Object.defineProperty(this, 'value', {
             get: function () {
                 return this._value;
             },
@@ -21,11 +19,11 @@ define([], function () {
             }
         });
 
-        if ("initMetaData" in this)
+        if ('initMetaData' in this)
             this.initMetaData();
     }
 
-    Symbol.UNDEFINED = "__UNDEFINED__";
+    Symbol.UNDEFINED = '__UNDEFINED__';
 
     Symbol.Undefined = new Symbol(Symbol.UNDEFINED, undefined);
 
@@ -41,7 +39,7 @@ define([], function () {
             returns: {}
         };
 
-        Object.defineProperty(this, "meta", {
+        Object.defineProperty(this, 'meta', {
             get: function () {
                 return this._meta;
             }
@@ -53,7 +51,7 @@ define([], function () {
      * @param newValue {object} actual value that will be assigned to the symbol
      */
     Symbol.prototype.updateMetaData = function (newValue) {
-        Symbol._updateMetaData(this.name, this._meta, newValue, "Symbol");
+        Symbol._updateMetaData(this.name, this._meta, newValue, 'Symbol');
     };
 
     /**
@@ -65,7 +63,7 @@ define([], function () {
         var type = typeof (newValue);
         if (dictionary[type] === undefined) {
             if (Symbol.EmitTypeWarnings && Object.keys(dictionary).length >= 1) {
-                console.warn(errorStartString + " \"" + symbolName + "\" takes more than one type in their lifetime.");
+                console.warn(errorStartString + ' "' + symbolName + '" takes more than one type in their lifetime.');
             }
             dictionary[type] = 1;
         } else {

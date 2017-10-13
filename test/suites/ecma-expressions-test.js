@@ -1,8 +1,10 @@
 // Copyright (c) 2013 - present UTN-LIS
 
-/*
- *              PUMASCRIPT ECMA-11 TEST SUITE
- *  @file: Base expressions test suite for the language
+/* eslint quotes: 0 */
+
+/**
+ * PUMASCRIPT ECMA-11 TEST SUITE
+ * @file: Expressions Test Suite
  */
 define(['pumascript', 'esprima'], function (puma, esprima) {
 
@@ -51,10 +53,10 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
     });
 
 
-    /*11.2.4 Argument Lists
-
-    11.2.5 Function Expressions
-    */
+    /**
+     * 11.2.4 Argument Lists
+     * 11.2.5 Function Expressions
+     */
 
     module('11.3 Postfix Expressions.');
 
