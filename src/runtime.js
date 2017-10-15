@@ -1,7 +1,7 @@
 // Copyright (c) 2013 - present UTN-LIS
 
 /**
- * @file: PumaScript main source code
+ * @file: PumaScript Main Source Code
  */
 
 define([
@@ -12,8 +12,9 @@ define([
     '../src/symbols/symbol',
     '../src/symbols/function-symbol',
     '../src/symbols/property-wrapper',
-    '../src/prune-pass'
-], function (escodegen, esprima, Global, State, Symbol, FunctionSymbol, PropertyWrapper, PrunePass) {
+    '../src/prune-pass',
+    './inference'
+], function (escodegen, esprima, Global, State, Symbol, FunctionSymbol, PropertyWrapper, PrunePass, Inference) {
 
     'use strict';
 
@@ -61,6 +62,12 @@ define([
             'column': 0
         };
         this._programAst = programAst;
+
+        /* Initialize Type Inference Engine
+         * TODO: Look for better modular solution.
+         * TODO: Call inference with meta-function?
+         */
+        Inference.init('native', true);
 
         /**Each new property will be defined in the @visitorStatements dictionary. */
         this._visitorStatements = {
@@ -313,22 +320,27 @@ define([
 
     FirstPass.prototype.visitVariableDeclarator = function (ast, state) {
         if (ast.id.type === 'Identifier') {
-            return new Result(true, this.addLocalVariableDeclaration(ast.id.name, ast.init, state));
+            return new Result(true, this.addLocalVariableDeclaration(ast.id.name, ast.init, ast.loc, state));
         } else {
             return defaultResult;
         }
     };
 
-    FirstPass.prototype.addLocalVariableDeclaration = function (name, init, state) {
-        var symbol = state.addSymbol(name);
+    FirstPass.prototype.addLocalVariableDeclaration = function (name, init, loc, state) {
+        var symbol;
+
         if (init !== null) {
             var initResult = this.accept(init, state);
             if (initResult.success) {
-                symbol = state.getSymbol(name);
                 initResult.makeValue();
-                symbol.value = initResult.value;
+                symbol = state.addSymbol(name, initResult.value, loc);
+            } else {
+                return defaultResult;
             }
+        } else {
+            symbol = state.addSymbol(name, undefined, loc);
         }
+
         return symbol;
     };
 
@@ -392,6 +404,7 @@ define([
                 symbol.value ^= rightResult.value;
                 break;
         }
+
         return new Result(true, symbol);
     };
 
@@ -730,7 +743,7 @@ define([
                 argumentValue.makeValue();
                 argumentValue = argumentValue.value;
             }
-            state.addSymbol(parameter.name, argumentValue);
+            state.addSymbol(parameter.name, argumentValue, parameter.loc);
         }
 
         // bind special meta function implicit arguments
@@ -1184,7 +1197,8 @@ define([
 
     CodeGenerator.prototype.generateCode = function () {
         if (Global.escodegen) { // browser === true
-            return Global.escodegen.generate(this.programAstPruned);
+            var ast = Global.escodegen.attachComments(this.programAstPruned, this.programAstPruned.comments, this.programAstPruned.tokens);
+            return Global.escodegen.generate(ast, { 'comment': true });
         } else {
             return escodegen.generate(this.programAstPruned);
         }
@@ -1211,7 +1225,7 @@ define([
     // puma API
 
     function evalPuma(programStr) {
-        var ast = esprima.parse(programStr, {'comment': true, 'loc': true});
+        var ast = esprima.parse(programStr, { 'comment': true, 'tokens': true, 'loc': true, 'range': true });
         addParent(ast);
         return evalPumaAst(ast);
     }

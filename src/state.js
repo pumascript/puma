@@ -25,8 +25,8 @@ define([
         this.addSymbol('this', {});
     };
 
-    State.prototype.addSymbol = function (name, value) {
-        var symbol = new Symbol(name, value);
+    State.prototype.addSymbol = function (name, value, loc) {
+        var symbol = new Symbol(name, value, loc);
         if (this._symbols[name] !== undefined) {
             console.warn('Duplicated symbol name "' + name + '" in current scope. Old symbol was discarded.');
         }

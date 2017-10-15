@@ -145,25 +145,34 @@ define(['pumascript', 'esprima'], function(puma, esprima) {
         equal(result.success, true, "Passed!");
     });
 
-    test("meta variables types counting", function(){
+    test("meta variables types", function(){
         var meta = puma.evalPuma("var a; a = 1; a = \"hola\"; a = 2;").value.meta;
-        equal(meta.number, 2, "Passed!");
-        equal(meta.string, 1, "Passed!");
+        equal(meta.init.value, undefined);
+        equal(meta.types.length, 2);
+        equal(meta.types[0], 'number');
+        equal(meta.types[1], 'string');
     });
 
-    test("meta parameters and return type counting", function(){
+    test("meta parameters and return types", function(){
         var meta = puma.evalPuma("function foo(a, b){ return a + b; } foo(1,2); foo(3,4); foo;").value.value.meta;
-        equal(meta.parameters[0].number, 2, "Passed!");
-        equal(meta.parameters[1].number, 2, "Passed!");
-        equal(meta.returns.number, 2, "Passed!");
+        equal(meta.parameters[0].length, 1);
+        equal(meta.parameters[0][0], 'number');
+        equal(meta.parameters[1].length, 1);
+        equal(meta.parameters[1][0], 'number');
+        equal(meta.returns.length, 1);
+        equal(meta.returns[0], 'number');
     });
 
-    test("mixed meta parameters and return type counting", function(){
+    test("mixed meta parameters and return types", function(){
         var meta = puma.evalPuma("function foo(a, b){ return a + b; } foo(1,\"hola\"); foo(3,4); foo;").value.value.meta;
-        equal(meta.parameters[0].number, 2, "Passed!");
-        equal(meta.parameters[1].number, 1, "Passed!");
-        equal(meta.returns.number, 1, "Passed!");
-        equal(meta.returns.string, 1, "Passed!");
+        equal(meta.parameters[0].length, 1);
+        equal(meta.parameters[0][0], 'number');
+        equal(meta.parameters[1].length, 2);
+        equal(meta.parameters[1][0], 'string');
+        equal(meta.parameters[1][1], 'number');
+        equal(meta.returns.length, 2);
+        equal(meta.returns[0], 'string');
+        equal(meta.returns[1], 'number');
     });
 
     test("Unary expressions", function(){

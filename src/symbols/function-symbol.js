@@ -31,11 +31,11 @@ define([
         for (n = 0; n < actualArguments.length; n++) {
             types = this._meta.parameters[n];
             if (types === undefined) {
-                types = {};
+                types = [];
                 this._meta.parameters[n] = types;
             }
             actualArgumentValue = actualArguments[n].value;
-            Symbol._updateMetaData(this.name, types, actualArgumentValue, 'Parameter ' + n + ' of function');
+            Symbol._updateMetaData(this.name, actualArgumentValue, types, 'Parameter ' + n + ' of function');
         }
     };
 
@@ -45,7 +45,7 @@ define([
      * @return {void}
      */
     FunctionSymbol.prototype.registerCallReturn = function (returnResult) {
-        Symbol._updateMetaData(this.name, this._meta.returns, returnResult.value, 'Return type');
+        Symbol._updateMetaData(this.name, returnResult.value, this._meta.returns, 'Return value of function');
     };
 
     return FunctionSymbol;

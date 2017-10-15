@@ -1,11 +1,13 @@
 // Copyright (c) 2013 - present UTN-LIS
 
-define([], function () {
+define([
+    '../inference'
+], function (Inference) {
 
     /**
      * @constructor
      */
-    function Symbol(name, value) {
+    function Symbol(name, value, loc) {
         this._value = value;
         this.name = name;
 
@@ -20,24 +22,35 @@ define([], function () {
         });
 
         if ('initMetaData' in this)
-            this.initMetaData();
+            this.initMetaData(value, loc);
     }
 
     Symbol.UNDEFINED = '__UNDEFINED__';
 
     Symbol.Undefined = new Symbol(Symbol.UNDEFINED, undefined);
 
-    Symbol.EmitTypeWarnings = false;
-
     Symbol.prototype.isUndefined = function () {
         return this.name === Symbol.UNDEFINED;
     };
 
-    Symbol.prototype.initMetaData = function () {
+    Symbol.EmitTypeWarnings = true;
+
+    Symbol.prototype.initMetaData = function (value, loc) {
         this._meta = {
             parameters: [],
-            returns: {}
+            returns: []
         };
+
+        if (loc) {
+            var type = Inference.resolveType(value);
+
+            this._meta.init = {
+                loc: loc.start,
+                type: type
+            };
+
+            this._meta.types = value ? [type] : [];
+        }
 
         Object.defineProperty(this, 'meta', {
             get: function () {
@@ -47,27 +60,43 @@ define([], function () {
     };
 
     /**
-     * Register symbol meta-type information for last assignation operation
-     * @param newValue {object} actual value that will be assigned to the symbol
+     * Register symbol meta-type information for the last assignation operation
+     * @param value {any} New value being assigned to the symbol
      */
-    Symbol.prototype.updateMetaData = function (newValue) {
-        Symbol._updateMetaData(this.name, this._meta, newValue, 'Symbol');
+    Symbol.prototype.updateMetaData = function (value) {
+        if (this._meta.init)
+            Symbol._updateMetaData(this.name, value, this._meta.types, 'Symbol');
     };
 
     /**
-     * Helper function to register (type,count) pairs in meta-type dictionaries
+     * Helper function for recording the inferred meta-type information
      * @param symbolName {string} Name of the symbol that will be used if a warning is emmited
-     * @param dictionary {object<string,number>} An object used as dictionary where the key is the typename and the value is the number of ocurrences.
+     * @param symbolValue {any} New value being assigned to the symbol
+     * @param dictionary {Array.<string>} Collection of inferred types the symbol has been assigned at runtime
+     * @param errorPrefix {string} String to prefix to the message if a warning if emmited
      */
-    Symbol._updateMetaData = function (symbolName, dictionary, newValue, errorStartString) {
-        var type = typeof (newValue);
-        if (dictionary[type] === undefined) {
-            if (Symbol.EmitTypeWarnings && Object.keys(dictionary).length >= 1) {
-                console.warn(errorStartString + ' "' + symbolName + '" takes more than one type in their lifetime.');
+    Symbol._updateMetaData = function (symbolName, symbolValue, dictionary, warningPrefix) {
+        // TODO: Differentiated meta update for different origins.
+        var type = Inference.resolveType(symbolValue);
+
+        // Check for initialization
+        if (dictionary.length) {
+            var oldType = dictionary[dictionary.length - 1];
+
+            // Check if symbol type differs from the previous one
+            if (type !== oldType) {
+                if (Symbol.EmitTypeWarnings)
+                    console.warn(warningPrefix + ' "' + symbolName + '" takes type {' + type + '}, previously {' + oldType + '}.');
+
+                if (!~dictionary.indexOf(type)) {
+                    // Save new type to the diccionary
+                    dictionary.push(type);
+                }
+
+                // TODO: undefined and null warning
             }
-            dictionary[type] = 1;
         } else {
-            dictionary[type] ++;
+            dictionary.push(type);
         }
     };
 
