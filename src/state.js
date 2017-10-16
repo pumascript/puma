@@ -10,6 +10,7 @@ define([
      * @constructor
      */
     function State() {
+        this._discardedFrames = [];
         this._stackFrame = [];
         this._symbols = {};
         this._newFrameThisBinding = undefined;
@@ -77,6 +78,8 @@ define([
             console.warn('You are trying to pop a stack frame with an empty stack!');
             return;
         }
+        // Save symbols before they are discarded
+        this._discardedFrames[this._discardedFrames.length] = this._symbols;
         this._symbols = this._stackFrame[this._stackFrame.length - 1];
         this._stackFrame.pop();
     };

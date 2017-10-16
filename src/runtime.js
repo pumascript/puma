@@ -1269,6 +1269,9 @@ define([
 
         // Create type-decoration comments
         annotateTypes(programAst.comments, result.state._symbols);
+        for (var _df in result.state._discardedFrames) {
+            annotateTypes(programAst.comments, result.state._discardedFrames[_df]);
+        }
 
         var prune = new PrunePass(programAst);
         var programAstPruned = prune.start();
