@@ -7,7 +7,7 @@ define([
     /**
      * @constructor
      */
-    function Symbol(name, value, loc) {
+    function Symbol(name, value, loc, range) {
         this._value = value;
         this.name = name;
 
@@ -22,7 +22,7 @@ define([
         });
 
         if ('initMetaData' in this)
-            this.initMetaData(value, loc);
+            this.initMetaData(value, loc, range);
     }
 
     Symbol.UNDEFINED = '__UNDEFINED__';
@@ -35,17 +35,18 @@ define([
 
     Symbol.EmitTypeWarnings = true;
 
-    Symbol.prototype.initMetaData = function (value, loc) {
+    Symbol.prototype.initMetaData = function (value, loc, range) {
         this._meta = {
             parameters: [],
             returns: []
         };
 
-        if (loc) {
+        if (loc && range) {
             var type = Inference.resolveType(value);
 
             this._meta.init = {
-                loc: loc.start,
+                loc: loc.start, // Identifier location
+                range: range,   // Declaration node range saved for type decoration
                 type: type
             };
 

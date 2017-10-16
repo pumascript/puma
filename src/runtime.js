@@ -141,7 +141,9 @@ define([
     };
 
     FirstPass.prototype.run = function (state) {
-        return this.accept(this._programAst, state);
+        var result = this.accept(this._programAst, state);
+        result.state = state;
+        return result;
     };
 
     FirstPass.prototype.accept = function (ast, state) {
@@ -318,27 +320,42 @@ define([
         }
     };
 
+    function findAncestor(node, type, depth) {
+        if (depth <= 0)
+            return undefined;
+
+        if (!node.type)
+            console.log(node);
+        if (node.type === type)
+            return node;
+        else if (node.parent && node.parent.parent)
+            return findAncestor(node.parent.parent, type, --depth);
+        else
+            return undefined;
+    }
+
     FirstPass.prototype.visitVariableDeclarator = function (ast, state) {
         if (ast.id.type === 'Identifier') {
-            return new Result(true, this.addLocalVariableDeclaration(ast.id.name, ast.init, ast.loc, state));
+            var init = findAncestor(ast, 'VariableDeclaration', 6);
+            return new Result(true, this.addLocalVariableDeclaration(ast.id.name, ast.init, ast.loc, init ? init.range : undefined, state));
         } else {
             return defaultResult;
         }
     };
 
-    FirstPass.prototype.addLocalVariableDeclaration = function (name, init, loc, state) {
+    FirstPass.prototype.addLocalVariableDeclaration = function (name, init, loc, range, state) {
         var symbol;
 
         if (init !== null) {
             var initResult = this.accept(init, state);
             if (initResult.success) {
                 initResult.makeValue();
-                symbol = state.addSymbol(name, initResult.value, loc);
+                symbol = state.addSymbol(name, initResult.value, loc, range);
             } else {
                 return defaultResult;
             }
         } else {
-            symbol = state.addSymbol(name, undefined, loc);
+            symbol = state.addSymbol(name, undefined, loc, range);
         }
 
         return symbol;
@@ -1230,9 +1247,28 @@ define([
         return evalPumaAst(ast);
     }
 
+    function annotateTypes(astComments, symbols) {
+        Object.keys(symbols).reduce(function (comments, symbolName) {
+            var symbol = symbols[symbolName];
+            if (symbol._meta.init && symbol._meta.init.range) {
+                var types = symbol._meta.types;
+                var message = ' {' + types.join('|') + '} ';
+                var range = [symbol._meta.init.range[0] - 1, message.length + 2];
+                var comment = { type: 'Line', value: message, range: range };
+                comments.push(comment);
+                return comments;
+            } else {
+                return comments;
+            }
+        }, astComments);
+    }
+
     function evalPumaAst(programAst) {
         var firstPass = new FirstPass(programAst);
         var result = firstPass.run(new State());
+
+        // Create type-decoration comments
+        annotateTypes(programAst.comments, result.state._symbols);
 
         var prune = new PrunePass(programAst);
         var programAstPruned = prune.start();
