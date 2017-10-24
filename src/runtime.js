@@ -53,6 +53,7 @@ define([
             "column": 0
         };
         this._programAst = programAst;
+        this._saveAstError = programAst;
     }
 
     var defaultResult = new Result(false, null);
@@ -74,7 +75,7 @@ define([
 
     FirstPass.prototype.accept = function (ast, state) {
         if (ast === undefined || ast === null) throw "invalid call to accept with null ast.";
-
+        this._saveAstError = ast;
         var nodeType = ast.type;
         var result = defaultResult;
 
@@ -85,6 +86,7 @@ define([
         case "ArrowExpression":
             console.warn("ArrowExpression visitor not implemented yet");
             //result = this.visitArrowExpression(ast, state);
+            result = defaultResult
             break;
         case "AssignmentExpression":
             result = this.visitAssignmentExpression(ast, state);
@@ -101,6 +103,7 @@ define([
         case "BreakStatement":
             console.warn("BreakStatement visitor not implemented yet");
             //result = this.visitBreakStatement(ast, state);
+            result = defaultResult
             break;
         case "CallExpression":
             result = this.visitCallExpression(ast, state);
@@ -108,10 +111,12 @@ define([
         case "CatchClause":
             console.warn("CatchClause visitor not implemented yet");
             //result = this.visitCatchClause(ast, state);
+            result = defaultResult
             break;
         case "ComprehensionExpression":
             console.warn("ComprehensionExpression visitor not implemented yet");
             //result = this.visitComprehensionExpression(ast, state);
+            result = defaultResult
             break;
         case "ConditionalExpression":
             result = this.visitIfStatement(ast, state);
@@ -119,10 +124,12 @@ define([
         case "ContinueStatement":
             console.warn("ContinueStatement visitor not implemented yet");
             //result = this.visitContinueStatement(ast, state);
+            result =defaultResult
             break;
         case "DebuggerStatement":
             console.warn("DebuggerStatement visitor not implemented yet");
             //result = this.visitDebuggerStatement(ast, state);
+            result = defaultResult
             break;
         case "DoWhileStatement":
             result = this.visitDoWhileStatement(ast, state);
@@ -130,6 +137,7 @@ define([
         case "EmptyStatement":
             console.warn("EmptyStatement visitor not implemented yet");
             //result = this.visitEmptyStatement(ast, state);
+            result = defaultResult
             break;
         case "ExpressionStatement":
             result = this.accept(ast.expression, state);
@@ -137,6 +145,7 @@ define([
         case "ForInStatement":
             console.warn("ForInStatement visitor not implemented yet");
             //result = this.visitForInStatement(ast, state);
+            result = defaultResult
             break;
         case "ForStatement":
             result = this.visitForStatement(ast, state);
@@ -150,14 +159,17 @@ define([
         case "GraphExpression":
             console.warn("GraphExpression visitor not implemented yet");
             //result = this.visitGraphExpression(ast, state);
+            result = defaultResult
             break;
         case "GraphIndexExpression":
             console.warn("GraphIndexExpression visitor not implemented yet");
             //result = this.visitGraphIndexExpression(ast, state);
+            result = defaultResult
             break;
         case "GeneratorExpression":
             console.warn("GeneratorExpression visitor not implemented yet");
             //result = this.visitGeneratorExpression(ast, state);
+            result = defaultResult
             break;
         case "Identifier":
             result = this.visitIdentifier(ast, state);
@@ -168,10 +180,12 @@ define([
         case "LabeledStatement":
             console.warn("LabeledStatement visitor not implemented yet");
             //result = this.visitLabeledStatement(ast, state);
+            result = defaultResult
             break;
         case "LetStatement":
             console.warn("LetStatement visitor not implemented yet");
             //result = this.visitLetStatement(ast, state);
+            result = defaultResult
             break;
         case "Literal":
             result = this.visitLiteral(ast, state);
@@ -194,6 +208,7 @@ define([
         case "Property":
             console.warn("Property visitor not implemented yet");
             //result = this.visitProperty(ast, state);
+            result = defaultResult
             break;
         case "ReturnStatement":
             result = this.visitReturnStatement(ast, state);
@@ -201,14 +216,17 @@ define([
         case "SequenceExpression":
             console.warn("SequenceExpression visitor not implemented yet");
             //result = this.visitSequenceExpression(ast, state);
+            result = defaultResult
             break;
         case "SwitchCase":
             console.warn("SwitchCase visitor not implemented yet");
             //result = this.visitSwitchCase(ast, state);
+            result = defaultResult
             break;
         case "SwitchStatement":
             console.warn("SwitchStatement visitor not implemented yet");
             //result = this.visitSwitchStatement(ast, state);
+            result = defaultResult
             break;
         case "ThisExpression":
             result = this.visitThisExpression(ast, state);
@@ -216,10 +234,12 @@ define([
         case "ThrowStatement":
             console.warn("ThrowStatement visitor not implemented yet");
             //result = this.visitThrowStatement(ast, state);
+            result = defaultResult
             break;
         case "TryStatement":
             console.warn("TryStatement visitor not implemented yet");
             //result = this.visitTryStatement(ast, state);
+            result = defaultResult
             break;
         case "UnaryExpression":
             result = this.visitUnaryExpression(ast, state);
@@ -239,14 +259,17 @@ define([
         case "WithStatement":
             console.warn("WithStatement visitor not implemented yet");
             //result = this.visitWithStatement(ast, state);
+            result = defaultResult
             break;
         case "YieldExpression":
             console.warn("YieldExpression visitor not implemented yet");
             //result = this.visitYieldExpression(ast, state);
+            result = defaultResult
             break;
                 
         case "Default":
             console.warn("PumaScript visitor: " + nodeType + "not implemented yet");
+            result = defaultResult
             break;
         }
 
@@ -1157,11 +1180,19 @@ define([
 
     function evalPumaAst(programAst) {
         var firstPass = new FirstPass(programAst);
-        var result = firstPass.run(new State());
+        try {
+            var result = firstPass.run(new State());
+        } catch(e) {
+            console.log(e);
+            console.log(firstPass._saveAstError);
+            var result = defaultResult;
+        }
+
 
         var prune = new PrunePass(programAst);
         var programAstPruned = prune.start();
 
+        console.log('*************** FINISHED ********************')
         var generator = new CodeGenerator(programAstPruned);
         var programStr = generator.generateCode();
 
