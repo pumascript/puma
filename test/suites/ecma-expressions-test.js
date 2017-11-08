@@ -56,7 +56,6 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         equal(result.value, 16);
     });
 
-
     /**
      * 11.2.4 Argument Lists
      * 11.2.5 Function Expressions
