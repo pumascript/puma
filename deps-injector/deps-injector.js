@@ -9,7 +9,7 @@ require.config({
 require(['pumascript'], function(puma){
     
     function PumaInjector(dependencies){
-        this.version = "1.0"
+        this.version = '1.0'
         this.puma = puma;
         this.deps = dependencies || [];
         this.installDeps();
@@ -21,7 +21,7 @@ require(['pumascript'], function(puma){
         console.log('Getting the Lib from web');
         var xhttp = new XMLHttpRequest();
         var that = this;
-        xhttp.onreadystatechange = function () {
+        xhtt2p.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 // Action to be performed when the document is read;
                 try {
@@ -43,7 +43,7 @@ require(['pumascript'], function(puma){
     PumaInjector.prototype.createScriptNode = function(dependency){
         var script = document.createElement('script');
         script.src = dependency.url;
-        script.setAttribute("crossorigin", "anonymous");
+        script.setAttribute('crossorigin', 'anonymous');
         script.integrity = dependency.checksum;
         document.getElementsByTagName('head')[0].appendChild(script);
     };
@@ -57,6 +57,6 @@ require(['pumascript'], function(puma){
         }
     };
     
-    return new PumaInjector([{url: "https://code.jquery.com/jquery-2.2.4.js",
-                             checksum: "sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="}]);
+    return new PumaInjector([{url: 'https://code.jquery.com/jquery-2.2.4.js',
+                             checksum: 'sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI='}]);
 });
