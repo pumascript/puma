@@ -14,7 +14,7 @@ npm install -g grunt grunt-cli
 In order to set-up PumaScript environment to give a try follow these steps:
 
 ```
-git clone https://github.com/emravera/puma.git
+git clone https://github.com/pumascript/puma.git
 npm install
 grunt init
 
@@ -79,7 +79,7 @@ jQuery(document.getElementById('#some-panel'));
 
 A meta-function can avoid re-writing the caller expression by returning null instead of the AST.
 
-You could go to PumaScript wiki and find more examples.
+If you wish want more examples, you could go to PumaScript [wiki](https://github.com/pumascript/puma/pull/106 "PumaScript Wiki").
 
 ## Using PumaScript with require
 
