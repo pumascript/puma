@@ -10,41 +10,17 @@ require.config({
 require(['pumascript'], function (puma) {
 
     function PumaInjector() {
-        this.version = "1.0"
+        var script = document.createElement('script');
+        this.version = "1.0";
+        script.setAttribute("crossorigin", "anonymous");
         this.puma = puma;
-        this.deps = [];
-        this.loadDependecies();
+        this.deps = myDependecies || [];
+        this.installDeps(myDependecies);
     };
 
     PumaInjector.FORCE_INJECT = true;
 
-    PumaInjector.prototype.loadDependecies = function () {
-        var that = this;
-        this.loadJSON("puma.json", function (response) {
-            var myDependecies = [];
-            var JSON_result = JSON.parse(response);
-            console.log(JSON_result);
-            for (var x in JSON_result) {
-                myDependecies.push(JSON_result[x]);
-            }
-
-            this.deps = myDependecies || [];
-            that.installDeps(myDependecies);
-        });
-    }
-
-    PumaInjector.prototype.loadJSON = function (file, callback) {
-        var xobj = new XMLHttpRequest();
-        xobj.overrideMimeType("application/json");
-        xobj.open('GET', file, true);
-        xobj.onreadystatechange = function () {
-            if (xobj.readyState == 4 && xobj.status == "200") {
-                // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-                callback(xobj.responseText);
-            }
-        };
-        xobj.send(null);
-    }
+    PumaInjector.CONFIGURATION = 'TEST'; // used as test for runtime error control or injector for dependency injection
 
     PumaInjector.prototype.getExternalScript = function (url) {
         console.log('Getting the Lib from web');
@@ -54,28 +30,7 @@ require(['pumascript'], function (puma) {
             if (this.readyState == 4 && this.status == 200) {
                 // Action to be performed when the document is read;
                 try {
-
-                    console.info('********** Entering ', url, '****************************');
-                    var result = that.puma.evalPuma(this.responseText);
-
-                    if (result.success !== undefined) {
-                        if (result.success) {
-                            console.info('++++++++++++++ Successful injection ++++++++++++++++++');
-                            that.createScriptNode(url);
-                        } else {
-                            console.error(`Error when interpreting the file, puma does not support any internal components.
-                            The error occurred in the line: ${result.pumaAst.loc.end.line}, column: ${result.pumaAst.loc.end.column}
-                            The component that generates error is the following: ${result.output}`);
-                            if (PumaInjector.FORCE_INJECT) that.createScriptNode(url);
-                        }
-                    }
-                    else {
-                        console.error(`Error when interpreting the file, puma does not support any internal components.
-                        The error occurred in the line: ${result.loc.end.line}, column: ${result.loc.end.column}
-                        The component that generates error is the following: ${result.name}`);
-                    }
-                    console.info('*************************END INJECTION**********************************');
-
+                    PumaInjector.CONFIGURATION === 'TEST' ? that.pumaTest(url, this.responseText, that) : that.pumaInjector(url, this.responseText, that);
                 }
                 catch (e) {
                     console.log('Error in puma interpretation');
@@ -86,6 +41,34 @@ require(['pumascript'], function (puma) {
         xhttp.open("GET", url, true);
         xhttp.send();
     };
+
+    PumaInjector.prototype.pumaTest = function(url, responseText, that) {
+        console.info('********** Entering ', url, '****************************');
+        var result = that.puma.evalPuma(responseText);
+
+        if (result.success !== undefined) {
+            if (result.success) {
+                console.info('++++++++++++++ Successful injection ++++++++++++++++++');
+                that.createScriptNode(url);
+            } else {
+                console.error(`Error when interpreting the file, puma does not support any internal components.
+                The error occurred in the line: ${result.pumaAst.loc.end.line}, column: ${result.pumaAst.loc.end.column}
+                The component that generates error is the following: ${result.output}`);
+                if (PumaInjector.FORCE_INJECT) that.createScriptNode(url);
+            }
+        }
+        else {
+            console.error(`Error when interpreting the file, puma does not support any internal components.
+            The error occurred in the line: ${result.loc.end.line}, column: ${result.loc.end.column}
+            The component that generates error is the following: ${result.name}`);
+        }
+        console.info('*************************END INJECTION**********************************');
+    }
+
+    PumaInjector.prototype.pumaInjector = function(url, responseText, that) {
+        var result = that.puma.evalPuma(responseText);
+        that.createScriptNode(url);
+    }
 
 
     PumaInjector.prototype.createScriptNode = function (url) {
@@ -98,8 +81,8 @@ require(['pumascript'], function (puma) {
         var dependencyList = deps || this.deps;
 
         //Retrieve the script from CDN's
-        for (var i = 0; i < dependencyList.length; i++) {
-            this.getExternalScript(dependencyList[i].url);
+        for (var key in dependencyList) {
+            this.getExternalScript(dependencyList[key].url);
         }
     };
 

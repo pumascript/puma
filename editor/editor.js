@@ -4,9 +4,9 @@
 
 require.config({
     paths: {
-        jquery: 'bower_components/jquery/dist/jquery.min',
-        bootstrap: 'bower_components/bootstrap/dist/js/bootstrap',
-        cm: 'bower_components/codemirror/',
+        jquery: 'node_modules/jquery/dist/jquery.min',
+        bootstrap: 'node_modules/bootstrap/dist/js/bootstrap',
+        cm: 'node_modules/codemirror/',
         pumascript: '../src/pumascript'
     },
     shim: {
@@ -36,18 +36,18 @@ require([
 ], function ($, CodeMirror, puma) {
 
     function PumaEditor() {
-        this._javaScriptEditor = this.instantiateCodeMirrorEditor("javascript");
-        this._pumaScriptEditor = this.instantiateCodeMirrorEditor("puma");
+        this._javaScriptEditor = this.instantiateCodeMirrorEditor('javascript');
+        this._pumaScriptEditor = this.instantiateCodeMirrorEditor('puma');
         this.registerEvents();
     }
 
     PumaEditor.prototype.instantiateCodeMirrorEditor = function (section) {
         return CodeMirror(document.getElementById(section), {
-            mode: "javascript",
+            mode: 'javascript',
             extraKeys: {
-                "Ctrl-Space": "autocomplete",
-                "Ctrl-J": "autocomplete",
-                "Ctrl-Q": function (cm) {
+                'Ctrl-Space': 'autocomplete',
+                'Ctrl-J': 'autocomplete',
+                'Ctrl-Q': function (cm) {
                     cm.foldCode(cm.getCursor());
                 }
             },
@@ -56,7 +56,7 @@ require([
             indentUnit: 4,
             tabSize: 4,
             foldGutter: true,
-            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+            gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter']
         });
     };
 
@@ -69,11 +69,11 @@ require([
     };
 
     PumaEditor.prototype.load = function () {
-        this.setEditorValue(this._pumaScriptEditor, localStorage.getItem("puma"));
+        this.setEditorValue(this._pumaScriptEditor, localStorage.getItem('puma'));
     };
 
     PumaEditor.prototype.loadBackup = function () {
-        this.setEditorValue(this._pumaScriptEditor, localStorage.getItem("puma-backup"));
+        this.setEditorValue(this._pumaScriptEditor, localStorage.getItem('puma-backup'));
     };
 
     PumaEditor.prototype.translate = function () {
@@ -82,8 +82,8 @@ require([
 
         //Save the last execution in local storage
         if (programStr !== '') {
-            localStorage.setItem("puma-backup", localStorage.getItem("puma"));
-            localStorage.setItem("puma", programStr);
+            localStorage.setItem('puma-backup', localStorage.getItem('puma'));
+            localStorage.setItem('puma', programStr);
         }
 
         if (programStr !== undefined && programStr !== null) {
@@ -98,11 +98,11 @@ require([
     };
 
     PumaEditor.prototype.registerEvents = function () {
-        $("#translatePuma").click(this.translate.bind(this));
+        $('#translatePuma').click(this.translate.bind(this));
 
-        $("#loadPuma").click(this.load.bind(this));
+        $('#loadPuma').click(this.load.bind(this));
 
-        $("#loadBackupPuma").click(this.loadBackup.bind(this));
+        $('#loadBackupPuma').click(this.loadBackup.bind(this));
     };
 
     var pumaEditorInstance = new PumaEditor();

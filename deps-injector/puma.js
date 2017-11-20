@@ -1,4 +1,4 @@
-{
+var myDependecies = {
 	"query": {
 		"url": "https://code.jquery.com/jquery-2.2.4.js",
 		"checksum": "sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
@@ -43,4 +43,4 @@
 		"url": "https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js",
 		"checksum": ""
 	}
-}
+};

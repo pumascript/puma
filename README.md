@@ -1,9 +1,4 @@
-# PumaScript
-
-[![Build Status](https://travis-ci.org/pumascript/puma.svg?branch=master)](https://travis-ci.org/pumascript/puma)
-[![Join the chat at https://gitter.im/emravera/puma](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/emravera/puma?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-## Intro
+# PumaScript [![Build Status](https://travis-ci.org/pumascript/puma.svg?branch=master)](https://travis-ci.org/pumascript/puma) [![Join the chat at https://gitter.im/emravera/puma](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/emravera/puma?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 PumaScript is a research programming language that adds meta-programming capabilities to JavaScript and is develop at the Universidad Tecnologica Nacional (UTN-FRC) in Cordoba, Argentina.
 
@@ -12,17 +7,20 @@ It has exactly the same syntax and semantic than regular JavaScript plus meta-pr
 A number of PumaScript features are based on LayerD project. Which is a meta-programming framework for statically typed languages.
 
 ## Getting started with Puma
+```
+npm install -g grunt grunt-cli
+```
 
 In order to set-up PumaScript environment to give a try follow these steps:
 
 ```
-git clone https://github.com/emravera/puma.git
+git clone https://github.com/pumascript/puma.git
 npm install
 grunt init
 
 ```
 
-After these steps PumaScript editor is ready to start coding. Open in any browser the file:
+After these steps PumaScript editor is ready to start coding. Open in your browser puma's editor:
 
 ```
 editor/puma-editor.html
@@ -81,6 +79,7 @@ jQuery(document.getElementById('#some-panel'));
 
 A meta-function can avoid re-writing the caller expression by returning null instead of the AST.
 
+If you wish want more examples, you could go to PumaScript [wiki](https://github.com/pumascript/puma/pull/106 "PumaScript Wiki").
 
 ## Using PumaScript with require
 
@@ -99,51 +98,13 @@ Now you can use PumaScript in your code in this way:
     puma.evalPuma('<PUMA PROGRAM STRING HERE>');
 ```
 
-## PumaScript Intrinsic Functions
+## Bugs Report
 
-There are two global functions that can be used to search for nodes inside a portion of AST.
+Feel free to create an issue onto Github issues tracker and add the right label. Also you can get in touch and we will do that for you.
 
-* Search by node type: `pumaFindByType`
-* Search by property names and values: `pumaFindByProperty`
+## Would do you like contribute?
 
-These functions are used to find specific sub-nodes in a portion of AST. For example:
-
-```
-var ast = pumaAst(function(){
-    var a, b, abc;
-    abc = 5;
-    a = 2;
-    b = 3 + 4;
-});
-
-// To look for the node with "a = 2" expression
-var result = pumaFindByProperty(ast, "expression.left.name", "a");
-
-// To look for the node with "3 + 4" binary expression
-result = pumaFindByType(ast, "BinaryExpression");
-
-// To look for the nodes "a = 2" and "b = 3 + 4"
-// This example use a custom comparison function to match the value of "left.name" property
-result = pumaFindByProperty(ast, "left.name", 1, function(value1, value2){ return value1.length === value2; } );
-```
-Both functions returns an Array with the results. If the array is empty it means that none was found.
-
-## The PumaScript Team
-* Ricardo Medel
-* Alexis Ferreyra
-* Emanuel Ravera
-* Albertina Durante
-* Nestor Navarro
-* Pedro Lucas Astrada
-* Alan Pipino
-* Carlos Ryser
-* Marcelo Pignataro
-
-### Universidad Tecnologica Nacional - Facultad Regional Cordoba - Argentina
-The PumaScript project is being developed at the Department of Information Systems Engineering of the UTN-FRC.
-
-![alt text][utn]
-[utn]: http://upload.wikimedia.org/wikipedia/commons/thumb/6/67/UTN_logo.jpg/200px-UTN_logo.jpg "UTN logo"
+We have ton of work that need to be claimed. From coding to documentation. Don't hesitate to contact. We'll waiting for you.
 
 ## License
 
