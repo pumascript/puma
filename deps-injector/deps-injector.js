@@ -18,9 +18,9 @@ require(['pumascript'], function (puma) {
         this.installDeps(myDependecies);
     };
 
-    PumaInjector.FORCE_INJECT = true;
-
     PumaInjector.CONFIGURATION = 'TEST'; // used as test for runtime error control or injector for dependency injection
+
+    PumaInjector.FORCE_INJECT = true;
 
     PumaInjector.prototype.getExternalScript = function (url) {
         console.log('Getting the Lib from web');
@@ -85,9 +85,6 @@ require(['pumascript'], function (puma) {
             this.getExternalScript(dependencyList[key].url);
         }
     };
-
-
-
 
     return new PumaInjector();
 });

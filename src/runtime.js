@@ -142,7 +142,6 @@ define([
         if (ast === undefined || ast === null) throw 'invalid call to accept with null ast.';
         if (ast.type === 'ExpressionStatement') ast = ast.expression;
         this._saveAstError = ast;
-        
         var result = defaultResult;
         if (this._visitorStatements[ast.type]) {
             result = this._visitorStatements[ast.type].call(this, ast, state);
@@ -1222,20 +1221,20 @@ define([
         var firstPass = new FirstPass(programAst);
         try {
             var result = firstPass.run(new State());
-        } catch(e) {
+            var prune = new PrunePass(programAst);
+            var programAstPruned = prune.start();
+
+            var generator = new CodeGenerator(programAstPruned);
+            var programStr = generator.generateCode();
+
+            result.pumaAst = programAstPruned;
+            result.output = programStr;
+
+            return result;
+        }
+        catch(e) {
             return firstPass._saveAstError;
         }
-
-        var prune = new PrunePass(programAst);
-        var programAstPruned = prune.start();
-
-        var generator = new CodeGenerator(programAstPruned);
-        var programStr = generator.generateCode();
-
-        result.pumaAst = programAstPruned;
-        result.output = programStr;
-
-        return result;
     }
 
     /**
