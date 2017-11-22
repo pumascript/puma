@@ -8,7 +8,8 @@ tracks/
 editor/
 
 # Configuration files for development
-.jshintrc
+.eslintrc.js
+.eslintignore
 .travis.yml
 
 # Tasks

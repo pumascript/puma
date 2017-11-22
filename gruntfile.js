@@ -1,5 +1,7 @@
 // Copyright (c) 2013 - present UTN-LIS
 
+/* eslint global-require: 0 */
+
 module.exports = function (grunt) {
 
     'use strict';
@@ -13,17 +15,17 @@ module.exports = function (grunt) {
             output: 'dist/<%= buildConfig.name %>'
         },
 
-        jshint: {
-            all: [
-                'gruntfile.js',
-                'src/**/*.js',
-                'tasks/*.js',
-                'test/*.js'
-            ],
+        eslint: {
             options: {
-                jshintrc: '.jshintrc',
-                reporter: require('jshint-stylish')
-            }
+                configFile: '.eslintrc.js',
+                format: 'stylish'
+            },
+            target: [
+                './editor/*.js',
+                './src/**/*.js',
+                './test/suites/*.js',
+                './test/*.js'
+            ]
         },
 
         exec: {
@@ -37,7 +39,7 @@ module.exports = function (grunt) {
                 options: {
                     sourceMap: true,
                     sourceMapName: 'dist/pumascript.min.map',
-                    sourceMapIn: 'dist/pumascript.map',
+                    sourceMapIn: 'dist/pumascript.map'
                 },
                 files: {
                     'dist/pumascript.min.js': [ 'dist/pumascript.js' ]
@@ -57,8 +59,8 @@ module.exports = function (grunt) {
 
     grunt.registerTask('init', 'Prepare to start working with Puma', function () {
         // Use spawn to report progress of the task
-        var spawn = require('child_process').spawn;
-        var cmd = spawn('bower', ['install'], { cwd: './editor' });
+        var exec = require('child_process').exec;
+        var cmd = exec('npm install', { cwd: './editor' });
         var done = this.async();
 
         cmd.stdout.on('data', function (data) {
@@ -76,6 +78,8 @@ module.exports = function (grunt) {
                 grunt.log.ok('Process Finished Code: ' + code.toString());
             }
 
+            //Grunt init tasks ends with an "Done, with errors" message due
+            //to the forecoming sentence
             done();
         });
     });
@@ -88,7 +92,7 @@ module.exports = function (grunt) {
     // plugin's task(s), then test the result.
     grunt.registerTask('test', ['clean', 'exec:webpack', 'qunit']);
 
-    grunt.registerTask('travis', ['jshint', 'test']);
+    grunt.registerTask('travis', ['eslint', 'test']);
 
     grunt.registerTask('default', ['init']);
 };
