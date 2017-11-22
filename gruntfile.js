@@ -31,6 +31,12 @@ module.exports = function (grunt) {
         exec: {
             webpack: {
                 cmd: 'node ./node_modules/webpack/bin/webpack.js --config webpack.config.js'
+            },
+            qunit:{
+                cmd: 'node ./node_modules/node-qunit-phantomjs/bin/node-qunit-phantomjs test/test.html'
+            },
+            ci:{
+                cmd: 'node ./node_modules/node-qunit-phantomjs/bin/node-qunit-phantomjs test/test.html --verbose'
             }
         },
 
@@ -50,11 +56,8 @@ module.exports = function (grunt) {
         clean: {
             tests: ['tmp'],
             dist: ['dist']
-        },
-
-        qunit: {
-            all: ['test/**/*.html']
         }
+
     });
 
     grunt.registerTask('init', 'Prepare to start working with Puma', function () {
@@ -90,9 +93,11 @@ module.exports = function (grunt) {
 
     // Whenever the "test" task is run, first clean the "tmp" dir, then run this
     // plugin's task(s), then test the result.
-    grunt.registerTask('test', ['clean', 'exec:webpack', 'qunit']);
+    grunt.registerTask('test', ['clean', 'exec:webpack', 'exec:qunit']);
 
-    grunt.registerTask('travis', ['eslint', 'test']);
+    grunt.registerTask('test-ci', ['clean', 'exec:webpack', 'exec:ci']);
+
+    grunt.registerTask('travis', ['eslint', 'test-ci']);
 
     grunt.registerTask('default', ['init']);
 };
