@@ -33,13 +33,6 @@ define(['pumascript'], function(puma) {
         assert.equal(result.value, 20);
     });
 
-    test("Array Initializer", function (assert) {
-        var result = puma.evalPuma("var a = [1, 2, ]");
-        assert.equal(result.value.value[1], 2, "Passed!");
-        assert.equal(result.value.value[2], null, "Passed!");
-        assert.equal(result.value.value.length, 2, "Passed!");
-    });
-
     QUnit.module("11.2 Left-Hand-Side Expressions");
 
     test("Property Accessors", function (assert) {

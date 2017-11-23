@@ -27,7 +27,7 @@
         "pumascript": "bin/pumascript.js"
     },
     "engines": {
-        "node": ">= 0.8.0"
+        "node": ">= 6.0.0"
     },
     "license": "MIT",
     "dependencies": {
@@ -44,7 +44,7 @@
         "grunt-exec": "3.0.0",
         "load-grunt-tasks": "3.5.2",
         "node-qunit-phantomjs": "1.6.0",
-        "qunitjs":"2.4.1",
+        "qunitjs": "2.4.1",
         "webpack": "2.2.1"
     },
     "scripts": {
