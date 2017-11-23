@@ -105,5 +105,6 @@ require([
         $('#loadBackupPuma').click(this.loadBackup.bind(this));
     };
 
+    // eslint-disable-next-line no-unused-vars
     var pumaEditorInstance = new PumaEditor();
 });

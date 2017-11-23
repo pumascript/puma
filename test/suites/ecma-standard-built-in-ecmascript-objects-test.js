@@ -1507,7 +1507,7 @@ define(['pumascript'], function (puma) {
         assert.equal(result.success, true);
         assert.equal(result.value, 2);
     });
-    
+
     // Helper to determine aritmetical equal on floats
     QUnit.assert.aritmeticEqual = function( value, expected, message ) {
         var actual = value - expected;
