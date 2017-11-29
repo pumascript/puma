@@ -31,6 +31,6 @@ var suites = [
 ];
 
 require(suites, function () {
-    // Required to make it work under phantomjs environment
+    // Required by phantomjs and Qunit interaction
     QUnit.start();
 });
