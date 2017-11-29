@@ -44,7 +44,7 @@ require(['pumascript'], function (puma) {
 
     PumaInjector.prototype.pumaTest = function(url, responseText, that) {
         console.info('********** Entering ', url, '****************************');
-        var result = that.puma.evalPuma(responseText);
+        var result = that.puma.evalPuma(responseText, 'inyector');
 
         if (result.success !== undefined) {
             if (result.success) {

@@ -74,7 +74,8 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         try {
             puma.evalPuma("var obj = {}; Object.defineProperty(obj, 'key', { value: 1, configurable: false, writable: false}); Object.defineProperty(obj, 'key', { writable: true });");
         } catch (e) {
-            if (e instanceof TypeError) {
+            // this error is exchanged for the return of runtime types
+            if (e instanceof Error) {
                 equal(true, true);
             }
         }

@@ -54,6 +54,18 @@ define([
     /**
      * @constructor
      */
+    function RuntimeConfig() {
+        this._modeConfig = 'default';
+    }
+
+    RuntimeConfig.prototype.getConfig = function () {
+        return this._modeConfig;
+    };
+
+    RuntimeConfig.prototype.setConfig = function (modeConfig) {
+        this._modeConfig = modeConfig;
+    };
+
     function FirstPass(programAst) {
         this._metaComments = [];
         this._lastStatementLoc = {
@@ -118,6 +130,7 @@ define([
     var defaultResult = new Result(false, null);
     var emptyResult = new Result(true, undefined);
     emptyResult.setIsEmptyResult(true);
+    var runtimeConfig = new RuntimeConfig();
 
     FirstPass.prototype.acceptArray = function (arrayNodes, state) {
         var result = emptyResult,
@@ -1211,8 +1224,10 @@ define([
 
     // puma API
 
-    function evalPuma(programStr) {
+    function evalPuma(programStr, modeConfig) {
         var ast = esprima.parse(programStr, {'comment': true, 'loc': true});
+        var config = modeConfig || 'default';
+        runtimeConfig.setConfig(config);
         addParent(ast);
         return evalPumaAst(ast);
     }
@@ -1233,7 +1248,13 @@ define([
             return result;
         }
         catch(e) {
-            return firstPass._saveAstError;
+            if (runtimeConfig.getConfig() === 'default') {
+                throw TypeError(e.messsage);
+            }
+            else {
+                // is used to detect errors from the puma-injector test mode
+                return firstPass._saveAstError;
+            }
         }
     }
 
