@@ -56,10 +56,18 @@ define([
      */
     function RuntimeConfig() {
         this._modeConfig = 'default';
+        this._MODES = {
+            DEFAULT: 'default',
+            TEST: 'test'
+        };
     }
 
     RuntimeConfig.prototype.getConfig = function () {
         return this._modeConfig;
+    };
+
+    RuntimeConfig.prototype.getModes = function () {
+        return this._MODES;
     };
 
     RuntimeConfig.prototype.setConfig = function (modeConfig) {
@@ -1248,7 +1256,7 @@ define([
             return result;
         }
         catch(e) {
-            if (runtimeConfig.getConfig() === 'default') {
+            if (runtimeConfig.getConfig() === runtimeConfig.getModes().DEFAULT) {
                 throw TypeError(e.messsage);
             }
             else {

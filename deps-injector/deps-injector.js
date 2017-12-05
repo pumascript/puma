@@ -44,7 +44,7 @@ require(['pumascript'], function (puma) {
 
     PumaInjector.prototype.pumaTest = function(url, responseText, that) {
         console.info('********** Entering ', url, '****************************');
-        var result = that.puma.evalPuma(responseText, 'inyector');
+        var result = that.puma.evalPuma(responseText, 'test');
 
         if (result.success !== undefined) {
             if (result.success) {
@@ -81,8 +81,8 @@ require(['pumascript'], function (puma) {
         var dependencyList = deps || this.deps;
 
         //Retrieve the script from CDN's
-        for (var key in dependencyList) {
-            this.getExternalScript(dependencyList[key].url);
+        for (var i=0;i<dependencyList.length;i++) {
+            this.getExternalScript(dependencyList[i].url);
         }
     };
 
