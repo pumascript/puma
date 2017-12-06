@@ -43,7 +43,8 @@ define(['pumascript', 'esprima'], function (puma, esprima) {
         try {
             var result = puma.evalPuma("eval(\"var 1;\");");
         } catch (e) {
-            if (e instanceof SyntaxError) {
+            // this error is exchanged for the return of runtime types
+            if (e instanceof Error) {
                 equal(true, true);
             }
         }
