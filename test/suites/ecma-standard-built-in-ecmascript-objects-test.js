@@ -44,7 +44,7 @@ define(['pumascript'], function (puma) {
         } catch (e) {
             // this error is exchanged for the return of runtime types
             if (e instanceof Error) {
-                equal(true, true);
+                assert.equal(true, true);
             }
         }
     });
