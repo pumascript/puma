@@ -54,6 +54,26 @@ define([
     /**
      * @constructor
      */
+    function RuntimeConfig() {
+        this._modeConfig = 'default';
+        this._MODES = {
+            DEFAULT: 'default',
+            TEST: 'test'
+        };
+    }
+
+    RuntimeConfig.prototype.getConfig = function () {
+        return this._modeConfig;
+    };
+
+    RuntimeConfig.prototype.getModes = function () {
+        return this._MODES;
+    };
+
+    RuntimeConfig.prototype.setConfig = function (modeConfig) {
+        this._modeConfig = modeConfig;
+    };
+
     function FirstPass(programAst) {
         this._metaComments = [];
         this._lastStatementLoc = {
@@ -61,6 +81,7 @@ define([
             'column': 0
         };
         this._programAst = programAst;
+        this._saveAstError = programAst;
 
         /**Each new property will be defined in the @visitorStatements dictionary. */
         this._visitorStatements = {
@@ -117,6 +138,7 @@ define([
     var defaultResult = new Result(false, null);
     var emptyResult = new Result(true, undefined);
     emptyResult.setIsEmptyResult(true);
+    var runtimeConfig = new RuntimeConfig();
 
     FirstPass.prototype.acceptArray = function (arrayNodes, state) {
         var result = emptyResult,
@@ -140,7 +162,7 @@ define([
     FirstPass.prototype.accept = function (ast, state) {
         if (ast === undefined || ast === null) throw 'invalid call to accept with null ast.';
         if (ast.type === 'ExpressionStatement') ast = ast.expression;
-
+        this._saveAstError = ast;
         var result = defaultResult;
         if (this._visitorStatements[ast.type]) {
             result = this._visitorStatements[ast.type].call(this, ast, state);
@@ -1210,26 +1232,38 @@ define([
 
     // puma API
 
-    function evalPuma(programStr) {
+    function evalPuma(programStr, modeConfig) {
         var ast = esprima.parse(programStr, {'comment': true, 'loc': true});
+        var config = modeConfig || 'default';
+        runtimeConfig.setConfig(config);
         addParent(ast);
         return evalPumaAst(ast);
     }
 
     function evalPumaAst(programAst) {
         var firstPass = new FirstPass(programAst);
-        var result = firstPass.run(new State());
+        try {
+            var result = firstPass.run(new State());
+            var prune = new PrunePass(programAst);
+            var programAstPruned = prune.start();
 
-        var prune = new PrunePass(programAst);
-        var programAstPruned = prune.start();
+            var generator = new CodeGenerator(programAstPruned);
+            var programStr = generator.generateCode();
 
-        var generator = new CodeGenerator(programAstPruned);
-        var programStr = generator.generateCode();
+            result.pumaAst = programAstPruned;
+            result.output = programStr;
 
-        result.pumaAst = programAstPruned;
-        result.output = programStr;
-
-        return result;
+            return result;
+        }
+        catch(e) {
+            if (runtimeConfig.getConfig() === runtimeConfig.getModes().DEFAULT) {
+                throw TypeError(e.messsage);
+            }
+            else {
+                // is used to detect errors from the puma-injector test mode
+                return firstPass._saveAstError;
+            }
+        }
     }
 
     /**
