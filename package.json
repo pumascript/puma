@@ -32,7 +32,8 @@
     "license": "MIT",
     "dependencies": {
         "commander": "2.11.0",
-        "escodegen": "1.6.1"
+        "esprima": "4.0.0",
+        "requirejs": "2.3.5"
     },
     "devDependencies": {
         "eslint": "^4.8.0",

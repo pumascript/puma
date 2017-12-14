@@ -24,14 +24,11 @@ define(['pumascript'], function (puma) {
 
     QUnit.module("13.1 Strict Mode Restrictions");
 
-    test("Strict Mode Restriction 1", function (assert) {
-        var errorMessage;
-        try {
-            var result = puma.evalPuma("\"use strict\"; var o = { p: 1, p: 2 };");
-        } catch (err) {
-            errorMessage = err.message;
-        }
-        assert.equal(errorMessage, "Line 1: Duplicate data property in object literal not allowed in strict mode");
+    // This is now accepted on ECMA6 - See BABEL issue on transpiling https://github.com/babel/babel/issues/2462
+    test("Strict Mode Restriction Duplicate Keys", function (assert) {
+        var result = puma.evalPuma("\"use strict\"; var o = { p: 1, p: 2 };");
+        assert.equal(result.success,true);
+        assert.equal(result.value, "use strict");
     });
 
     test("Strict Mode Restriction 2", function (assert) {

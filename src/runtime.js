@@ -830,7 +830,7 @@ define([
         flagged = false;
         hasDefault = -1;
 
-        if (ast.cases) {
+        if (ast.cases && ast.cases.length > 0) {
             for (c = 0; c < ast.cases.length; c++) {
                 var ast_case = ast.cases[c];
 
@@ -1257,7 +1257,7 @@ define([
         }
         catch(e) {
             if (runtimeConfig.getConfig() === runtimeConfig.getModes().DEFAULT) {
-                throw TypeError(e.messsage);
+                throw TypeError(e.message);
             }
             else {
                 // is used to detect errors from the puma-injector test mode
