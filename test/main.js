@@ -8,7 +8,7 @@
 require.config({
     paths: {
         'pumascript': '../src/pumascript',
-        'esprima': '../thirdparty/esprima/esprima',
+        'esprima': '../node_modules/esprima/dist/esprima',
         'escodegen': '../thirdparty/escodegen/escodegen.browser'
     }
 });

@@ -401,7 +401,7 @@ define(['pumascript'], function(puma) {
             puma.evalPuma("var class=1;");
         } catch (e) {
             var result = e.message;
-            assert.ok(result === "Line 1: Unexpected reserved word");
+            assert.ok(result === "Line 1: Unexpected token class");
         }
     });
 
@@ -419,7 +419,7 @@ define(['pumascript'], function(puma) {
             puma.evalPuma("var extends=1;");
         } catch (e) {
             var result = e.message;
-            assert.ok(result === "Line 1: Unexpected reserved word");
+            assert.ok(result === "Line 1: Unexpected token extends");
         }
     });
 
