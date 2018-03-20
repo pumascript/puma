@@ -61,7 +61,7 @@ require([
     };
 
     PumaEditor.prototype.editorValue = function (editor) {
-        return editor.getValue();
+        return editor.getValue() || '';
     };
 
     PumaEditor.prototype.setEditorValue = function (editor, value) {
@@ -69,11 +69,13 @@ require([
     };
 
     PumaEditor.prototype.load = function () {
-        this.setEditorValue(this._pumaScriptEditor, localStorage.getItem('puma'));
+        var value = localStorage.getItem('puma') || '';
+        this.setEditorValue(this._pumaScriptEditor, value);
     };
 
     PumaEditor.prototype.loadBackup = function () {
-        this.setEditorValue(this._pumaScriptEditor, localStorage.getItem('puma-backup'));
+        var value = localStorage.getItem('puma-backup') || '';
+        this.setEditorValue(this._pumaScriptEditor, value);
     };
 
     PumaEditor.prototype.translate = function () {
