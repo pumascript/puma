@@ -48,4 +48,4 @@ define(['pumascript'], function (puma) {
         assert.equal(result.value, true);
 	});
 	
-});		
+});
