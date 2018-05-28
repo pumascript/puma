@@ -12,6 +12,7 @@ var skip = QUnit.skip;
 define(['pumascript'], function (puma) {
 	
 	QUnit.module("Ecma6-Map-Set-And-WeakMap-WeakSet-Tests");
+	
 	skip("Map get method", function(assert) {
         var result = puma.evalPuma("let m = new Map(); let s = Symbol(); m.set('hello', 42); m.set(s, 34); m.get(s) === 34");
         assert.equal(result.value, true);
@@ -46,4 +47,5 @@ define(['pumascript'], function (puma) {
 		var result = puma.evalPuma("let s = new Set(); s.add('hello').add('goodbye').add('hello'); s.size === 2;");
         assert.equal(result.value, true);
 	});
+	
 });		

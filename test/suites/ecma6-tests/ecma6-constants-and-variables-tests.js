@@ -11,7 +11,8 @@ var skip = QUnit.skip;
 
 define(['pumascript'], function (puma) {
 	
-	QUnit.module("Ecma6-Variables-And-Constants-Tests");
+	QUnit.module("Ecma6-Constants-And-Variables-Tests");
+	
 	skip("Constant", function(assert) {
         var result = puma.evalPuma("const PI = 3.141593; PI > 3.0;");
         assert.equal(result.value, true);
@@ -41,12 +42,12 @@ define(['pumascript'], function (puma) {
 		var result = puma.evalPuma("let a = 2; a === 2");
 		assert.equal(result.value, true);
 	});
-		
+	
 	skip("Variable let principal scope", function(assert) {
 		var result = puma.evalPuma("let a = 2; if(true){let a = 3;} a === 2;");
 		assert.equal(result.value, true);
 	});
-		
+	
 	skip("Variable let block scope", function(assert) {
 		var result = puma.evalPuma("let a = 2; if(true){let a = 3; a === 3}");
 		assert.equal(result.value, true);
@@ -56,4 +57,5 @@ define(['pumascript'], function (puma) {
 		var result = puma.evalPuma("if(true){let a = 3;} typeof(a) === 'undefined';");
 		assert.equal(result.value, true);
 	});
+	
 });				
