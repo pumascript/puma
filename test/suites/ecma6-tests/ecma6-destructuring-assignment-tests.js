@@ -64,17 +64,17 @@ define(['pumascript'], function (puma) {
 	});	
 	
 	skip("Object destructuring: function arguments default", function(assert) {
-        var result = puma.evalPuma("function drawES2015Chart({size = 'big', cords = { x: 0, y: 0 }, radius = 25} = {}){return [size, cords, radius]} let [size, cords, radius] = drawES2015Chart({cords: { x: 18, y: 30 }, radius: 30}); size === 'big' && cords.x === 18 && cords.y === 30 && radius === 30;");
+        var result = puma.evalPuma("function drawES2015Chart({cords = { x: 0, y: 0 }, radius = 25} = {}){return [cords, radius]} let [cords, radius] = drawES2015Chart({cords: { x: 18, y: 30}}); cords.x === 18 && cords.y === 30;");
         assert.equal(result.value, true);
 	});
 	
 	skip("Object destructuring: nested objects and array destructuring", function(assert) {
-        var result = puma.evalPuma("let metadata = {title: 'Scratchpad', translations: [{locale: 'de', localization_tags: [ ], last_edit: '2014-04-14T08:43:37', url: '/de/docs/Tools/Scratchpad', title: 'JavaScript-Umgebung'}], url: '/en-US/docs/Tools/Scratchpad'}; let { title: englishTitle, translations: [{ title: localeTitle }] } = metadata; englishTitle === 'Scratchpad' && localeTitle === 'JavaScript-Umgebung';");
+        var result = puma.evalPuma("let metadata = { title: 'Scratchpad', translations: [{ locale: 'de', title: 'JavaScript-Umgebung'}] }; let { title: englishTitle, translations: [{ title: localeTitle }] } = metadata; englishTitle === 'Scratchpad' && localeTitle === 'JavaScript-Umgebung';");
         assert.equal(result.value, true);
 	});
 	
 	skip("Object destructuring: For iterations with destructuring", function(assert) {
-        var result = puma.evalPuma("var people = [{name: 'Mike Smith',family: {mother: 'Jane Smith', father: 'Harry Smith'}, age: 35}, {name: 'Tom Jones', family: {mother: 'Norah Jones', father: 'Richard Jones'}, age: 25}]; let fathers=[]; for (let {name: n, family: { father: f } } of people) {father=[{name: n, father: f}];fathers.push(father);} fathers.length === 2;");
+        var result = puma.evalPuma("let people = [{ name: 'Mike Smith', family: { father: 'Harry Smith' } }, { name: 'Tom Jones', family: { father: 'Richard Jones' } }]; let fathers = []; for (let { family: { father: f } } of people) {father = [{ father: f }]; fathers.push(father);} fathers.length === 2;");
         assert.equal(result.value, true);
 	});	
 	
