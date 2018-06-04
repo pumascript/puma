@@ -24,8 +24,7 @@ module.exports = function (grunt) {
             target: [
                 './editor/*.js',
                 './src/**/*.js',
-                './test/suites/*.js',
-                './test/*.js'
+                './test/**/*.js'
             ]
         },
 
