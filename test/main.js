@@ -27,7 +27,8 @@ var suites = [
     './suites/ecma-expressions-test.js',
     './suites/ecma-statements-test.js',
     './suites/ecma-function-definition-test.js',
-    './suites/ecma-standard-built-in-ecmascript-objects-test.js'
+    './suites/ecma-standard-built-in-ecmascript-objects-test.js',
+    './suites/ecma6-tests/ecma6-parameters-handling-tests.js'
 ];
 
 require(suites, function () {
