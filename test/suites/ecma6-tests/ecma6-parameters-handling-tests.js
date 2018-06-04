@@ -13,9 +13,16 @@ define(['pumascript'], function (puma) {
 
     QUnit.module("Ecma6-Parameters-Handling-Tests");
 
+    skip("Default parameter values", function(assert) {
+        var result = puma.evalPuma("function f (x, y = 7, z = 42) { return x + y + z } f(1);");
+        result.makeValue();
+        assert.ok(result.success && result.value === 50);
+    });
+
     skip("Rest parameter", function(assert) {
-        var result = puma.evalPuma("function f (x, y, ...a){return (x + y) * a.length} f(1, 2, 'hello', true, 7) === 9;");
-        assert.ok(result.success && result.value === true);
+        var result = puma.evalPuma("function f (x, y, ...a){return (x + y) * a.length} f(1, 2, 'hello', true, 7);");
+        result.makeValue();
+        assert.ok(result.success && result.value === 9);
     });
 
     skip("Spread operator", function(assert) {
