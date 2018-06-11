@@ -14,31 +14,31 @@ define(['pumascript'], function (puma) {
     QUnit.module("Ecma6-Map-Set-And-WeakMap-WeakSet-Tests");
 
     skip("Map get method", function(assert) {
-        var result = puma.evalPuma("let m = new Map(); let s = Symbol(); m.set('hello', 42); m.set(s, 34); m.get(s);");
+        var result = puma.evalPuma("let m = new Map(); const s = Symbol(); m.set('hello', 42); m.set(s, 34); m.get(s);");
         result.makeValue();
         assert.ok(result.success && result.value === 34);
     });
 
     skip("Map has method", function(assert) {
-        var result = puma.evalPuma("let m = new Map(); let s = Symbol(); m.set('hello', 42); m.set(s, 34); m.has(s);");
+        var result = puma.evalPuma("let m = new Map(); const s = Symbol(); m.set('hello', 42); m.set(s, 34); m.has(s);");
         result.makeValue();
         assert.ok(result.success && result.value === true);
     });
 
     skip("Map stores unique keys, check of size", function(assert) {
-        var result = puma.evalPuma("let m = new Map(); let s = Symbol(); m.set('hello', 42); m.set(s, 34); m.set('hello', 34); m.size;");
+        var result = puma.evalPuma("let m = new Map(); const s = Symbol(); m.set('hello', 42); m.set(s, 34); m.set('hello', 34); m.size;");
         result.makeValue();
         assert.ok(result.success && result.value === 2);
     });
 
     skip("Map delete method", function(assert) {
-        var result = puma.evalPuma("let m = new Map(); let s = Symbol(); m.set('hello', 42); m.set(s, 34); m.delete('hello'); m.size;");
+        var result = puma.evalPuma("let m = new Map(); const s = Symbol(); m.set('hello', 42); m.set(s, 34); m.delete('hello'); m.size;");
         result.makeValue();
         assert.ok(result.success && result.value === 1);
     });
 
     skip("Map clear method", function(assert) {
-        var result = puma.evalPuma("let m = new Map(); let s = Symbol(); m.set('hello', 42); m.set(s, 34); m.clear(); m.size;");
+        var result = puma.evalPuma("let m = new Map(); const s = Symbol(); m.set('hello', 42); m.set(s, 34); m.clear(); m.size;");
         result.makeValue();
         assert.ok(result.success && result.value === 0);
     });
@@ -53,6 +53,18 @@ define(['pumascript'], function (puma) {
         var result = puma.evalPuma("let s = new Set(); s.add('hello').add('goodbye').add('hello'); s.size;");
         result.makeValue();
         assert.ok(result.success && result.value === 2);
+    });
+
+    skip("Set delete method", function(assert) {
+        var result = puma.evalPuma("let s = new Set(); s.add('hello').add('goodbye'); s.delete('hello'); s.size;");
+        result.makeValue();
+        assert.ok(result.success && result.value === 1);
+    });
+
+    skip("Set clear method", function(assert) {
+        var result = puma.evalPuma("let s = new Set(); s.add('hello').add('goodbye'); s.clear(); s.size;");
+        result.makeValue();
+        assert.ok(result.success && result.value === 0);
     });
 
     //Missing WeakMap and WeakSet tests
