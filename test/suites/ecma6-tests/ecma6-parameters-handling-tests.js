@@ -14,25 +14,25 @@ define(['pumascript'], function (puma) {
     QUnit.module("Ecma6-Parameters-Handling-Tests");
 
     skip("Default parameter values", function(assert) {
-        var result = puma.evalPuma("function f (x, y = 7, z = 42) { return x + y + z } f(1);");
+        var result = puma.evalPuma("function f(x, y = 7, z = 42) {return x + y + z} f(1);");
         result.makeValue();
         assert.ok(result.success && result.value === 50);
     });
 
     skip("Rest parameter", function(assert) {
-        var result = puma.evalPuma("function f (x, y, ...a){return (x + y) * a.length} f(1, 2, 'hello', true, 7);");
+        var result = puma.evalPuma("function f(x, y, ...a){return (x + y) * a.length} f(1, 2, 'hello', true, 7);");
         result.makeValue();
         assert.ok(result.success && result.value === 9);
     });
 
     skip("Spread operator", function(assert) {
-        var result = puma.evalPuma("let params = [ 'hello', true, 7 ]; let other = [ 1, 2, ...params ]; other.length;");
+        var result = puma.evalPuma("const params = [ 'hello', true, 7 ]; const other = [ 1, 2, ...params ]; other.length;");
         result.makeValue();
         assert.ok(result.success && result.value === 5);
     });
 
     skip("Spread operator, alternative case", function(assert) {
-        var result = puma.evalPuma("let str = 'foo'; let chars = [ ...str ]; chars.length;");
+        var result = puma.evalPuma("const str = 'foo'; const chars = [ ...str ]; chars.length;");
         result.makeValue();
         assert.ok(result.success && result.value === 3);
     });
