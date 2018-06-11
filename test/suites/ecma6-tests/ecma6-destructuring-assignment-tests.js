@@ -14,7 +14,7 @@ define(['pumascript'], function (puma) {
     QUnit.module("Ecma6-Destructuring-Assignment-Tests");
 
     skip("Array destructuring: assignment with array declaration", function(assert) {
-        var result = puma.evalPuma("let foo = ['one', 'two', 'three']; let [one, two, three] = foo; one;");
+        var result = puma.evalPuma("const foo = ['one', 'two', 'three']; const [one, two, three] = foo; one;");
         result.makeValue();
         assert.ok(result.success && result.value === 'one');
     });
@@ -32,31 +32,37 @@ define(['pumascript'], function (puma) {
     });
 
     skip("Array destructuring: multiple return values", function(assert) {
-        var result = puma.evalPuma("function f() {return [1, 2];} let [a, b] = f(); a;");
+        var result = puma.evalPuma("function f() {return [1, 2];} const [a, b] = f(); a;");
         result.makeValue();
         assert.ok(result.success && result.value === 1);
     });
 
     skip("Array destructuring: multiple return values assigned to an array", function(assert) {
-        var result = puma.evalPuma("function f() {return [1, 2];} let a = f(); a[0];");
+        var result = puma.evalPuma("function f() {return [1, 2];} const a = f(); a[0];");
         result.makeValue();
         assert.ok(result.success && result.value === 1);
     });
 
     skip("Array destructuring: some return values ignored", function(assert) {
-        var result = puma.evalPuma("function f() {return [1, 2, 3];} let [a, , b] = f(); b;");
+        var result = puma.evalPuma("function f() {return [1, 2, 3];} const [a, , b] = f(); b;");
         result.makeValue();
         assert.ok(result.success && result.value === 3);
     });
 
+    skip("Array destructuring: all return values ignored", function(assert) {
+        var result = puma.evalPuma("function f(){return [1, 2, 3]}; ([,,] = f()) instanceof Array;");
+        result.makeValue();
+        assert.ok(result.success && result.value === true);
+    });
+
     skip("Object destructuring: assignment with object declaration", function(assert) {
-        var result = puma.evalPuma("let o = {p: 42, q: true}; let {p, q} = o; p;");
+        var result = puma.evalPuma("const o = {p: 42, q: true}; const {p, q} = o; p;");
         result.makeValue();
         assert.ok(result.success && result.value === 42);
     });
 
     skip("Object destructuring: assignment with object declaration", function(assert) {
-        var result = puma.evalPuma("let o = {p: 42, q: true}; let {p: foo, q: bar} = o; foo;");
+        var result = puma.evalPuma("const o = {p: 42, q: true}; const {p: foo, q: bar} = o; foo;");
         result.makeValue();
         assert.ok(result.success && result.value === 42);
     });
@@ -68,37 +74,37 @@ define(['pumascript'], function (puma) {
     });
 
     skip("Object destructuring: function arguments default, simple example", function(assert) {
-        var result = puma.evalPuma("let {x = 1, y = 200} = {x: 100}; x===100 && y ===200;");
+        var result = puma.evalPuma("let {x = 1, y = 200} = {x: 100}; x + y;");
         result.makeValue();
-        assert.ok(result.success && result.value === true);
+        assert.ok(result.success && result.value === 300);
     });
 
     skip("Object destructuring: function arguments default", function(assert) {
-        var result = puma.evalPuma("function drawES2015Chart({cords = { x: 0, y: 0 }, radius = 25} = {}){return [cords, radius]} let [cords, radius] = drawES2015Chart({cords: { x: 18, y: 30}}); cords.x;");
+        var result = puma.evalPuma("function drawES2015Chart({cords = { x: 0, y: 0 }, radius = 25} = {}){return [cords, radius]} const [cords, radius] = drawES2015Chart({cords: { x: 18, y: 30}}); cords.x;");
         result.makeValue();
         assert.ok(result.success && result.value === 18);
     });
 
     skip("Object destructuring: nested objects and array destructuring", function(assert) {
-        var result = puma.evalPuma("let metadata = { title: 'Scratchpad', translations: [{ locale: 'de', title: 'JavaScript-Umgebung'}] }; let { title: englishTitle, translations: [{ title: localeTitle }] } = metadata; localeTitle;");
+        var result = puma.evalPuma("const metadata = { title: 'Scratchpad', translations: [{ locale: 'de', title: 'JavaScript-Umgebung'}] }; const { title: englishTitle, translations: [{ title: localeTitle }] } = metadata; localeTitle;");
         result.makeValue();
         assert.ok(result.success && result.value === 'JavaScript-Umgebung');
     });
 
     skip("Object destructuring: For iterations with destructuring", function(assert) {
-        var result = puma.evalPuma("let people = [{ name: 'Mike Smith', family: { father: 'Harry Smith' } }, { name: 'Tom Jones', family: { father: 'Richard Jones' } }]; let fathers = []; for (let { family: { father: f } } of people) {father = [{ father: f }]; fathers.push(father);} fathers.length;");
+        var result = puma.evalPuma("const people = [{ name: 'Mike Smith', family: { father: 'Harry Smith' } }, { name: 'Tom Jones', family: { father: 'Richard Jones' } }]; const fathers = []; for (const { family: { father: f } } of people) {father = [{ father: f }]; fathers.push(father);} fathers.length;");
         result.makeValue();
         assert.ok(result.success && result.value === 2);
     });
 
     skip("Object destructuring: Computed object property names and destructuring", function(assert) {
-        var result = puma.evalPuma("let key = 'z'; let { [key]: foo } = { z: 'bar' }; foo;");
+        var result = puma.evalPuma("const key = 'z'; let { [key]: foo } = { z: 'bar' }; foo;");
         result.makeValue();
         assert.ok(result.success && result.value === 'bar');
     });
 
     skip("Object destructuring: Computed object property names and destructuring, alternative", function(assert) {
-        var result = puma.evalPuma("let {['f' + 'oo']: there} = {foo : 'bar'}; there;");
+        var result = puma.evalPuma("const {['f' + 'oo']: there} = {foo : 'bar'}; there;");
         result.makeValue();
         assert.ok(result.success && result.value === 'bar');
     });
