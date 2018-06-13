@@ -3,9 +3,9 @@
 /* eslint quotes: 0, no-unused-vars: 0 */
 
 /**
-*          PUMASCRIPT ECMA 6 TEMPLATE LITERALS SUITE
-* @file: Ecma6 Template literals expressions test suite for the language
-*/
+ *          PUMASCRIPT ECMA 6 TEMPLATE LITERALS SUITE
+ * @file: Ecma6 Template literals expressions test suite for the language
+ */
 var test = QUnit.test;
 var skip = QUnit.skip;
 
