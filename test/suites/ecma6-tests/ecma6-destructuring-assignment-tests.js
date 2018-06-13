@@ -3,9 +3,9 @@
 /* eslint quotes: 0, no-unused-vars: 0 */
 
 /**
-*          PUMASCRIPT ECMA 6 DESTRUCTURING ASSIGNMENT SUITE
-* @file: Ecma6 Destructuring assignment expressions test suite for the language
-*/
+ *          PUMASCRIPT ECMA 6 DESTRUCTURING ASSIGNMENT SUITE
+ * @file: Ecma6 Destructuring assignment expressions test suite for the language
+ */
 var test = QUnit.test;
 var skip = QUnit.skip;
 
