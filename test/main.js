@@ -28,6 +28,7 @@ var suites = [
     './suites/ecma-statements-test.js',
     './suites/ecma-function-definition-test.js',
     './suites/ecma-standard-built-in-ecmascript-objects-test.js',
+    './suites/ecma6-tests/ecma6-template-literals-tests.js',
     './suites/ecma6-tests/ecma6-constants-and-variables-tests.js',
     './suites/ecma6-tests/ecma6-map-set-and-weakmap-weakset-tests.js'
 ];
