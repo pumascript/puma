@@ -1260,8 +1260,8 @@ define([
                 throw TypeError(e.message);
             }
             else {
-                // is used to detect errors from the puma-injector test mode
-                return firstPass._saveAstError;
+                // Returns errors in TEST mode
+                return { error: e.stack, details: firstPass._saveAstError };
             }
         }
     }
