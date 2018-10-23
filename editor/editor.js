@@ -5,34 +5,26 @@
 require.config({
     paths: {
         jquery: 'node_modules/jquery/dist/jquery.min',
-        bootstrap: 'node_modules/bootstrap/dist/js/bootstrap',
-        cm: 'node_modules/codemirror/',
-        pumascript: '../src/pumascript'
+        codemirror: 'node_modules/codemirror/',
+        pumascript: '../src/pumascript',
     },
-    shim: {
-        bootstrap: {
-            exports: 'bootstrap',
-            deps: ['jquery']
-        }
-    }
 });
 
 require([
     'jquery',
-    'cm/lib/codemirror',
+    'codemirror/lib/codemirror',
     'pumascript',
-    'bootstrap',
-    'cm/addon/hint/show-hint',
-    'cm/addon/hint/xml-hint',
-    'cm/addon/hint/html-hint',
-    'cm/addon/hint/javascript-hint',
-    'cm/addon/fold/foldcode',
-    'cm/addon/fold/foldgutter',
-    'cm/addon/fold/brace-fold',
-    'cm/mode/xml/xml',
-    'cm/mode/javascript/javascript',
-    'cm/mode/css/css',
-    'cm/mode/htmlmixed/htmlmixed'
+    'codemirror/addon/hint/show-hint',
+    'codemirror/addon/hint/xml-hint',
+    'codemirror/addon/hint/html-hint',
+    'codemirror/addon/hint/javascript-hint',
+    'codemirror/addon/fold/foldcode',
+    'codemirror/addon/fold/foldgutter',
+    'codemirror/addon/fold/brace-fold',
+    'codemirror/mode/xml/xml',
+    'codemirror/mode/javascript/javascript',
+    'codemirror/mode/css/css',
+    'codemirror/mode/htmlmixed/htmlmixed'
 ], function ($, CodeMirror, puma) {
 
     function PumaEditor() {

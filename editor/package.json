@@ -29,8 +29,9 @@
   },
   "homepage": "https://github.com/pumascript/puma#readme",
   "dependencies": {
-    "bootstrap": "^3.3.7",
+    "bootstrap": ">=4.1.2",
     "codemirror": "^5.18.2",
-    "jquery": "^3.0.0"
+    "jquery": "^3.0.0",
+    "popper": "^1.0.1"
   }
 }
