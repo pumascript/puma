@@ -1255,7 +1255,7 @@ define([
 
             return result;
         }
-        catch(e) {
+        catch (e) {
             if (runtimeConfig.getConfig() === runtimeConfig.getModes().DEFAULT) {
                 throw TypeError(e.message);
             }

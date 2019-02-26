@@ -6,8 +6,8 @@ require.config({
     paths: {
         jquery: 'node_modules/jquery/dist/jquery.min',
         codemirror: 'node_modules/codemirror/',
-        pumascript: '../src/pumascript',
-    },
+        pumascript: '../src/pumascript'
+    }
 });
 
 require([
